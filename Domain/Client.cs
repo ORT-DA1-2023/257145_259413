@@ -5,6 +5,19 @@ namespace Domain
 {
     public class Client
     {
+        public string name;
+        private string password;
+
+        public Client()
+        {
+        }
+
+        public Client(string name, string password)
+        {
+            this.name = name;
+            this.password = password;
+        }
+
         public bool VerifyName(string name)
         {
             if (name.Length<3 || name.Length>20 || !Regex.IsMatch(name, @"^\S+$"))
