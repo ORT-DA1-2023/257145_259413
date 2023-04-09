@@ -8,11 +8,13 @@ namespace Domain
         public string name;
         private string password;
         private List<Figure> figures;
+        private List<Material> materials;
 
 
         public Client()
         {
             this.figures = new List<Figure>();
+            this.materials = new List<Material>();
 
         }
 
@@ -22,6 +24,7 @@ namespace Domain
             this.name = name;
             this.password = password;
             this.figures= new List<Figure>();
+            this.materials = new List<Material>();
         }
 
         public  bool VerifyDate(DateTime date)
@@ -128,6 +131,41 @@ namespace Domain
                 }
             }
             return hasNumber && hasUpperCase;
+        }
+
+        public void AddMaterial(Material material1)
+        {
+            foreach(Material material in materials)
+            {
+                if (material.name == material1.name)
+                {
+                    return;
+                }
+            }
+            materials.Add(material1);
+        }
+
+        public bool VerifyMaterials()
+        {
+            if (materials.Count == 0)
+            {
+                return false;
+            }
+            if (materials.Count == 1)
+            {
+                return true;
+            }
+            for(int i = 0; i < materials.Count; i++)
+            {
+                for(int j = i + 1; j < materials.Count; j++)
+                {
+                    if (materials[i].name == materials[j].name)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }
