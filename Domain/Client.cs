@@ -7,15 +7,83 @@ namespace Domain
     {
         public string name;
         private string password;
+        private List<Figure> figures;
+
 
         public Client()
         {
+            this.figures = new List<Figure>();
+
         }
+
 
         public Client(string name, string password)
         {
             this.name = name;
             this.password = password;
+            this.figures= new List<Figure>();
+        }
+
+        public  bool VerifyDate(DateTime date)
+        {
+
+            DateTime dateNow= DateTime.Now;
+
+            if (DateTime.Compare(dateNow, date) >0 )
+            { 
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public  bool VerifyListFigures()
+        { 
+
+            if (figures.Count == 0)
+            {
+                return false;
+            }
+
+            if (figures.Count == 1)
+            {
+                return true;
+            }
+
+            for (int i=0;i < figures.Count; i++)
+            {
+
+                for (int j=i+1; j< figures.Count; j++)
+                {
+
+                    if (figures[i].name == figures[j].name)
+                    {
+                        return false;
+                    }
+
+                }
+
+            }
+
+            return true;
+        }
+
+        public void addFigures(Figure figure1)
+        {
+
+            foreach (Figure figure in figures)
+            {
+
+                if  (figure.name == figure1.name)
+                { 
+                    return;
+                }
+            }
+
+
+
+            this.figures.Add(figure1);
         }
 
         public bool VerifyName(string name)

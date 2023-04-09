@@ -92,5 +92,29 @@ namespace Domain.test
             bool result = client.VerifyPassword(password);
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void returnTrueIfDateGreatesThanSecondDate()
+        {
+
+            DateTime date = DateTime.Now;
+            Client client = new Client();
+            bool result = client.VerifyDate(date);
+            Assert.IsTrue(result);
+
+
+
+
+
+        }
+    
+    
+    
+    
+    
     }
+
+
+
+
 }
