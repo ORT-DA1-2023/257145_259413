@@ -172,12 +172,12 @@ namespace Domain
 
         public void addModel(Model model1)
         {
-            throw new NotImplementedException();
+          this.models.Add(model1);
         }
 
         public bool VerifyListModels()
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }
