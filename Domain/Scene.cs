@@ -74,6 +74,7 @@ namespace Domain
 
         public void deletePositionedModel(int v)
         {
+            _positionedModels.RemoveAt(v);
             _lastModified = DateTime.Now;
         }
     }
