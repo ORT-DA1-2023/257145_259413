@@ -10,7 +10,7 @@ namespace Domain
     {
         public bool VerifyName(string name)
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }
