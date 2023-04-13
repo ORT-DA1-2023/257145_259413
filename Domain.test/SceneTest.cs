@@ -78,7 +78,20 @@ namespace Domain.test
             Assert.IsTrue(DateTime.Compare(scene._lastModified, date) >=1);
         }
 
-
+        [TestMethod]
+        public void ReturnsTrueIfLastModifiedDateIsModifiedWhenModelDeleted()
+        {
+            PositionedModel positionedModel = new PositionedModel();
+            PositionedModel positionedModel2 = new PositionedModel();
+            PositionedModel positionedModel3 = new PositionedModel();
+            Scene scene = new Scene();
+            scene.addPositionedModel(positionedModel);
+            scene.addPositionedModel(positionedModel2);
+            scene.addPositionedModel(positionedModel3);
+            DateTime date = scene._lastModified;
+            scene.deletePositionedModel(1);
+            Assert.IsTrue(DateTime.Compare(scene._lastModified, date) >= 1);
+        }
 
 
 

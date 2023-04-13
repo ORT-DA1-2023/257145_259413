@@ -71,6 +71,11 @@ namespace Domain
             _positionedModels.Add(positionedModel);
             _lastModified = DateTime.Now;
         }
+
+        public void deletePositionedModel(int v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
