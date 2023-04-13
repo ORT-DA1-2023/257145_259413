@@ -16,12 +16,13 @@ namespace Domain
 
         public Scene()
         {
+            this._positionedModels = new List<PositionedModel>();
         }
 
         public Scene(string name)
         {
             this.name = name;
-
+            this._positionedModels = new List<PositionedModel>();
 
         }
 
@@ -60,7 +61,7 @@ namespace Domain
 
         public bool VerifyPositionedModels()
         {
-            return true;
+            return _positionedModels.Count >= 0;
         }
     }
 }
