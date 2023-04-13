@@ -9,7 +9,9 @@ namespace Domain
 {
     public class Model
     {
-        private string name;
+
+        public object name { get;  set; }
+
 
         public Model()
         {
@@ -23,7 +25,7 @@ namespace Domain
 
         }
 
-
+        
 
         public bool VerifyName(string name)
         {

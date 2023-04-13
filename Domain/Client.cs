@@ -172,12 +172,48 @@ namespace Domain
 
         public void addModel(Model model1)
         {
-          this.models.Add(model1);
+            foreach (Model model in models)
+            {
+
+                if (model.name == model1.name)
+                {
+                    return;
+                }
+            }
+
+
+
+            this.models.Add(model1);
+
+
+
         }
 
         public bool VerifyListModels()
         {
+
+            if (models.Count == 0)
+            {
+                return false;
+            }
+            if (models.Count == 1)
+            {
+                return true;
+            }
+            for (int i = 0; i < models.Count; i++)
+            {
+                for (int j = i + 1; j < models.Count; j++)
+                {
+                    if (models[i].name == models[j].name)
+                    {
+                        return false;
+                    }
+                }
+            }
             return true;
+
+
+
         }
     }
 }
