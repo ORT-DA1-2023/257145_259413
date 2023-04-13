@@ -45,7 +45,7 @@ namespace Domain.test
 
             client1.addScenes(scene1);
             client1.addScenes(scene2);
-            bool result = client1.VerifyListFigures();
+            bool result = client1.VerifyListScene();
             Assert.IsTrue(result);
 
         }

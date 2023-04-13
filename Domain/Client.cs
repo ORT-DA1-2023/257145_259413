@@ -11,12 +11,15 @@ namespace Domain
         private List<Figure> figures;
         private List<Material> materials;
         private List<Model> models;
+        private List<Scene> scenes;
+
 
         public Client()
         {
             this.figures = new List<Figure>();
             this.materials = new List<Material>();
             this.models = new List<Model>();
+            this.scenes = new List<Scene>();
         }
 
 
@@ -27,6 +30,7 @@ namespace Domain
             this.figures= new List<Figure>();
             this.materials = new List<Material>();
             this.models = new List<Model>();
+            this.scenes = new List<Scene>();
         }
 
         public  bool VerifyDate(DateTime date)
@@ -218,7 +222,12 @@ namespace Domain
 
         public void addScenes(Scene scene1)
         {
-            throw new NotImplementedException();
+            this.scenes.Add(scene1);
+        }
+
+        public bool VerifyListScene()
+        {
+            return true;
         }
     }
 }
