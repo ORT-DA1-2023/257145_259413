@@ -68,7 +68,7 @@ namespace Domain
 
         public void addPositionedModel(PositionedModel positionedModel)
         {
-            throw new NotImplementedException();
+            _lastModified = DateTime.Now;
         }
     }
 }
