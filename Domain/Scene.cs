@@ -9,6 +9,26 @@ namespace Domain
 {
     public class Scene
     {
+
+        public object name { get; set; }
+
+
+        public Scene()
+        {
+
+        }
+
+        public Scene(string name)
+        {
+            this.name = name;
+
+
+        }
+
+
+
+
+
         public bool VerifyName(string name)
         {
 

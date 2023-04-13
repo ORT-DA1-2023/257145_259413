@@ -32,5 +32,35 @@ namespace Domain.test
 
         }
 
+
+
+        [TestMethod]
+        public void returnTrueIfUnique()
+        {
+
+
+            Client client1 = new Client();
+            Scene scene1 = new Scene("fig1");
+            Scene scene2 = new Scene("fig1");
+
+            client1.addScenes(scene1);
+            client1.addScenes(scene2);
+            bool result = client1.VerifyListFigures();
+            Assert.IsTrue(result);
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

@@ -215,5 +215,10 @@ namespace Domain
 
 
         }
+
+        public void addScenes(Scene scene1)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
