@@ -32,5 +32,23 @@ namespace Domain.test
 
 
 
+        [TestMethod]
+        public void returnTrueIfUnique()
+        {
+
+
+            Client client1 = new Client();
+            Model model1 = new Model("model1");
+            Model model2 = new Model("model1");
+            client1.addModel(model1);
+            client1.addModel(model2);
+            bool result = client1.VerifyListModels();
+            Assert.IsTrue(result);
+
+        }
+
+
+
+
     }
 }

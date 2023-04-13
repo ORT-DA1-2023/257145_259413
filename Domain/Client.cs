@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace Domain
@@ -9,13 +10,13 @@ namespace Domain
         private string password;
         private List<Figure> figures;
         private List<Material> materials;
-
+        private List<Model> models;
 
         public Client()
         {
             this.figures = new List<Figure>();
             this.materials = new List<Material>();
-
+            this.models = new List<Model>();
         }
 
 
@@ -25,6 +26,7 @@ namespace Domain
             this.password = password;
             this.figures= new List<Figure>();
             this.materials = new List<Material>();
+            this.models = new List<Model>();
         }
 
         public  bool VerifyDate(DateTime date)
@@ -166,6 +168,16 @@ namespace Domain
                 }
             }
             return true;
+        }
+
+        public void addModel(Model model1)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool VerifyListModels()
+        {
+            throw new NotImplementedException();
         }
     }
 }
