@@ -11,7 +11,9 @@ namespace Domain
     {
         private List<PositionedModel> _positionedModels;
 
-        public object name { get; set; }
+        public DateTime _lastModified;
+
+        public string name { get; set; }
 
 
         public Scene()
@@ -62,6 +64,11 @@ namespace Domain
         public bool VerifyPositionedModels()
         {
             return _positionedModels.Count >= 0;
+        }
+
+        public void addPositionedModel(PositionedModel positionedModel)
+        {
+            throw new NotImplementedException();
         }
     }
 }

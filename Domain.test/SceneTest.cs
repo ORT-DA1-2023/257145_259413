@@ -68,7 +68,15 @@ namespace Domain.test
             Assert.IsTrue(result);
         }
 
-
+        [TestMethod]
+        public void ReturnsTrueIfLastModifiedDateIsModifiedWhenModelAdded()
+        {
+            PositionedModel positionedModel = new PositionedModel();
+            Scene scene = new Scene();
+            DateTime date = scene._lastModified;
+            scene.addPositionedModel(positionedModel);
+            Assert.IsTrue(DateTime.Compare(scene._lastModified, date) >=1);
+        }
 
 
 
