@@ -9,6 +9,7 @@ namespace Domain
 {
     public class Scene
     {
+        private List<PositionedModel> _positionedModels;
 
         public object name { get; set; }
 
@@ -58,6 +59,10 @@ namespace Domain
             return false;
         }
 
+        public bool VerifyPositionedModels()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

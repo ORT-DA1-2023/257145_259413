@@ -58,11 +58,14 @@ namespace Domain.test
             Scene scene = new Scene();
             bool result = scene.VerifyDate(date);
             Assert.IsTrue(result);
+        }
 
-
-
-
-
+        [TestMethod]
+        public void ReturnsTrueIfPositionedModelListIsCreated()
+        {
+            Scene scene = new Scene();
+            bool result = scene.VerifyPositionedModels();
+            Assert.IsTrue(result);
         }
 
 
