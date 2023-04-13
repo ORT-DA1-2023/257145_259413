@@ -21,7 +21,16 @@ namespace Domain.test
         }
 
 
+        [TestMethod]
+        public void returnFalseIfHasAnySpace()
+        {
 
+            string name = " aa2 ";
+            Scene scene = new Scene();
+            bool result = scene.VerifyName(name);
+            Assert.IsFalse(result);
+
+        }
 
     }
 }
