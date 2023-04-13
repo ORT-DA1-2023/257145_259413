@@ -10,7 +10,12 @@ namespace Domain
     {
         public bool VerifyName(string name)
         {
-            return false;
+            if (name.Length == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
