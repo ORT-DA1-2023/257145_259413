@@ -222,12 +222,50 @@ namespace Domain
 
         public void addScenes(Scene scene1)
         {
+
+            foreach (Scene scene in scenes)
+            {
+
+                if (scene.name == scene1.name)
+                {
+                    return;
+                }
+            }
+
+
+
             this.scenes.Add(scene1);
+
+
         }
 
         public bool VerifyListScene()
         {
+
+
+            if (scenes.Count == 0)
+            {
+                return false;
+            }
+            if (scenes.Count == 1)
+            {
+                return true;
+            }
+            for (int i = 0; i < scenes.Count; i++)
+            {
+                for (int j = i + 1; j < scenes.Count; j++)
+                {
+                    if (scenes[i].name == scenes[j].name)
+                    {
+                        return false;
+                    }
+                }
+            }
             return true;
+
+
+
+
         }
     }
 }
