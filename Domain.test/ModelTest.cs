@@ -19,7 +19,16 @@ namespace Domain.test
             Assert.IsFalse(result);
         }
 
+        [TestMethod]
+        public void returnFalseIfHasAnySpace()
+        {
 
+            string name = " aa2 ";
+            Model model = new Model();
+            bool result = model.VerifyName(name);
+            Assert.IsFalse(result);
+
+        }
 
 
 
