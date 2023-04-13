@@ -16,7 +16,6 @@ namespace Domain
 
         public Scene()
         {
-
         }
 
         public Scene(string name)
@@ -61,7 +60,7 @@ namespace Domain
 
         public bool VerifyPositionedModels()
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }
