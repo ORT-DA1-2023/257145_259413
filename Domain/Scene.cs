@@ -47,7 +47,17 @@ namespace Domain
 
         public bool VerifyDate(DateTime date)
         {
-            return true;
+            DateTime dateNow = DateTime.Now;
+
+            if (DateTime.Compare(dateNow, date) > 0)
+            {
+
+                return true;
+            }
+
+            return false;
         }
+
     }
 }
+
