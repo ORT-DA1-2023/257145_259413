@@ -50,6 +50,20 @@ namespace Domain.test
 
         }
 
+        [TestMethod]
+        public void returnTrueIfDateGreatesThanSecondDate()
+        {
+
+            DateTime date = DateTime.Now;
+            Scene scene = new Scene();
+            bool result = scene.VerifyDate(date);
+            Assert.IsTrue(result);
+
+
+
+
+
+        }
 
 
 

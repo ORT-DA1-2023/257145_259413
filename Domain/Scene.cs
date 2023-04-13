@@ -44,5 +44,10 @@ namespace Domain
 
 
         }
+
+        public bool VerifyDate(DateTime date)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
