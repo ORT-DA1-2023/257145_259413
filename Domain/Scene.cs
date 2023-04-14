@@ -131,7 +131,7 @@ namespace Domain
 
         public bool VerifyFoV(int fov)
         {
-            return false;
+            return fov >= 1;
         }
     }
 }
