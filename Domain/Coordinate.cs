@@ -29,7 +29,7 @@ namespace Domain
 
         public bool VerifyCoordinate(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }
