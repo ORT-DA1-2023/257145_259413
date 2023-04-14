@@ -17,7 +17,7 @@ namespace Domain
         public Coordinate cameraObjective;
 
         public string name { get; set; }
-
+        public int FieldOfVision { get; set; }
 
         public Scene()
         {

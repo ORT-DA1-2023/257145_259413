@@ -135,5 +135,13 @@ namespace Domain.test
             bool result = scene.VerifyFoV(fov);
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void ReturnsTrueIfFoVDefaultValueIs30()
+        {
+            Scene scene = new Scene();
+            int fov = 30;
+            Assert.AreEqual(scene.FieldOfVision, fov);
+        }
     }
 }
