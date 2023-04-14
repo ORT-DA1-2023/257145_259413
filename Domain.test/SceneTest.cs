@@ -126,5 +126,14 @@ namespace Domain.test
             bool result = scene.VerifyFoV(fov);
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void ReturnsFalseIfFoVAbove160()
+        {
+            Scene scene = new Scene();
+            int fov = 165;
+            bool result = scene.VerifyFoV(fov);
+            Assert.IsFalse(result);
+        }
     }
 }
