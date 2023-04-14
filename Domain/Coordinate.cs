@@ -29,7 +29,44 @@ namespace Domain
 
         public bool VerifyCoordinate(float x, float y, float z)
         {
-            return false;
+            
+            return VerifyCoordinateValues(x) && VerifyCoordinateValues(y) && VerifyCoordinateValues(z);
+
         }
+
+
+        public bool VerifyCoordinateValues (float coordinate)
+        {
+
+            if (coordinate.ToString().Contains("."))
+            {
+                String radiusLetter = coordinate.ToString();
+
+
+                for (int i = 0; i < radiusLetter.Length - 1; i++)
+                {
+                    if (radiusLetter[i].Equals("."))
+                    {
+                        if (char.IsDigit(radiusLetter[i + 1]))
+                        {
+                            return true;
+                        }
+
+
+                    }
+
+                }
+
+
+            }
+
+            return false;
+
+
+        }
+
+
+
+
     }
 }
