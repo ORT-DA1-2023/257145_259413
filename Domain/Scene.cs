@@ -87,8 +87,48 @@ namespace Domain
 
         public bool VerifyCoordinate(float x, float y, float z)
         {
-           return false;
+
+
+            return VerifyCoordinateValuesLen(x) && VerifyCoordinateValuesLen(y) && VerifyCoordinateValuesLen(z);
+
+
         }
+
+        public bool VerifyCoordinateValuesLen(float coordinate)
+        {
+
+            if (coordinate.ToString().Contains("."))
+            {
+                String radiusLetter = coordinate.ToString();
+
+
+                for (int i = 0; i < radiusLetter.Length - 1; i++)
+                {
+                    if (radiusLetter[i].Equals("."))
+                    {
+                        if (char.IsDigit(radiusLetter[i + 1]))
+                        {
+                            return true;
+                        }
+
+
+                    }
+
+                }
+
+
+            }
+
+            return false;
+
+
+        }
+
+
+
+
+
+
     }
 }
 
