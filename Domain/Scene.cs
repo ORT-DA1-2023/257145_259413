@@ -131,7 +131,7 @@ namespace Domain
 
         public bool VerifyFoV(int fov)
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }
