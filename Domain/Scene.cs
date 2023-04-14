@@ -84,6 +84,11 @@ namespace Domain
              _lastRendered = DateTime.Now;
            
         }
+
+        public bool VerifyCoordinate(float x, float y, float z)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

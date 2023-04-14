@@ -106,5 +106,16 @@ namespace Domain.test
         }
 
 
+        [TestMethod]
+        public void ReturnsFalseIfNotDecimalNUmber()
+        {
+            float x = 1;
+            float y = 1;
+            float z = 1;
+            Scene scene = new Scene();
+            bool result = scene.VerifyCoordinate(x, y, z);
+            Assert.IsFalse(result);
+
+        }
     }
 }
