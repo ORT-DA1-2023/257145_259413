@@ -79,9 +79,10 @@ namespace Domain
             _lastModified = DateTime.Now;
         }
 
-        public void rendered()
+        public void Render()
         {
-            throw new NotImplementedException();
+             _lastRendered = DateTime.Now;
+           
         }
     }
 }

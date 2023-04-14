@@ -99,7 +99,7 @@ namespace Domain.test
         {
             Scene scene = new Scene();
             DateTime date = scene._lastRendered;
-            scene.rendered();
+            scene.Render();
             Assert.IsTrue(DateTime.Compare(scene._lastRendered, date) >= 1);
 
 
