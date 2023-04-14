@@ -11,8 +11,10 @@ namespace Domain
     {
         private List<PositionedModel> _positionedModels;
 
-        public DateTime _lastModified;
-        public DateTime _lastRendered;
+        public DateTime lastModified;
+        public DateTime lastRendered;
+        public Coordinate cameraPosition;
+        public Coordinate cameraObjective;
 
         public string name { get; set; }
 
@@ -20,12 +22,15 @@ namespace Domain
         public Scene()
         {
             this._positionedModels = new List<PositionedModel>();
+
         }
 
         public Scene(string name)
         {
             this.name = name;
             this._positionedModels = new List<PositionedModel>();
+            this.cameraPosition = new Coordinate(0,2,0);
+            this.cameraObjective = new Coordinate(0,2,5);
 
         }
 
@@ -70,18 +75,18 @@ namespace Domain
         public void addPositionedModel(PositionedModel positionedModel)
         {
             _positionedModels.Add(positionedModel);
-            _lastModified = DateTime.Now;
+            lastModified = DateTime.Now;
         }
 
         public void deletePositionedModel(int v)
         {
             _positionedModels.RemoveAt(v);
-            _lastModified = DateTime.Now;
+            lastModified = DateTime.Now;
         }
 
         public void Render()
         {
-             _lastRendered = DateTime.Now;
+             lastRendered = DateTime.Now;
            
         }
 
@@ -124,11 +129,10 @@ namespace Domain
 
         }
 
-
-
-
-
-
+        public bool VerifyFoV(int fov)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

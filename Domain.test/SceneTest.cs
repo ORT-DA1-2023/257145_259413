@@ -74,9 +74,9 @@ namespace Domain.test
         {
             PositionedModel positionedModel = new PositionedModel();
             Scene scene = new Scene();
-            DateTime date = scene._lastModified;
+            DateTime date = scene.lastModified;
             scene.addPositionedModel(positionedModel);
-            Assert.IsTrue(DateTime.Compare(scene._lastModified, date) >=1);
+            Assert.IsTrue(DateTime.Compare(scene.lastModified, date) >=1);
         }
 
         [TestMethod]
@@ -89,18 +89,18 @@ namespace Domain.test
             scene.addPositionedModel(positionedModel);
             scene.addPositionedModel(positionedModel2);
             scene.addPositionedModel(positionedModel3);
-            DateTime date = scene._lastModified;
+            DateTime date = scene.lastModified;
             scene.deletePositionedModel(1);
-            Assert.IsTrue(DateTime.Compare(scene._lastModified, date) >= 1);
+            Assert.IsTrue(DateTime.Compare(scene.lastModified, date) >= 1);
         }
 
         [TestMethod]
         public void ReturnsTrueIfLastrenderedDateIsModifiedWhenSceneAdded()
         {
             Scene scene = new Scene();
-            DateTime date = scene._lastRendered;
+            DateTime date = scene.lastRendered;
             scene.Render();
-            Assert.IsTrue(DateTime.Compare(scene._lastRendered, date) >= 1);
+            Assert.IsTrue(DateTime.Compare(scene.lastRendered, date) >= 1);
 
 
         }
@@ -116,6 +116,15 @@ namespace Domain.test
             bool result = scene.VerifyCoordinate(x, y, z);
             Assert.IsFalse(result);
 
+        }
+
+        [TestMethod]
+        public void ReturnsFalseIfFoVUnder1()
+        {
+            Scene scene = new Scene();
+            int fov = -2;
+            bool result = scene.VerifyFoV(fov);
+            Assert.IsFalse(result);
         }
     }
 }

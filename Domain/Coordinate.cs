@@ -21,9 +21,9 @@ namespace Domain
 
         public Coordinate(float x, float y, float z)
         {
-            this.x = 0;
-            this.y = 2;
-            this.z = 0;
+            this.x = x;
+            this.y = y;
+            this.z = z;
 
         }
 
