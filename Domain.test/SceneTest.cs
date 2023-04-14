@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Domain.test
 {
@@ -93,11 +94,16 @@ namespace Domain.test
             Assert.IsTrue(DateTime.Compare(scene._lastModified, date) >= 1);
         }
 
+        [TestMethod]
+        public void ReturnsTrueIfLastrenderedDateIsModifiedWhenSceneAdded()
+        {
+            Scene scene = new Scene();
+            DateTime date = scene._lastRendered;
+            scene.rendered();
+            Assert.IsTrue(DateTime.Compare(scene._lastRendered, date) >= 1);
 
 
-
-
-
+        }
 
 
     }

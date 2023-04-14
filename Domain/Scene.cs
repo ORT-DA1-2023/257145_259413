@@ -12,6 +12,7 @@ namespace Domain
         private List<PositionedModel> _positionedModels;
 
         public DateTime _lastModified;
+        public DateTime _lastRendered;
 
         public string name { get; set; }
 
@@ -76,6 +77,11 @@ namespace Domain
         {
             _positionedModels.RemoveAt(v);
             _lastModified = DateTime.Now;
+        }
+
+        public void rendered()
+        {
+            throw new NotImplementedException();
         }
     }
 }
