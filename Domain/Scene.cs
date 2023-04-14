@@ -22,6 +22,7 @@ namespace Domain
         public Scene()
         {
             this._positionedModels = new List<PositionedModel>();
+            this.FieldOfVision = 30;
 
         }
 
@@ -31,7 +32,7 @@ namespace Domain
             this._positionedModels = new List<PositionedModel>();
             this.cameraPosition = new Coordinate(0,2,0);
             this.cameraObjective = new Coordinate(0,2,5);
-
+            this.FieldOfVision = 30;
         }
 
 
