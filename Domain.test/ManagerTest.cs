@@ -6,7 +6,7 @@
         [TestMethod]
         public void ReturnsTrueIfUniqueClients()
         {
-            System system = new System();
+            Manager system = new Manager();
             Client client1 = new Client("juan2", "myPassw1");
             Client client2 = new Client("Juan2", "myPassw2");
             Client client3 = new Client("Juan2", "myPassw3");

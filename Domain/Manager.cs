@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class System
+    public class Manager
     {
 
         private List<Client> clients;
-        public System() 
+        public Manager() 
         {
             this.clients = new List<Client>();
         }
+
+        public Client logged { get; set; }
 
         public void add(Client client1)
         {
@@ -25,6 +27,11 @@ namespace Domain
                 }
             }
             this.clients.Add(client1);
+        }
+
+        public Client logIn(string name, string password)
+        {
+            throw new NotImplementedException();
         }
 
         public bool Verify()
