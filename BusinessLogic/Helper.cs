@@ -2,15 +2,15 @@
 
 namespace BusinessLogic
 {
-    public class Class1
+    public class Helper
     {
 
-
-
-
-
-
+        public Helper()
+        {
+            Manager manager = new Manager();
+        }
 
 
     }
+
 }

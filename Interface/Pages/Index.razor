@@ -1,9 +1,55 @@
 ﻿@page "/"
+@using Domain;
+@inject NavigationManager NavigationManager
+<h3>Iniciar sesión</h3>
 
-<PageTitle>Index</PageTitle>
+<div>
+    <label for="nombre">Nombre de usuario:</label>
+    <input type="text" id="nombre" @bind="nombre" />
+</div>
 
-<h1>Hello, world!</h1>
+<div>
+    <label for="contraseña">Contraseña:</label>
+    <input type="password" id="contraseña" @bind="contraseña" />
+</div>
 
-Welcome to your new app.
+<button @onclick="IniciarSesion">Iniciar sesión</button>
+@if (!string.IsNullOrEmpty(mensajeError))
+{
+    <div class="alert alert-danger">@mensajeError</div>
+}
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<a href="/SignUp">Sign up</a>
+
+@code {
+    string nombre;
+    string contraseña;
+    string mensajeError;
+
+    List<Client> clientes = new List<Client>
+    {
+        new Client("Juan", "123456"),
+        new Client("María", "abcdef"),
+        new Client("Pedro", "qwerty")
+    };
+
+    void IniciarSesion()
+    {
+        var cliente = clientes.FirstOrDefault(c => c.name == nombre && c.password == contraseña);
+       
+        if (cliente != null)
+        {
+            // El usuario está registrado, redirigir a la página principal
+            NavigationManager.NavigateTo("/Loged");
+        }
+        else
+        {
+        
+            mensajeError = "Incorrect username or password";
+           
+        }
+
+
+
+    }
+}

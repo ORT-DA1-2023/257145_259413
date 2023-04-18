@@ -1,0 +1,40 @@
+﻿@page "/SignUp"
+
+<h1>Formulario</h1>
+
+<form>
+    <label>Nombre:</label>
+    <InputText @bind-Value="nombre" />
+
+    <label>Contra:</label>
+    <InputText type="contra" @bind-Value="contra" />
+
+    <button type="submit" @onclick="Enviar">Enviar</button>
+</form>
+
+@code {
+    private string nombre;
+    private string contra;
+
+    private void Enviar()
+    {
+        // Manejar la submisión del formulario aquí
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@code {
+
+}

@@ -7,7 +7,7 @@ namespace Domain
     public class Client
     {
         public string name;
-        private string password;
+        public string password;   // cambie a publico
         private List<Figure> figures;
         private List<Material> materials;
         private List<Model> models;

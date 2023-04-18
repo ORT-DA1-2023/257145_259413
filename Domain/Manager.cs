@@ -9,7 +9,7 @@ namespace Domain
     public class Manager
     {
         public Client logged { get; set; }
-        private List<Client> clients;
+        public List<Client> clients;    //cambie a publico
 
         public Manager() 
         {
