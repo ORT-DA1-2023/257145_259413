@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@using Domain;
+@using BusinessLogic;
 
 <PageTitle>Interface</PageTitle>
 
@@ -14,7 +16,13 @@
         </div>
 
         <article class="content px-4">
-            @Body
+            <CascadingValue Value="@data">
+                @Body
+            </CascadingValue>
         </article>
     </main>
 </div>
+
+@code{
+    Helper data = new Helper();
+}

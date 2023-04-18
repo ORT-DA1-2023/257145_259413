@@ -1,6 +1,11 @@
 ﻿@page "/"
+
 @using Domain;
+@using BusinessLogic;
+
 @inject NavigationManager NavigationManager
+@inject Manager manager
+
 <h3>Iniciar sesión</h3>
 
 <div>
@@ -9,8 +14,8 @@
 </div>
 
 <div>
-    <label for="contraseña">Contraseña:</label>
-    <input type="password" id="contraseña" @bind="contraseña" />
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" @bind="contrasena" />
 </div>
 
 <button @onclick="IniciarSesion">Iniciar sesión</button>
@@ -23,21 +28,23 @@
 
 @code {
     string nombre;
-    string contraseña;
+    string contrasena;
     string mensajeError;
 
-    List<Client> clientes = new List<Client>
-    {
-        new Client("Juan", "123456"),
-        new Client("María", "abcdef"),
-        new Client("Pedro", "qwerty")
-    };
+
+ 
+
+    Client toLogIn = new Client();
 
     void IniciarSesion()
     {
-        var cliente = clientes.FirstOrDefault(c => c.name == nombre && c.password == contraseña);
-       
-        if (cliente != null)
+        manager.add(new Client("Pablo","Hola123"));
+        if(toLogIn.VerifyName(nombre) && toLogIn.VerifyPassword(contrasena))
+        {
+            toLogIn = manager.logIn(nombre, contrasena);
+        }
+
+        if (toLogIn != null)
         {
             // El usuario está registrado, redirigir a la página principal
             NavigationManager.NavigateTo("/Loged");

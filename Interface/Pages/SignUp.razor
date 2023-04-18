@@ -1,4 +1,6 @@
 ﻿@page "/SignUp"
+@using Domain;
+@using BusinessLogic;
 
 <h1>Formulario</h1>
 
@@ -16,9 +18,28 @@
     private string nombre;
     private string contra;
 
+    [CascadingParameter]
+    public Helper? data { get; set; }
+
+    Client newClient;
+
     private void Enviar()
     {
-        // Manejar la submisión del formulario aquí
+
+        if(newClient.VerifyName(nombre) && newClient.VerifyPassword(contra))
+        {
+            newClient = data.manager.logIn(nombre, contra);
+            if(newClient == null)
+            {
+                newClient = new Client(nombre, contra);
+            }
+
+        }
+        else
+        {
+            //mensaje de error
+        }
+
     }
 }
 
