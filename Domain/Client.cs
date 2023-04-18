@@ -270,6 +270,20 @@ namespace Domain
 
         internal bool MatchingPassword(string password)
         {
+
+            if (password.Length != this.password.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < password.Length; i++)
+            {
+                if (password[i] != this.password[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+            /*
             string palabra1 = password;
             string palabra2 = this.password;
             if (palabra1.Length != palabra2.Length)
@@ -284,24 +298,47 @@ namespace Domain
                 }
             }
             return true;
+
+            */
         }
 
         internal bool MatchingUsername(string name)
         {
-            string palabra1 = name;
-            string palabra2 = this.name;
-            if (palabra1.Length != palabra2.Length)
+
+
+            if (name.Length != this.name.Length)
             {
                 return false;
             }
-            for (int i = 0; i < palabra1.Length; i++)
+            for (int i = 0; i < name.Length; i++)
             {
-                if (palabra1[i] != palabra2[i] && Char.ToUpper(palabra1[i]) != Char.ToUpper(palabra2[i]))
+                if (name[i] != this.name[i])
                 {
                     return false;
                 }
             }
             return true;
+
+
+
+
+            /*
+               string palabra1 = name;
+               string palabra2 = this.name;
+               if (palabra1.Length != palabra2.Length)
+               {
+                   return false;
+               }
+               for (int i = 0; i < palabra1.Length; i++)
+               {
+                   if (palabra1[i] != palabra2[i] && Char.ToUpper(palabra1[i]) != Char.ToUpper(palabra2[i]))
+                   {
+                       return false;
+                   }
+               }
+               return true;
+
+               */
         }
 
         internal bool Equals(Client client)

@@ -9,7 +9,7 @@ public class HelperTest
     public void ReturnsTrueIfUserLoggedIn()
     {
         string name = "Pedro";
-        string password = "MejorObl1Gatorio";
+        string password = "MejorObl1gatorio";
         Manager system = new Manager();
         Client loggedIn = new Client("Pedro","MejorObl1gatorio");
         system.add(loggedIn);
