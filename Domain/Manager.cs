@@ -8,14 +8,13 @@ namespace Domain
 {
     public class Manager
     {
-
+        public Client logged { get; set; }
         private List<Client> clients;
+
         public Manager() 
         {
             this.clients = new List<Client>();
         }
-
-        public Client logged { get; set; }
 
         public void add(Client client1)
         {
@@ -31,7 +30,15 @@ namespace Domain
 
         public Client logIn(string name, string password)
         {
-            throw new NotImplementedException();
+            foreach (Client client in clients)
+            {
+                if (client.MatchingUsername(name) && client.MatchingPassword(password))
+                {
+                    this.logged = client;
+                    return client;
+                }
+            }
+            return null;
         }
 
         public bool Verify()
