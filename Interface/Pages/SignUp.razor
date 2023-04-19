@@ -10,34 +10,91 @@
     <label>Nombre:</label>
     <InputText @bind-Value="nombre" />
 
-    <label>Contra:</label>
-    <InputText type="contra" @bind-Value="contra" />
+    <label>Contraseña:</label>
+    <InputText type="contra" @onkeypress="ValidatePassword" @bind-Value="contra" />
+    @if (passwordError != "")
+    {
+        <div @ref="passwordMessage" class="alert alert-danger">@passwordError</div>
+    }
+
+    <label>Confirmar contraseña:</label>
+    <InputText type="password" @onkeypress="EqualPasswords" @bind-Value="passwordConfirmation" />
+    @if (!string.IsNullOrEmpty(differentPassword))
+    {
+        <div class="alert alert-danger">@differentPassword</div>
+    }
 
     <button type="submit" @onclick="Enviar">Enviar</button>
 </form>
 
 @code {
-    private string nombre;
-    private string contra;
+    private ElementReference passwordMessage;
+    private string nombre = "";
+    private string contra = "";
+    private string passwordConfirmation = "";
+    private string nameError = "";
+    private string passwordError = "";
+    private string differentPassword = "";
+
+    public bool MatchingPasswords(string password, string confirmation)
+    {
+
+        if (password.Length != confirmation.Length)
+        {
+            return false;
+        }
+        for (int i = 0; i < password.Length; i++)
+        {
+            if (password[i] != confirmation[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
     Client newClient = new Client();
+
+private void ValidatePassword(KeyboardEventArgs e)
+    {
+        if(!newClient.VerifyPassword(contra))
+        {
+            passwordError = "La contraseña debe ser ...";
+            return;
+        }
+        passwordError = string.Empty;
+    }
+
+    private void EqualPasswords(KeyboardEventArgs e)
+    {
+        if (MatchingPasswords(contra, passwordConfirmation))
+        {
+            differentPassword= "Las contraseñas no coinciden";
+            return;
+        }
+        differentPassword = string.Empty;
+
+    }
 
     private void Enviar()
     {
 
         if(newClient.VerifyName(nombre) && newClient.VerifyPassword(contra))
         {
-            newClient = manager.logIn(nombre, contra);
-            if(newClient.name == "")
+            if(!manager.Exists(nombre))
             {
                 newClient = new Client(nombre, contra);
+                manager.logIn(nombre, contra);
             }
 
         }
         else
         {
-            //mensaje de error
+            if(!newClient.VerifyName(nombre))
+            {
+                nameError = "El nombre debe ser ...";
+            }
         }
 
     }

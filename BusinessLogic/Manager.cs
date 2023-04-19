@@ -77,7 +77,7 @@ namespace BusinessLogic
             return client;
         }
 
-        private bool Exists(string name)
+        public bool Exists(string name)
         {
             foreach(Client client in clients)
             {
