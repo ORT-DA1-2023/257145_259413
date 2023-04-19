@@ -64,5 +64,10 @@ namespace BusinessLogic
             }
             return true;
         }
+
+        public bool SignUp(string name, string password)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -31,8 +31,16 @@ namespace BusinessLogic.test
             system.add(loggedIn);
             Client actualLogged = system.logIn(name, password);
             Assert.IsTrue(system.logged.Equals(actualLogged));
+        }
 
-
+        [TestMethod]
+        public void ReturnsTrueIfClientCanSignUp()
+        {
+            string name = "Marco5";
+            string password = "NoPued3Ser";
+            Manager system = new Manager();
+            bool result = system.SignUp(name, password);
+            Assert.IsTrue(result);
         }
     }
 }
