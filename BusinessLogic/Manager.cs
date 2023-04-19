@@ -67,7 +67,7 @@ namespace BusinessLogic
 
         public bool SignUp(string name, string password)
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }
