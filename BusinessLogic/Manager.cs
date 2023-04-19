@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain;
 
-namespace Domain
+namespace BusinessLogic
 {
     public class Manager
     {
         public Client logged { get; set; }
-        public List<Client> clients;    //cambie a publico
+        public List<Client> clients;
 
         public Manager() 
         {

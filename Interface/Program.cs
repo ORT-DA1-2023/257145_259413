@@ -2,6 +2,7 @@ using Interface.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Domain;
+using BusinessLogic;
 
 var builder = WebApplication.CreateBuilder(args);
 

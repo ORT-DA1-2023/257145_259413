@@ -2,6 +2,8 @@
 @using Domain;
 @using BusinessLogic;
 
+@inject Manager manager;
+
 <h1>Formulario</h1>
 
 <form>
@@ -18,18 +20,16 @@
     private string nombre;
     private string contra;
 
-    [CascadingParameter]
-    public Helper? data { get; set; }
 
-    Client newClient;
+    Client newClient = new Client();
 
     private void Enviar()
     {
 
         if(newClient.VerifyName(nombre) && newClient.VerifyPassword(contra))
         {
-            newClient = data.manager.logIn(nombre, contra);
-            if(newClient == null)
+            newClient = manager.logIn(nombre, contra);
+            if(newClient.name == "")
             {
                 newClient = new Client(nombre, contra);
             }
@@ -43,19 +43,3 @@
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-@code {
-
-}
