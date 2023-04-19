@@ -16,6 +16,8 @@ namespace Domain
 
         public Client()
         {
+            this.name = "";
+            this.password = "";
             this.figures = new List<Figure>();
             this.materials = new List<Material>();
             this.models = new List<Model>();

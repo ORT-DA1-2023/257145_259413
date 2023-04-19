@@ -39,8 +39,8 @@ namespace BusinessLogic.test
             string name = "Marco5";
             string password = "NoPued3Ser";
             Manager system = new Manager();
-            bool result = system.SignUp(name, password);
-            Assert.IsTrue(result);
+            Client result = system.SignUp(name, password);
+            Assert.IsTrue(result.MatchingUsername(name) && result.MatchingPassword(password));
         }
     }
 }

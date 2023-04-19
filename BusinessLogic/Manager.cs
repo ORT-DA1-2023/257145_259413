@@ -65,9 +65,28 @@ namespace BusinessLogic
             return true;
         }
 
-        public bool SignUp(string name, string password)
+        public Client SignUp(string name, string password)
         {
-            return true;
+            Client client= new Client();
+            if (!client.VerifyName(name) || !client.VerifyPassword(password) || Exists(name))
+            {
+                return client;
+            }
+            client.name = name;
+            client.password = password;
+            return client;
+        }
+
+        private bool Exists(string name)
+        {
+            foreach(Client client in clients)
+            {
+                if (client.MatchingUsername(name))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
