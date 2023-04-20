@@ -12,7 +12,7 @@ namespace Domain
 
 
         public string name;
-        private float radio;
+        public float radio;
 
         public Figure()
         {
@@ -35,14 +35,7 @@ namespace Domain
 
             }
             return true;
-            /*
-            if (name.Length==0)
-            {
-                return false;
-            }
-
-            return true;
-            */
+          
         }
 
         public bool VerifyRadiusFigure(float radius)
