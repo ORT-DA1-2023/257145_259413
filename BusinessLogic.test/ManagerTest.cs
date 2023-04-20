@@ -61,10 +61,13 @@ namespace BusinessLogic.test
             Client client = new Client();
             manager.logged = client;
             Figure figure = new Figure();
+            Figure figure1 = new Figure();
             manager.addFigure(figure);
-            int before = manager.GetFigures().Count;
+            manager.addFigure(figure1);
             manager.DeleteFigure(figure);
-            Assert.IsTrue(before > manager.GetFigures().Count);
+            Assert.IsTrue(!client.getFigures().Contains(figure));
+            
+
         }
     }
 }

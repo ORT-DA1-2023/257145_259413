@@ -101,7 +101,7 @@ namespace BusinessLogic
 
         public void DeleteFigure(Figure figure)
         {
-            throw new NotImplementedException();
+            GetFigures().Remove(figure);
         }
     }
 }
