@@ -38,6 +38,7 @@ namespace Domain
           
         }
 
+
         public bool VerifyRadiusFigure(Object radius)
         {
             return radius.GetType() == typeof(float)? (float)radius >0 : false;

@@ -53,5 +53,18 @@ namespace BusinessLogic.test
             manager.addFigure(figure);
             Assert.IsTrue(client.getFigures().Contains(figure));
         }
+
+        [TestMethod]
+        public void ReturnsTrueIfClientCanDeleteFigure()
+        {
+            Manager manager = new Manager();
+            Client client = new Client();
+            manager.logged = client;
+            Figure figure = new Figure();
+            manager.addFigure(figure);
+            int before = manager.GetFigures().Count;
+            manager.DeleteFigure(figure);
+            Assert.IsTrue(before > manager.GetFigures().Count);
+        }
     }
 }

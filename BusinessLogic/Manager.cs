@@ -98,5 +98,10 @@ namespace BusinessLogic
         {
             return logged.getFigures();
         }
+
+        public void DeleteFigure(Figure figure)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

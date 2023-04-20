@@ -38,6 +38,7 @@
             <tr>
                 <th>Nombre</th>
                 <th>Radio</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -46,6 +47,7 @@
                 <tr>
                     <td>@figura.name</td>
                     <td>@figura.radio</td>
+                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteFigure(figura))">Eliminar</button></td>
                 </tr>
             }
         </tbody>
