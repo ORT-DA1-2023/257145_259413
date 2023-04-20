@@ -12,7 +12,7 @@
 
 <h3>Crear una figura (esfera)</h3>
 
-<form>
+
     <div class="form-group">
         <label for="name">Nombre de la figura:</label>
         <input type="text" class="form-control" id="name" @bind="@name">
@@ -31,12 +31,27 @@
 
     }
 
-
-
-
     <button type="button" class="btn btn-primary" @onclick="CancelarFigura">Cancelar</button>
 
-</form>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Radio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var figura in manager.GetFigures())
+            {
+                <tr>
+                    <td>@figura.name</td>
+                    <td>@figura.radio</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
 
 
 

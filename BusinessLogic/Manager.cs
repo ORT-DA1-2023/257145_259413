@@ -93,5 +93,10 @@ namespace BusinessLogic
         {
             logged.AddFigure(figure);
         }
+
+        public List<Figure> GetFigures()
+        {
+            return logged.getFigures();
+        }
     }
 }
