@@ -35,6 +35,11 @@ namespace Domain
             this.scenes = new List<Scene>();
         }
 
+        public List<Figure> getFigures()
+        {
+            return this.figures;
+        }
+
         public  bool VerifyDate(DateTime date)
         {
 
@@ -80,7 +85,7 @@ namespace Domain
             return true;
         }
 
-        public void addFigures(Figure figure1)
+        public void AddFigure(Figure figure1)
         {
 
             foreach (Figure figure in figures)
@@ -176,7 +181,7 @@ namespace Domain
             return true;
         }
 
-        public void addModel(Model model1)
+        public void AddModel(Model model1)
         {
             foreach (Model model in models)
             {
@@ -222,7 +227,7 @@ namespace Domain
 
         }
 
-        public void addScenes(Scene scene1)
+        public void AddScene(Scene scene1)
         {
 
             foreach (Scene scene in scenes)

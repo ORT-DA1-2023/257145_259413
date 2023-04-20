@@ -42,5 +42,15 @@ namespace BusinessLogic.test
             Client result = system.SignUp(name, password);
             Assert.IsTrue(result.MatchingUsername(name) && result.MatchingPassword(password));
         }
+
+        [TestMethod]
+        public void ReturnsTrueIfClientCanCreateANewFigure()
+        {
+            Manager manager = new Manager();
+            Client client = new Client();
+            Figure figure = new Figure();
+            manager.addFigure(figure);
+            Assert.IsTrue(client.getFigures().Contains(figure));
+        }
     }
 }

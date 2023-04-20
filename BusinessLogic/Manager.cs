@@ -88,5 +88,10 @@ namespace BusinessLogic
             }
             return false;
         }
+
+        public void addFigure(Figure figure)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
