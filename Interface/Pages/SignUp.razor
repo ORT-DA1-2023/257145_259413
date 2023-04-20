@@ -1,48 +1,110 @@
 ﻿@page "/SignUp"
 @using Domain;
 @using BusinessLogic;
-
+@inject NavigationManager NavigationManager
 @inject Manager manager;
 
 <h1>Formulario</h1>
 
-<form>
+
     <label>Nombre:</label>
-    <InputText @bind-Value="nombre" />
+    <InputText @bind-Value="nombre" @oninput="ValidateName" />
+    @if (!string.IsNullOrEmpty(nameError))
+    {
+        <div class="alert alert-danger">@nameError</div>
+    }
 
     <label>Contraseña:</label>
-    <InputText type="contra" @onkeypress="ValidatePassword" @bind-Value="contra" />
-    @if (passwordError != "")
+    <InputText type="password" @bind-Value="contra" @oninput="ValidatePassword" />
+    @if (!string.IsNullOrEmpty(passwordError))
     {
-        <div @ref="passwordMessage" class="alert alert-danger">@passwordError</div>
+        <div class="alert alert-danger">@passwordError</div>
     }
 
     <label>Confirmar contraseña:</label>
-    <InputText type="password" @onkeypress="EqualPasswords" @bind-Value="passwordConfirmation" />
+    <InputText type="password" @bind-Value="passwordConfirmation" @oninput="ValidatePasswordConfirmation" />
     @if (!string.IsNullOrEmpty(differentPassword))
     {
         <div class="alert alert-danger">@differentPassword</div>
     }
 
-    <button type="submit" @onclick="Enviar">Enviar</button>
-</form>
+    <button @onclick="EnviarForm" disabled="@(!CanSubmit())">Enviar</button>
+
+
+   
+    
+    @if (!string.IsNullOrEmpty(startSessions))
+    {
+        <div class="alert alert-danger">@startSessions</div>
+    }
+
+
+
+
 
 @code {
-    private ElementReference passwordMessage;
     private string nombre = "";
     private string contra = "";
     private string passwordConfirmation = "";
     private string nameError = "";
     private string passwordError = "";
     private string differentPassword = "";
+    private string startSessions = "";
+
+
+    Client newClient = new Client();
+
+    private bool CanSubmit()
+    {
+        return string.IsNullOrEmpty(nameError) && string.IsNullOrEmpty(passwordError) && string.IsNullOrEmpty(differentPassword);
+    }
+
+    private void ValidateName(ChangeEventArgs e)
+    {
+        nombre = (string)e.Value;
+
+        if (!newClient.VerifyName(nombre))
+        {
+            nameError = "El nombre debe contener:Mayuscula - Numero- Sin espacios -Entre 3 a 20 letras";
+            return;
+        }
+
+        nameError = string.Empty;
+    }
+
+    private void ValidatePassword(ChangeEventArgs e)
+    {
+        contra = (string)e.Value;
+
+        if (!newClient.VerifyPassword(contra))
+        {
+            passwordError = "La contraseña debe contener: Mayuscula- Numero- Entre 5 y 25 letras";
+            return;
+        }
+
+        passwordError = string.Empty;
+    }
+
+    private void ValidatePasswordConfirmation(ChangeEventArgs e)
+    {
+        passwordConfirmation = (string)e.Value;
+
+        if (!MatchingPasswords(contra, passwordConfirmation))
+        {
+            differentPassword = "Las contraseñas no coinciden";
+            return;
+        }
+
+        differentPassword = string.Empty;
+    }
 
     public bool MatchingPasswords(string password, string confirmation)
     {
-
         if (password.Length != confirmation.Length)
         {
             return false;
         }
+
         for (int i = 0; i < password.Length; i++)
         {
             if (password[i] != confirmation[i])
@@ -50,53 +112,31 @@
                 return false;
             }
         }
+
         return true;
     }
 
-
-    Client newClient = new Client();
-
-private void ValidatePassword(KeyboardEventArgs e)
+    private void EnviarForm()
     {
-        if(!newClient.VerifyPassword(contra))
+        if (manager.Exists(nombre))
         {
-            passwordError = "La contraseña debe ser ...";
+            nameError = "El nombre de usuario ya existe";
+
             return;
         }
-        passwordError = string.Empty;
-    }
 
-    private void EqualPasswords(KeyboardEventArgs e)
-    {
-        if (MatchingPasswords(contra, passwordConfirmation))
+        if (!CanSubmit())
         {
-            differentPassword= "Las contraseñas no coinciden";
             return;
         }
-        differentPassword = string.Empty;
 
-    }
+        newClient = new Client(nombre, contra);
+        manager.logIn(nombre, contra);
+        manager.add(newClient);
+        startSessions = "Se creo un cliente nuevo";
 
-    private void Enviar()
-    {
-
-        if(newClient.VerifyName(nombre) && newClient.VerifyPassword(contra))
-        {
-            if(!manager.Exists(nombre))
-            {
-                newClient = new Client(nombre, contra);
-                manager.logIn(nombre, contra);
-            }
-
-        }
-        else
-        {
-            if(!newClient.VerifyName(nombre))
-            {
-                nameError = "El nombre debe ser ...";
-            }
-        }
-
-    }
+        NavigationManager.NavigateTo("/logged");
+    
+     }
+    
 }
-

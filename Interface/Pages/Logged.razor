@@ -1,7 +1,23 @@
-﻿@page "/Loged"
+﻿@page "/Logged"
+@using Domain;
+@using BusinessLogic;
+@inject NavigationManager NavigationManager
+@inject Manager manager;
 
 <h3>Loged</h3>
 
+
+<button @onclick="SignOut">Enviar</button>
+
+
+
 @code {
+
+	private void SignOut()
+	{
+
+		NavigationManager.NavigateTo("/");
+
+	}
 
 }
