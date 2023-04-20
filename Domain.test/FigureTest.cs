@@ -47,7 +47,7 @@ namespace Domain.test
         [TestMethod]
         public void returnFalseIsNotDecimalNumber()
         {
-            float number = 4;
+            int number = 4;
             Figure figure = new Figure();
             bool result = figure.VerifyRadiusFigure(number);
             Assert.IsFalse(result);

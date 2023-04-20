@@ -1,6 +1,7 @@
 ﻿@page "/Figures"
 @using Domain;
 @using BusinessLogic;
+@using System.Globalization;
 @inject NavigationManager NavigationManager
 @inject Manager manager;
 
@@ -18,7 +19,7 @@
     </div>
     <div class="form-group">
         <label for="radius">Radio de la figura:</label>
-        <input type="number" class="form-control" id="radius" @bind="@radius">
+        <input type="text" class="form-control" id="radius" @bind="@radius">
     </div>
 
 
@@ -41,24 +42,25 @@
 
 @code {
     private string name = "";
-    private float radius;
+    private string radius;
     private string mensajeError;
 
 
     void CrearFigura()
     {
 
+        float radiusNumber = float.Parse(radius, CultureInfo.InvariantCulture.NumberFormat);
+
         Figure figure = new Figure();
 
 
 
-        if (figure.VerifyNameFigure(name) && figure.VerifyRadiusFigure(radius))
+        if (figure.VerifyNameFigure(name) && figure.VerifyRadiusFigure(radiusNumber))
         {
 
 
-            Figure newFig = new Figure(name, radius);
-            manager.logged.addFigures(newFig);
-
+            Figure newFig = new Figure(name, radiusNumber);
+            manager.addFigure(newFig);
         }
         else
         {

@@ -38,32 +38,9 @@ namespace Domain
           
         }
 
-        public bool VerifyRadiusFigure(float radius)
+        public bool VerifyRadiusFigure(Object radius)
         {
-
-            if (radius >0 && radius.ToString().Contains("."))
-            {
-                String radiusLetter = radius.ToString();
-
-                
-               for (int i=0; i< radiusLetter.Length-1; i++)
-                {
-                   if (radiusLetter[i].Equals ("."))
-                    {
-                        if (char.IsDigit(radiusLetter[i+1]))
-                        {
-                            return true;
-                        }
-
-
-                    }
-
-                } 
-
-            
-            }
-
-            return false;
+            return radius.GetType() == typeof(float)? (float)radius >0 : false;
         }
     }
 }
