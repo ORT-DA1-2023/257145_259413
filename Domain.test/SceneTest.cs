@@ -44,8 +44,8 @@ namespace Domain.test
             Scene scene1 = new Scene("fig1");
             Scene scene2 = new Scene("fig1");
 
-            client1.addScenes(scene1);
-            client1.addScenes(scene2);
+            client1.AddScene(scene1);
+            client1.AddScene(scene2);
             bool result = client1.VerifyListScene();
             Assert.IsTrue(result);
 

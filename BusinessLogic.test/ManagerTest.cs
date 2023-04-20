@@ -48,6 +48,7 @@ namespace BusinessLogic.test
         {
             Manager manager = new Manager();
             Client client = new Client();
+            manager.logged = client;
             Figure figure = new Figure();
             manager.addFigure(figure);
             Assert.IsTrue(client.getFigures().Contains(figure));

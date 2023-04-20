@@ -64,8 +64,8 @@ namespace Domain.test
             Figure figure1 = new Figure("fig1",50);
             Figure figure2 = new Figure("fig1",10);
 
-            client1.addFigures(figure1);
-            client1.addFigures(figure2);
+            client1.AddFigure(figure1);
+            client1.AddFigure(figure2);
             bool result = client1.VerifyListFigures();
             Assert.IsTrue(result);
 

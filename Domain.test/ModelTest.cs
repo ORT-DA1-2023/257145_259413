@@ -40,8 +40,8 @@ namespace Domain.test
             Client client1 = new Client();
             Model model1 = new Model("model1");
             Model model2 = new Model("model1");
-            client1.addModel(model1);
-            client1.addModel(model2);
+            client1.AddModel(model1);
+            client1.AddModel(model2);
             bool result = client1.VerifyListModels();
             Assert.IsTrue(result);
 

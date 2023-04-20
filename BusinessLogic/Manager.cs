@@ -91,7 +91,7 @@ namespace BusinessLogic
 
         public void addFigure(Figure figure)
         {
-            throw new NotImplementedException();
+            logged.AddFigure(figure);
         }
     }
 }
