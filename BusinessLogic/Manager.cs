@@ -103,5 +103,10 @@ namespace BusinessLogic
         {
             GetFigures().Remove(figure);
         }
+
+        public void addMaterial(Material material)
+        {
+            logged.AddMaterial(material);
+        }
     }
 }

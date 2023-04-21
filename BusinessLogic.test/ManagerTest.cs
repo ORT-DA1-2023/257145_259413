@@ -69,5 +69,23 @@ namespace BusinessLogic.test
             
 
         }
+
+
+        [TestMethod]
+        public void ReturnTrueIfClientCanCreateANewMaterial()
+        {
+
+            Manager manager = new Manager();
+            Client client = new Client();
+            manager.logged= client;
+            Material material = new Material();
+            manager.addMaterial(material);
+            Assert.IsTrue(client.getMaterials().Contains(material));
+
+        }
+
+        
+
+
     }
 }

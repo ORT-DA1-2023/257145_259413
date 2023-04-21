@@ -314,5 +314,10 @@ namespace Domain
         {
             return client.MatchingUsername(this.name) && client.MatchingPassword(this.password);
         }
+
+        public  List<Material> getMaterials()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
