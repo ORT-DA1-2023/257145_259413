@@ -33,27 +33,8 @@
 
     <button type="button" class="btn btn-primary" @onclick="CancelarFigura">Cancelar</button>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Radio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var figura in manager.GetFigures())
-            {
-                <tr>
-                    <td>@figura.name</td>
-                    <td>@figura.radio</td>
-                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteFigure(figura))">Eliminar</button></td>
-                </tr>
-            }
-        </tbody>
-    </table>
 
-
+    <button type="button" class="btn btn-primary" @onclick="VerFiguras">Ver Figuras</button>
 
 
 
@@ -61,7 +42,7 @@
     private string name = "";
     private string radius;
     private string mensajeError;
-    
+
 
     void CrearFigura()
     {
@@ -91,6 +72,9 @@
         NavigationManager.NavigateTo("/logged");
     }
 
-
+    void VerFiguras()
+    {
+        NavigationManager.NavigateTo("/figures/list");
+    }
 
 }

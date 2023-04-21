@@ -11,7 +11,8 @@ namespace Domain
     public class Material
     {
         public string name;
-        private Color color;
+        public Color color;
+        public string type;
 
         public Material() 
         {
@@ -22,6 +23,13 @@ namespace Domain
         {
             this.name = name;
             this.color = color;
+        }
+
+        public Material(string name, Color color, string type)
+        {
+            this.name = name;
+            this.color = color;
+            this.type = type;
         }
 
         public bool VerifyColor(int red, int green, int blue)
@@ -40,6 +48,11 @@ namespace Domain
                 return false;
             }
             return true;
+        }
+
+        public override string ToString()
+        {
+            return "R: " + color.R + " G: " + color.G + " B: " + color.B;
         }
     }
 }

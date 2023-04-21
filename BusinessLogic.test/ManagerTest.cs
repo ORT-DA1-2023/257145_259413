@@ -99,6 +99,30 @@ namespace BusinessLogic.test
 
         }
 
+        [TestMethod]
+        public void ReturnTrueIfClientCanCreateANewModel()
+        {
+            Manager manager = new Manager();
+            Client client = new Client();
+            manager.logged = client;
+            Model model = new Model();
+            manager.addModel(model);
+            Assert.IsTrue(client.getModels().Contains(model));
+        }
+
+        [TestMethod]
+        public void ReturnTrueIfClientCanDeleteModel()
+        {
+            Manager manager = new Manager();
+            Client client = new Client();
+            manager.logged = client;
+            Model model = new Model();
+            Model model1 = new Model();
+            manager.addModel(model);
+            manager.addModel(model1);
+            manager.DeleteModel(model);
+            Assert.IsTrue(!client.getModels().Contains(model));
+        }
 
     }
 }

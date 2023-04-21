@@ -1,0 +1,51 @@
+﻿@using BusinessLogic;
+@using Domain;
+@inject Manager manager;
+@page "/model";
+
+<h3>model</h3>
+
+<InputText @bind-Value="name" @oninput="ValidateName"/>
+@if (!string.IsNullOrEmpty(nameError))
+{
+    <div class="alert alert-danger">@nameError</div>
+
+}
+
+<p>Selecciona la figura</p>
+<select @bind="selectedFigure">
+    @foreach(var figure in manager.GetFigures())
+    {
+        <option value="@FigureToValue(figure)">@figure.name</option>
+    }
+</select>
+
+<p>Selecciona el material</p>
+<select @bind="selectedMaterial">
+    <option value="">Selecciona el tipo de material</option>
+    @foreach (var material in manager.GetMaterials())
+    {
+        <option value="@MaterialToValue(material)">@material.name</option>
+    }
+</select>
+
+<InputCheckbox @bind-Value="@isChecked"/>
+
+@code {
+    private string name;
+    private string nameError;
+    private Material selectedMaterial;
+    private Figure selectedFigure;
+    private bool isChecked = false;
+
+
+    void ValidateName()
+    {
+
+    }
+
+    public string FigureToValue(Figure figure) => figure.name.ToString();
+
+    public string MaterialToValue(Material material) => material.name.ToString();
+
+}

@@ -77,7 +77,7 @@
     <div class="alert alert-danger"> @mensajeError </div>
 }
 
-
+<button type="button" class="btn btn-primary" @onclick="VerMateriales">Ver Materiales</button>
 
 @code {
 
@@ -88,7 +88,7 @@
     private int green;
     private int blue;
     private string nameError ="";
-   
+
 
 
     bool showDropdown = false;
@@ -125,21 +125,25 @@
     void CrearMaterial()
     {
 
-        if (material.VerifyName(name) && material.VerifyColor(red, green, blue))
+        if (material.VerifyName(name) && material.VerifyColor(red, green, blue) && !string.IsNullOrEmpty(selectedMaterial))
         {
-
+            color = Color.FromArgb(red, green, blue);
             Material newMaterial = new Material(name, color);
             manager.addMaterial(newMaterial);
 
         }
         else
         {
-            mensajeError = " Nombre incorrecto  o  color incorrecto";
+            mensajeError = " Nombre  o  color incorrecto o material no seleccionado";
         }
 
 
     }
 
+    void VerMateriales()
+    {
+        NavigationManager.NavigateTo("/material/list");
+    }
 
 }
     

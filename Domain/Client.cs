@@ -320,6 +320,9 @@ namespace Domain
             return client.MatchingUsername(this.name) && client.MatchingPassword(this.password);
         }
 
-       
+        public List<Model> getModels()
+        {
+            return this.models;
+        }
     }
 }

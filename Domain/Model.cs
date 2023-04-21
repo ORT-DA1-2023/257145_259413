@@ -10,7 +10,9 @@ namespace Domain
     public class Model
     {
 
-        public object name { get;  set; }
+        public string name { get;  set; }
+        public Figure figure { get; set; }
+        public Material material { get; set; }
 
 
         public Model()
@@ -23,6 +25,13 @@ namespace Domain
             this.name = name;
           
 
+        }
+
+        public Model(string name, Figure figure, Material material)
+        {
+            this.name = name;
+            this.figure = figure;
+            this.material = material;
         }
 
         

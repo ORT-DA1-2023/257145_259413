@@ -1,0 +1,32 @@
+﻿@page "/figures/list"
+@using BusinessLogic;
+@inject Manager manager;
+
+<h3>FigureList</h3>
+
+<a href="/figures">Volver</a>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Radio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var figura in manager.GetFigures())
+        {
+            <tr>
+                <td>@figura.name</td>
+                <td>@figura.radio</td>
+                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteFigure(figura))">Eliminar</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+
+}

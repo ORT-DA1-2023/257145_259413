@@ -1,0 +1,32 @@
+﻿@using BusinessLogic;
+@inject Manager manager;
+@page "/material/list";
+
+<h3>MaterialList</h3>
+
+<a href="/material">Volver</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Color</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var material in manager.GetMaterials())
+        {
+            <tr style="width: 100px; height: 100px; background-color:rgb(@material.color.R, @material.color.G, @material.color.B);">
+                <td>@material.name</td>
+                <td>@material.ToString()</td>
+                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteMaterial(material))">Eliminar</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+
+}

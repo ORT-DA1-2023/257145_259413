@@ -114,10 +114,39 @@ namespace BusinessLogic
             return logged.getMaterials();
         }
 
+        public bool VerifyMaterialInModels(Material material)
+        {
+            foreach(Model model in GetModels())
+            {
+                if(model.material == material)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public void DeleteMaterial(Material material)
         {
-            GetMaterials().Remove(material);
+            if (!VerifyMaterialInModels(material))
+            {
+                GetMaterials().Remove(material);
+            }
+        }
+
+        public void addModel(Model model)
+        {
+            logged.AddModel(model);
+        }
+
+        public List<Model> GetModels()
+        {
+            return logged.getModels();
+        }
+
+        public void DeleteModel(Model model)
+        {
+            GetModels().Remove(model); 
         }
     }
 }
