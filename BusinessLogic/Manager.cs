@@ -108,5 +108,16 @@ namespace BusinessLogic
         {
             logged.AddMaterial(material);
         }
+
+        public List<Material> GetMaterials()
+        {
+            return logged.getMaterials();
+        }
+
+
+        public void DeleteMaterial(Material material)
+        {
+            GetMaterials().Remove(material);
+        }
     }
 }

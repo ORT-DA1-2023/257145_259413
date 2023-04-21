@@ -2,10 +2,59 @@
 @using Domain;
 @using BusinessLogic;
 @using System.Globalization;
+@using System.Drawing;
 @inject NavigationManager NavigationManager
 @inject Manager manager;
 
 <h1>Crea tu material</h1>
+
+
+
+
+
+<InputText @bind-Value="name" @oninput="ValidateName" />
+@if (!string.IsNullOrEmpty(nameError))
+{
+    <div class="alert alert-danger">@nameError</div>
+}
+
+
+
+
+
+<h3> Color:</h3>
+
+<div class="form-group">
+    <label for="radius">Red:</label>
+    <input type="number"  class="form-control" id="red" @bind="@red" >
+
+
+    <p>Color entre 0-255</p>
+
+
+
+</div>
+
+<div class="form-group">
+    <label for="radius">Green:</label>
+    <input type="number" class="form-control" id="green" @bind="@green" >
+
+
+    <p>Color entre 0-255</p>
+
+
+</div>
+
+<div class="form-group">
+    <label for="radius">Blue:</label>
+    <input type="number"class="form-control" id="blue" @bind="@blue" >
+
+
+    <p>Color entre 0-255</p>
+
+</div>
+
+
 
 <button @onclick="ToggleDropdown">Elegir material</button>
 
@@ -14,13 +63,34 @@
     <select @onchange="HandleSelection">
         <option value="">Selecciona el tipo de material</option>
         <option value="lambertiano">Lambertiano</option>
-        <option value="concreto">Concreto</option>
-        <option value="madera">Madera</option>
-        <option value="acero">Acero</option>
+    
     </select>
 }
 
+
+
+
+
+<button type="button" class="btn btn-primary" @onclick="CrearMaterial">Guardar</button>
+@if(!string.IsNullOrEmpty(mensajeError))
+{
+    <div class="alert alert-danger"> @mensajeError </div>
+}
+
+
+
 @code {
+
+    private string name="";
+    private Color color;
+    private string mensajeError;
+    private int red;
+    private int green;
+    private int blue;
+    private string nameError ="";
+   
+
+
     bool showDropdown = false;
     string selectedMaterial = "";
 
@@ -35,4 +105,48 @@
         showDropdown = false;
         // Aquí puedes realizar alguna acción con el material seleccionado
     }
+
+
+    Material material = new Material();
+
+    private void ValidateName(ChangeEventArgs e)
+    {
+        name = (string)e.Value;
+
+        if (!material.VerifyName(name))
+        {
+            nameError = "Nombre Sin espacios al Principio ni al final";
+            return;
+        }
+
+        nameError = string.Empty;
+    }
+
+    void CrearMaterial()
+    {
+
+        if (material.VerifyName(name) && material.VerifyColor(red, green, blue))
+        {
+
+            Material newMaterial = new Material(name, color);
+            manager.addMaterial(newMaterial);
+
+        }
+        else
+        {
+            mensajeError = " Nombre incorrecto  o  color incorrecto";
+        }
+
+
+    }
+
+
 }
+    
+
+
+  
+
+
+
+

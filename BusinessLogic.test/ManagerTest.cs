@@ -83,8 +83,21 @@ namespace BusinessLogic.test
             Assert.IsTrue(client.getMaterials().Contains(material));
 
         }
+        [TestMethod]
+        public void ReturnTrueIfClientCanDeleteMaterial()
+        {
 
-        
+            Manager manager = new Manager();
+            Client client = new Client();
+            manager.logged = client;
+            Material material = new Material();
+            Material material1 = new Material();
+            manager.addMaterial(material);
+            manager.addMaterial(material1);
+            manager.DeleteMaterial(material);
+            Assert.IsTrue(!client.getMaterials().Contains(material));
+
+        }
 
 
     }
