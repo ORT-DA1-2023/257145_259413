@@ -128,9 +128,8 @@
         if (material.VerifyName(name) && material.VerifyColor(red, green, blue) && !string.IsNullOrEmpty(selectedMaterial))
         {
             color = Color.FromArgb(red, green, blue);
-            Material newMaterial = new Material(name, color);
+            Material newMaterial = new Material(name, color, selectedMaterial);
             manager.addMaterial(newMaterial);
-
         }
         else
         {

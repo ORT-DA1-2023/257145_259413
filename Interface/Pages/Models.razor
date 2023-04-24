@@ -1,51 +1,87 @@
 ﻿@using BusinessLogic;
 @using Domain;
 @inject Manager manager;
+@inject NavigationManager NavigationManager;
 @page "/model";
 
 <h3>model</h3>
 
-<InputText @bind-Value="name" @oninput="ValidateName"/>
+<InputText @bind-Value="name"/>
 @if (!string.IsNullOrEmpty(nameError))
 {
     <div class="alert alert-danger">@nameError</div>
 
 }
 
-<p>Selecciona la figura</p>
-<select @bind="selectedFigure">
-    @foreach(var figure in manager.GetFigures())
+<label for="Figures">Figuras</label>
+<select class="form-control" @onchange="figureSelection">
+    <option disabled selected value= "">Selecciona la figura</option>
+    @foreach (var figure in manager.GetFigures())
     {
-        <option value="@FigureToValue(figure)">@figure.name</option>
+        <option value="@figure.name">@figure.name</option>
     }
 </select>
 
-<p>Selecciona el material</p>
-<select @bind="selectedMaterial">
-    <option value="">Selecciona el tipo de material</option>
-    @foreach (var material in manager.GetMaterials())
+<label for="Material">Materiales</label>
+<select class="form-control" @onchange="materialSelection">
+    @foreach(var material in manager.GetMaterials())
     {
-        <option value="@MaterialToValue(material)">@material.name</option>
+        <option value="@material.name">@material.name</option>
     }
 </select>
 
+<p>Generar preview al guardar</p>
 <InputCheckbox @bind-Value="@isChecked"/>
+
+<button type="button" class="btn btn-primary" @onclick="CrearModelo">Guardar</button>
+@if (!string.IsNullOrEmpty(mensajeError))
+{
+    <div class="alert alert-danger"> @mensajeError </div>
+}
+
+<button type="button" class="btn btn-primary" @onclick="VerModelo">Ver Modelos</button>
 
 @code {
     private string name;
     private string nameError;
-    private Material selectedMaterial;
-    private Figure selectedFigure;
+    private string mensajeError;
+    private string selectedMaterial;
+    private string selectedFigure;
     private bool isChecked = false;
 
+    Model model = new Model();
 
-    void ValidateName()
+    void figureSelection(ChangeEventArgs e)
     {
-
+        selectedFigure = e.Value.ToString();
+        model.figure = manager.MatchingFigure(selectedFigure);
     }
 
-    public string FigureToValue(Figure figure) => figure.name.ToString();
+    void materialSelection(ChangeEventArgs e)
+    {
+        selectedMaterial = e.Value.ToString();
+        model.material = manager.MatchingMaterial(selectedMaterial);
+    }
 
-    public string MaterialToValue(Material material) => material.name.ToString();
+    void CrearModelo()
+    {
+
+        if (model.VerifyName(name))
+        {
+            model.name = name;
+            manager.addModel(model);
+
+        }
+        else
+        {
+            mensajeError = "figura " + selectedFigure + " material " + selectedMaterial;
+        }
+    }
+
+    void VerModelo()
+    {
+        NavigationManager.NavigateTo("/model/list");
+    }
+
 
 }

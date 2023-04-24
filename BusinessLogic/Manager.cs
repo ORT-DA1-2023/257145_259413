@@ -17,6 +17,31 @@ namespace BusinessLogic
             this.clients = new List<Client>();
         }
 
+        public Figure MatchingFigure(string name)
+        {
+            foreach(var figure in this.logged.getFigures())
+            {
+                if(figure.name == name)
+                {
+                    return figure;
+                }
+            }
+            return new Figure();
+        }
+
+        public Material MatchingMaterial(string name)
+        {
+            foreach(var material in this.logged.getMaterials())
+            {
+                if(material.name == name) 
+                {
+                    return material;
+                }
+            }
+            return new Material();
+        }
+
+
         public void add(Client client1)
         {
             foreach (Client client in clients)

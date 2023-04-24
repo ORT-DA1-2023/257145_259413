@@ -24,6 +24,11 @@
     <div class="alert alert-danger">@mensajeError</div>
 }
 
+<button @onclick="IniciarSesion1">Test 1</button>
+
+<button @onclick="IniciarSesion2">Test 2</button>
+
+
 <a href="/SignUp">Sign up</a>
 
 @code {
@@ -32,13 +37,27 @@
     string mensajeError;
 
 
- 
+
 
     Client toLogIn = new Client();
-    
+    Client pablin = new Client("Pablo", "123");
+    Client nachin = new Client("Ignacio", "nashe1");
+
+    void IniciarSesion1()
+    {
+        manager.logged = pablin;
+        NavigationManager.NavigateTo("/figures");
+    }
+
+    void IniciarSesion2()
+    {
+        manager.logged = nachin;
+        NavigationManager.NavigateTo("/figures");
+    }
+
     void IniciarSesion()
     {
-        manager.add(new Client("Pablo1","Hola123"));
+        
         if(toLogIn.VerifyName(nombre) && toLogIn.VerifyPassword(contrasena))
         {
             toLogIn = manager.logIn(nombre, contrasena);
@@ -56,6 +75,7 @@
            
         }
 
+        manager.logged=new Client("Pablo1","Hola123");
 
 
     }

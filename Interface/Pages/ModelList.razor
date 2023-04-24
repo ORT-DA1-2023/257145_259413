@@ -1,0 +1,39 @@
+﻿@using BusinessLogic;
+@inject Manager manager;
+@inject NavigationManager NavigationManager;
+
+
+
+@page "/model/list";
+
+<h3>ModelList</h3>
+
+<a href="/model">Volver</a>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Figura</th>
+            <th>Material</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var model in manager.GetModels())
+        {
+            <tr>
+                <td>@model.name</td>
+                <td>@model.figure.name</td>
+                <td>@model.material.name</td>
+                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteModel(model))">Eliminar</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+
+}
+
