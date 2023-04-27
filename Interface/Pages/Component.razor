@@ -1,0 +1,68 @@
+﻿@page "/scene/{name}"
+@using BusinessLogic;
+@using Domain;
+@inject Manager manager;
+
+<h3>Scene @name</h3>
+
+
+<div class="form-group">
+	<label for="name">Modelos Posicionados:</label>
+	<input type="text" class="form-control" id="name" @bind="@name">
+</div>
+
+
+
+
+
+<div class="form-group">
+	<label for="name">Modelos Disponibles:</label>
+	<input type="text" class="form-control" id="name" @bind="@name">
+</div>
+
+
+
+<div class="form-group">
+	<label for="name">Look From:</label>
+	<input type="text" class="form-control" id="name" @bind="@name">
+</div>
+
+
+
+
+<div class="form-group">
+	<label for="name">Look At:</label>
+	<input type="text" class="form-control" id="name" @bind="@name">
+</div>
+
+
+
+
+<div class="form-group">
+	<label for="name">Look FoV:</label>
+	<input type="text" class="form-control" id="name" @bind="@name">
+</div>
+
+
+
+<div class="form-group">
+	<label for="name">Preview:</label>
+	<input type="text" class="form-control" id="name" @bind="@name">
+</div>
+
+
+
+
+@code {
+
+
+	[Parameter]
+	public string name { get; set; }
+	private Scene? scene;
+	protected override void OnInitialized()
+	{
+		scene = manager.GetScenebyName(name);
+		
+
+	}
+}

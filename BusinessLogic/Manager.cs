@@ -173,5 +173,30 @@ namespace BusinessLogic
         {
             GetModels().Remove(model); 
         }
+
+        public void addScene(Scene scene)
+        {
+            logged.AddScene(scene);
+        }
+
+        public List<Scene> GetScenes() 
+        { 
+            return logged.getScenes();
+        }
+
+       public Scene GetScenebyName(string name)
+        {
+
+            foreach (Scene scene in GetScenes()){
+                if (scene.name == name)
+                {
+					return scene;
+				}
+            }
+
+            return null;
+        }
+
+
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class Scene
+    public class Scene: IComparable<Scene>
     {
         private List<PositionedModel> _positionedModels;
 
@@ -25,8 +25,9 @@ namespace Domain
             this._positionedModels = new List<PositionedModel>();
             this.FieldOfVision = 30;
             this.created = DateTime.Now;
+            this.lastModified = this.created;
 
-        }
+		}
 
         public Scene(string name)
         {
@@ -137,6 +138,26 @@ namespace Domain
         {
             return fov >= 1 && fov <=160;
         }
+
+        public int CompareTo(Scene scene)
+        {
+            if (scene.lastModified < this.lastModified)
+            {
+				return -1;
+			}
+			else if (scene.lastModified > this.lastModified)
+			{
+				
+				return 1;
+			}
+            else
+            {
+                return 0;
+            }
+            
+
+        }
+
     }
 }
 

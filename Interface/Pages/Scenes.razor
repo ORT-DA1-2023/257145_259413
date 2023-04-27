@@ -1,0 +1,99 @@
+﻿@using BusinessLogic;
+@using Domain;
+@inject Manager manager;
+@inject NavigationManager NavigationManager;
+@page "/scene"
+
+
+<h3> Scene </h3>
+
+
+@if (!muestroCasilla)
+{
+	<button type="button" class="btn btn-primary" @onclick="tocoNuevaScena">Nueva escena en blanco</button>
+}
+
+@if (!string.IsNullOrEmpty(mensajeError))
+{
+	<div class="alert alert-danger"> @mensajeError </div>
+}
+
+@if (muestroCasilla)
+{
+	<form>
+		<label> Nombre de la escena</label>
+		<input type="text" @bind="name" />
+		<button button type="button" class=" btn btn-primary" @onclick="CrearScene">Crear escena</button>
+
+	</form>	
+
+
+}
+
+<table>
+	<thead>
+		<tr>
+			<th>Nombre</th>
+			<th>Ultima modificacion</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var scene in listScene)
+		{
+			<tr>
+				<td><a href="@($"/scene/{scene.name}")">@scene.name</a></td>
+				<td> @scene.lastModified</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
+
+@code {
+
+
+	private int id { get; set; }
+	private string name;
+	private string mensajeError;
+	private bool muestroCasilla=false;
+	private List<Scene> listScene = new List<Scene>();
+
+	void tocoNuevaScena()
+	{
+		muestroCasilla = true;
+	}
+
+
+	void CrearScene()
+	{
+		Scene scene = new Scene();
+
+		if (scene.VerifyName(name))
+		{
+			muestroCasilla = false;
+			Scene newScene = new Scene();
+			scene.name = name;
+			manager.addScene(scene);
+			name = "";
+
+			listScene = manager.GetScenes();
+			listScene.Sort();
+
+		//List<Scene> lista = manager.GetScenes;
+		//lista
+		}
+		else
+		{
+			mensajeError = "nombre no debe tener espacios (Principio, ni final)";
+		}
+
+
+	}
+
+
+
+
+}
+

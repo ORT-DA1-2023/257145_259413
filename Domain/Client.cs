@@ -324,5 +324,10 @@ namespace Domain
         {
             return this.models;
         }
+
+        public List<Scene> getScenes()
+        {
+            return this.scenes;
+        }
     }
 }

@@ -124,5 +124,23 @@ namespace BusinessLogic.test
             Assert.IsTrue(!client.getModels().Contains(model));
         }
 
+
+        [TestMethod]
+        public void ReturnTrueIfClienteCanCreateaNewScene()
+        {
+
+            Manager manager = new Manager();
+            Client client = new Client();
+            manager.logged = client;
+            Scene scene = new Scene();
+            manager.addScene(scene);
+            Assert.IsTrue(client.getScenes().Contains(scene));
+        }
+
+
+
+
+
+
     }
 }
