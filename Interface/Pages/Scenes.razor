@@ -73,16 +73,12 @@
 		if (scene.VerifyName(name))
 		{
 			muestroCasilla = false;
-			Scene newScene = new Scene();
-			scene.name = name;
+			scene = new Scene(name);
 			manager.addScene(scene);
 			name = "";
 
 			listScene = manager.GetScenes();
 			listScene.Sort();
-
-		//List<Scene> lista = manager.GetScenes;
-		//lista
 		}
 		else
 		{

@@ -39,7 +39,10 @@ namespace Domain
             this.created = DateTime.Now;
         }
 
-
+        public List<PositionedModel> GetPositionedModels()
+        {
+            return this._positionedModels;
+        }
 
 
 
@@ -99,12 +102,12 @@ namespace Domain
         {
 
 
-            return VerifyCoordinateValuesLen(x) && VerifyCoordinateValuesLen(y) && VerifyCoordinateValuesLen(z);
+            return VerifyCoordinateValuesLens(x) && VerifyCoordinateValuesLens(y) && VerifyCoordinateValuesLens(z);
 
 
         }
 
-        public bool VerifyCoordinateValuesLen(float coordinate)
+        public bool VerifyCoordinateValuesLens(float coordinate)
         {
 
             if (coordinate.ToString().Contains("."))

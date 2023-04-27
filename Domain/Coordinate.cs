@@ -15,9 +15,10 @@ namespace Domain
 
         public Coordinate()
         {
-          
+            this.x =0;
+            this.y = 0;
+            this.z = 0;
         }
-
 
         public Coordinate(float x, float y, float z)
         {
@@ -27,22 +28,17 @@ namespace Domain
 
         }
 
-        public bool VerifyCoordinate(float x, float y, float z)
+		public bool VerifyCoordinate(float x, float y, float z)
         {
-            
             return VerifyCoordinateValues(x) && VerifyCoordinateValues(y) && VerifyCoordinateValues(z);
-
         }
 
        
         public bool VerifyCoordinateValues (float coordinate)
         {
-
             if (coordinate.ToString().Contains("."))
             {
                 String radiusLetter = coordinate.ToString();
-
-
                 for (int i = 0; i < radiusLetter.Length - 1; i++)
                 {
                     if (radiusLetter[i].Equals("."))
@@ -51,22 +47,15 @@ namespace Domain
                         {
                             return true;
                         }
-
-
                     }
-
                 }
-
-
             }
-
             return false;
-
-
         }
 
-
-
-
+		public override string ToString()
+		{
+			return "x: " + this.x + " y: " + this.y + " z: " + this.z;
+		}
     }
 }

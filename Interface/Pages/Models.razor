@@ -14,7 +14,7 @@
 }
 
 <label for="Figures">Figuras</label>
-<select class="form-control" @onchange="figureSelection">
+<select class="form-control" id="Figures" @onchange="figureSelection">
     <option disabled selected value= "">Selecciona la figura</option>
     @foreach (var figure in manager.GetFigures())
     {
@@ -23,7 +23,8 @@
 </select>
 
 <label for="Material">Materiales</label>
-<select class="form-control" @onchange="materialSelection">
+<select class="form-control" id="Material" @onchange="materialSelection">
+    <option disabled selected value="">Selecciona el material</option>
     @foreach(var material in manager.GetMaterials())
     {
         <option value="@material.name">@material.name</option>
@@ -46,7 +47,9 @@
     private string nameError;
     private string mensajeError;
     private string selectedMaterial;
+    private Material material;
     private string selectedFigure;
+    private Figure figure;
     private bool isChecked = false;
 
     Model model = new Model();
@@ -54,13 +57,13 @@
     void figureSelection(ChangeEventArgs e)
     {
         selectedFigure = e.Value.ToString();
-        model.figure = manager.MatchingFigure(selectedFigure);
+        figure = manager.MatchingFigure(selectedFigure);
     }
 
     void materialSelection(ChangeEventArgs e)
     {
         selectedMaterial = e.Value.ToString();
-        model.material = manager.MatchingMaterial(selectedMaterial);
+        material = manager.MatchingMaterial(selectedMaterial);
     }
 
     void CrearModelo()
@@ -68,7 +71,7 @@
 
         if (model.VerifyName(name))
         {
-            model.name = name;
+            model = new Model(name, figure, material);
             manager.addModel(model);
 
         }

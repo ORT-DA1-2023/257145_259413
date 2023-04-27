@@ -7,40 +7,65 @@
 
 
 <div class="form-group">
-	<label for="name">Modelos Posicionados:</label>
-	<input type="text" class="form-control" id="name" @bind="@name">
-</div>
-
-
-
-
-
-<div class="form-group">
 	<label for="name">Modelos Disponibles:</label>
-	<input type="text" class="form-control" id="name" @bind="@name">
+	<table>
+		<thead>
+			<tr>
+				<th>Nombre</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var model in manager.GetModels())
+			{
+				<tr>
+					<td>@model.name</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 </div>
 
 
 
 <div class="form-group">
-	<label for="name">Look From:</label>
-	<input type="text" class="form-control" id="name" @bind="@name">
+	<table>
+		<thead>
+			<tr>
+				<th>Modelos Posicionados</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (PositionedModel positionedModel in scene.GetPositionedModels())
+			{
+				<tr>
+					<td>@positionedModel.ToString()</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+
+
+<div class="form-group">
+	<label for="lookFrom">Look From:</label>
+	<input type="text" class="form-control" id="lookFrom" @bind="@scene.cameraPosition">
 </div>
 
 
 
 
 <div class="form-group">
-	<label for="name">Look At:</label>
-	<input type="text" class="form-control" id="name" @bind="@name">
+	<label for="lookAt">Look At:</label>
+	<input type="text" class="form-control" id="lookAt" @bind="@scene.cameraObjective">
 </div>
 
 
 
 
 <div class="form-group">
-	<label for="name">Look FoV:</label>
-	<input type="text" class="form-control" id="name" @bind="@name">
+	<label for="FoV">FoV:</label>
+	<input type="text" class="form-control" id="FoV" @bind="@scene.FieldOfVision">
 </div>
 
 
@@ -58,11 +83,9 @@
 
 	[Parameter]
 	public string name { get; set; }
-	private Scene? scene;
+	private Scene scene;
 	protected override void OnInitialized()
 	{
 		scene = manager.GetScenebyName(name);
-		
-
 	}
 }
