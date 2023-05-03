@@ -45,66 +45,14 @@ namespace Domain
             return this.materials;
         }
 
-        public  bool VerifyDate(DateTime date)
+        public List<Model> getModels()
         {
-
-            DateTime dateNow= DateTime.Now;
-
-            if (DateTime.Compare(dateNow, date) >0 )
-            { 
-
-                return true;
-            }
-
-            return false;
+            return this.models;
         }
 
-        public  bool VerifyListFigures()
-        { 
-
-            if (figures.Count == 0)
-            {
-                return false;
-            }
-
-            if (figures.Count == 1)
-            {
-                return true;
-            }
-
-            for (int i=0;i < figures.Count; i++)
-            {
-
-                for (int j=i+1; j< figures.Count; j++)
-                {
-
-                    if (figures[i].name == figures[j].name)
-                    {
-                        return false;
-                    }
-
-                }
-
-            }
-
-            return true;
-        }
-
-        public void AddFigure(Figure figure1)
+        public List<Scene> getScenes()
         {
-
-            foreach (Figure figure in figures)
-            {
-
-                if  (figure.name == figure1.name)
-                { 
-                    return;
-                }
-            }
-
-
-
-            this.figures.Add(figure1);
+            return this.scenes;
         }
 
         public bool VerifyName(string name)
@@ -151,6 +99,116 @@ namespace Domain
             return hasNumber && hasUpperCase;
         }
 
+        public bool MatchingPassword(string password)
+        {
+
+            if (password.Length != this.password.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < password.Length; i++)
+            {
+                if (password[i] != this.password[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool MatchingUsername(string name)
+        {
+
+
+            if (name.Length != this.name.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < name.Length; i++)
+            {
+                if (name[i] != this.name[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public  bool VerifyDate(DateTime date)
+        {
+
+            DateTime dateNow= DateTime.Now;
+
+            if (DateTime.Compare(dateNow, date) >0 )
+            { 
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public void AddFigure(Figure figure1)
+        {
+
+            foreach (Figure figure in figures)
+            {
+
+                if  (figure.name == figure1.name)
+                { 
+                    return;
+                }
+            }
+
+
+
+            this.figures.Add(figure1);
+        }
+
+        public  bool VerifyListFigures()
+        { 
+
+            if (figures.Count == 0)
+            {
+                return false;
+            }
+
+            if (figures.Count == 1)
+            {
+                return true;
+            }
+
+            for (int i=0;i < figures.Count; i++)
+            {
+
+                for (int j=i+1; j< figures.Count; j++)
+                {
+
+                    if (figures[i].name == figures[j].name)
+                    {
+                        return false;
+                    }
+
+                }
+
+            }
+
+            return true;
+        }
+
+        public bool FigureIsLinked(Figure figure)
+        {
+            foreach(Model model in this.models)
+            {
+                if(model.figure == figure)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         public void AddMaterial(Material material1)
         {
             foreach(Material material in materials)
@@ -184,6 +242,18 @@ namespace Domain
                 }
             }
             return true;
+        }
+
+        public bool MaterialIsLinked(Material material)
+        {
+            foreach(Model model in this.models)
+            {
+                if (model.material == material)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void AddModel(Model model1)
@@ -227,9 +297,18 @@ namespace Domain
                 }
             }
             return true;
+        }
 
-
-
+        public bool ModelIsLinked(Model model)
+        {
+            foreach(Scene scene in this.scenes)
+            {
+                if(scene.ModelIsPositioned(model))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void AddScene(Scene scene1)
@@ -280,54 +359,6 @@ namespace Domain
 
         }
 
-        public bool MatchingPassword(string password)
-        {
 
-            if (password.Length != this.password.Length)
-            {
-                return false;
-            }
-            for (int i = 0; i < password.Length; i++)
-            {
-                if (password[i] != this.password[i])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public bool MatchingUsername(string name)
-        {
-
-
-            if (name.Length != this.name.Length)
-            {
-                return false;
-            }
-            for (int i = 0; i < name.Length; i++)
-            {
-                if (name[i] != this.name[i])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        internal bool Equals(Client client)
-        {
-            return client.MatchingUsername(this.name) && client.MatchingPassword(this.password);
-        }
-
-        public List<Model> getModels()
-        {
-            return this.models;
-        }
-
-        public List<Scene> getScenes()
-        {
-            return this.scenes;
-        }
     }
 }

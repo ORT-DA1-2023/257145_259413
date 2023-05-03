@@ -126,7 +126,14 @@ namespace BusinessLogic
 
         public void DeleteFigure(Figure figure)
         {
-            GetFigures().Remove(figure);
+            if (logged.FigureIsLinked(figure))
+            {
+                throw new InvalidOperationException("La figura seleccionada está siendo usada por un modelo existente");
+            }
+            else
+            {
+                GetFigures().Remove(figure);
+            }
         }
 
         public void addMaterial(Material material)
@@ -139,21 +146,13 @@ namespace BusinessLogic
             return logged.getMaterials();
         }
 
-        public bool VerifyMaterialInModels(Material material)
-        {
-            foreach(Model model in GetModels())
-            {
-                if(model.material == material)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public void DeleteMaterial(Material material)
         {
-            if (!VerifyMaterialInModels(material))
+            if (logged.MaterialIsLinked(material))
+            {
+                throw new InvalidOperationException("El material seleccionado está siendo usado por un modelo existente");
+            }
+            else
             {
                 GetMaterials().Remove(material);
             }
@@ -171,7 +170,14 @@ namespace BusinessLogic
 
         public void DeleteModel(Model model)
         {
-            GetModels().Remove(model); 
+            if (logged.ModelIsLinked(model))
+            {
+                throw new InvalidOperationException("El modelo seleccionado está siendo usado por una escena existente");
+            }
+            else
+            {
+                GetModels().Remove(model);
+            }
         }
 
         public void addScene(Scene scene)

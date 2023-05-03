@@ -46,13 +46,13 @@
     void IniciarSesion1()
     {
         manager.logged = pablin;
-        NavigationManager.NavigateTo("/figures");
+        NavigationManager.NavigateTo("/figure");
     }
 
     void IniciarSesion2()
     {
         manager.logged = nachin;
-        NavigationManager.NavigateTo("/figures");
+        NavigationManager.NavigateTo("/figure");
     }
 
     void IniciarSesion()
@@ -74,8 +74,6 @@
             mensajeError = "Incorrect username or password";
            
         }
-
-        manager.logged=new Client("Pablo1","Hola123");
 
 
     }

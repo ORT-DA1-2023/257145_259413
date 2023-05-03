@@ -3,9 +3,14 @@
 @inject Manager manager
 
 
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-square" viewBox="0 0 16 16">
+        <path d="M0 6a6 6 0 1 1 12 0A6 6 0 0 1 0 6z" />
+        <path d="M12.93 5h1.57a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-1.57a6.953 6.953 0 0 1-1-.22v1.79A1.5 1.5 0 0 0 5.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 4h-1.79c.097.324.17.658.22 1z" />
+    </svg>
+
     <div class="top-row ps-3 navbar navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="">Interface</a>
+            <a class="navbar-brand" href="">RTX ON</a>
             <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -17,18 +22,28 @@
     <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                    <span class="oi oi-home" aria-hidden="true"></span> Home
+                <NavLink class="nav-link" href="logged" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span> Inicio
                 </NavLink>
             </div>
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="counter">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Counter
+                <NavLink class="nav-link" href="figure">
+                    <span class="bi bi-bounding-box-circles" aria-hidden="true"></span> Figuras
                 </NavLink>
             </div>
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="fetchdata">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+                <NavLink class="nav-link" href="material">
+                    <span class=" bi bi-tree-fill" aria-hidden="true"></span> Materiales
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="model">
+                    <span class="bi bi-circle-fill" aria-hidden="true"></span> Modelos
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="scene">
+                    <span class="bi bi-circle-square" aria-hidden="true"></span> Escenas
                 </NavLink>
             </div>
         </nav>

@@ -107,6 +107,18 @@ namespace Domain
 
         }
 
+        public bool ModelIsPositioned(Model model)
+        {
+            foreach(PositionedModel positionedModel in _positionedModels)
+            {
+                if(positionedModel.model == model)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool VerifyCoordinateValuesLens(float coordinate)
         {
 
