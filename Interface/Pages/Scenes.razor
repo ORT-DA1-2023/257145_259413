@@ -30,11 +30,12 @@
 
 }
 
+
 <table>
 	<thead>
 		<tr>
-			<th>Nombre</th>
-			<th>Ultima modificacion</th>
+			<th>Nombre </th>
+			<th>   Ultima modificacion</th>
 
 		</tr>
 	</thead>
@@ -44,6 +45,7 @@
 			<tr>
 				<td><a href="@($"/scene/{scene.name}")">@scene.name</a></td>
 				<td> @scene.lastModified</td>
+				<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteSceness(scene))">Eliminar</button></td>
 			</tr>
 		}
 	</tbody>

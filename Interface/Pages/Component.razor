@@ -4,7 +4,7 @@
 @inject Manager manager;
 
 
-<h3>Scene @name</h3>
+<h3>Scene:  @name</h3>
 
 
 <div class="form-group">
@@ -99,6 +99,7 @@
 
 
 
+
 <div class="form-group">
 	<label for="lookFrom">Look From:</label>
 
@@ -106,10 +107,13 @@
 		<input type="number" @bind-value="LookFromCoordenadaX" />	
 		<input type="number" @bind-value="LookFromCoordenadaY" />
 		<input type="number" @bind-value="LookFromCoordenadaZ" />
-
-
-
 	</form>
+	@if (showValidationMessageLookFrom)
+	{
+		<div class="alert alert-danger" role="alert">
+			LookFrom no es válido.
+		</div>
+	}
 	
 </div>
 
@@ -123,9 +127,15 @@
 		<input type="number" @bind-value="LookAtCoordenadaZ" />
 	</form>
 
+	@if (showValidationMessageLookAt)
+	{
+		<div class="alert alert-danger" role="alert">
+			LookA no es válido.
+		</div>
+	}
 
 
-	
+
 </div>
 
 
@@ -134,14 +144,25 @@
 	
 	<form id="Fov">
 
-		<input type="number" @bind-value="Fov" />
+		<input type="number" @bind-value="Fov"/>
 
 	</form>
-
+	@if (showValidationMessageFov)
+	{
+		<div class="alert alert-danger" role="alert">
+			FoV no es válido.
+		</div>
+	}
 
 
 
 </div>
+
+<button @onclick="adjustframe">Ajustar camara</button>
+
+
+
+
 
 
 <button @onclick="Renderizar">Renderizar</button>
@@ -176,64 +197,82 @@
 	private int Fov = 30;
 
 	private string nameError = "";
+	private bool showValidationMessageFov = false;
+	private bool showValidationMessageLookFrom = false;
+	private bool showValidationMessageLookAt = false;
 
 
-		private Model modeloSeleccionado;
+	private Model modeloSeleccionado;
 
-		private void SeleccionarModelo(Model modelo)
-		{
-			modeloSeleccionado = modelo;
-
-			mostrarFormulario = true;
-
-		}
-
-		void AgregarModeloPosiconado()
-		{
-
-			Coordinate coordinates = new Coordinate();
-
-			if (coordinates.VerifyCoordinate(CoordenadaX,CoordenadaY,CoordenadaZ))
-			{
-				Coordinate coordinateCreate = new Coordinate(CoordenadaX, CoordenadaY, CoordenadaZ);
-
-				PositionedModel PositionedModel = new PositionedModel(modeloSeleccionado, coordinateCreate);
-
-				scene.addPositionedModel(PositionedModel);
-
-			}
-			CoordenadaX = 0;
-			CoordenadaY = 0;
-			CoordenadaZ = 0;
-
-
-		}
-		/*
-	private void valido(ChangeEventArgs e)
+	private void SeleccionarModelo(Model modelo)
 	{
-		LookFromCoordenadaX = int.Parse(e.Value.ToString());
+		modeloSeleccionado = modelo;
 
-		if (scene.VerifyCoordinateValuesLens(LookFromCoordenadaX))
-		{
-			nameError = "El nombre debe contener:Mayuscula - Numero- Sin espacios -Entre 3 a 20 letras";
-			return;
-		}
+		mostrarFormulario = true;
 
-		nameError = string.Empty;
 	}
 
-		
-	*/
 
+	void AgregarModeloPosiconado()
+	{
 
+		Coordinate coordinates = new Coordinate();
 
-		
-		
-		
-		void Renderizar()
+		if (coordinates.VerifyCoordinate(CoordenadaX,CoordenadaY,CoordenadaZ))
 		{
-			//renderizar
+			Coordinate coordinateCreate = new Coordinate(CoordenadaX, CoordenadaY, CoordenadaZ);
+
+			PositionedModel PositionedModel = new PositionedModel(modeloSeleccionado, coordinateCreate);
+
+			scene.addPositionedModel(PositionedModel);
+
 		}
+		CoordenadaX = 0;
+		CoordenadaY = 0;
+		CoordenadaZ = 0;
+
+
+	}
+
+	//MIRAR ESTO:
+	void adjustframe()
+	{
+		if (!scene.VerifyFoV(Fov))
+		{
+			showValidationMessageFov = true;
+		}
+		else
+		{
+			showValidationMessageFov = false;
+
+		}
+
+		if (!scene.VerifyCoordinate(LookFromCoordenadaX, LookFromCoordenadaY, LookFromCoordenadaZ))
+		{
+			showValidationMessageLookFrom = true;
+		}
+		else
+		{
+			showValidationMessageLookFrom = false;
+		}
+
+
+		if (!scene.VerifyCoordinate(LookAtCoordenadaX, LookAtCoordenadaY, LookAtCoordenadaZ))
+		{
+			showValidationMessageLookAt = true;
+		}
+		else
+		{
+			showValidationMessageLookAt = false;
+		}
+
+	}
+	
+
+	void Renderizar()
+	{
+		//renderizar
+	}
 
 
 

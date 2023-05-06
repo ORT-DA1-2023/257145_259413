@@ -203,6 +203,18 @@ namespace BusinessLogic
             return null;
         }
 
-	
+		public void DeleteSceness(Scene scene)
+		{
+
+
+			GetScenes().Remove(scene);
+
+		}
+
 	}
+
+
+
+
+
 }
