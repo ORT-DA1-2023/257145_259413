@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic.test", "BusinessLogic.test\BusinessLogic.test.csproj", "{32C500CA-E466-4161-892A-1A7E9BEA743B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{AD9E951E-9B0E-4CDF-B4FB-86C35635F1DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{32C500CA-E466-4161-892A-1A7E9BEA743B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32C500CA-E466-4161-892A-1A7E9BEA743B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32C500CA-E466-4161-892A-1A7E9BEA743B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD9E951E-9B0E-4CDF-B4FB-86C35635F1DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD9E951E-9B0E-4CDF-B4FB-86C35635F1DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD9E951E-9B0E-4CDF-B4FB-86C35635F1DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD9E951E-9B0E-4CDF-B4FB-86C35635F1DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
