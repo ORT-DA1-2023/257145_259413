@@ -1,7 +1,7 @@
 ﻿@using BusinessLogic;
 @using Domain;
 @inject Manager manager;
-@inject NavigationManager NavigationManager;
+@inject NavigationManager NavigationManager; 
 @page "/model";
 
 <h3>model</h3>
@@ -73,6 +73,7 @@
         {
             model = new Model(name, figure, material);
             manager.addModel(model);
+            name = "";
 
         }
         else

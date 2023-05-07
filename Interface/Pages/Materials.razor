@@ -130,6 +130,13 @@
             color = Color.FromArgb(red, green, blue);
             Material newMaterial = new Material(name, color, selectedMaterial);
             manager.addMaterial(newMaterial);
+            name = "";
+            red = 0;
+            green = 0;
+            blue = 0;
+
+
+
         }
         else
         {

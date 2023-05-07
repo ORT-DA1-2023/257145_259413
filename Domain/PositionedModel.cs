@@ -26,7 +26,8 @@ namespace Domain
 
         public override string ToString()
         {
-            return "Model: " + this.model.name + " Position: " + this.position.ToString();
+            return "Model: " + this.model.name + "  " +
+                  "Position: " + this.position.ToString();
         }
     }
 }

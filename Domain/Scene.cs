@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class Scene: IComparable<Scene>
+    public class Scene : IComparable<Scene>
     {
         private List<PositionedModel> _positionedModels;
 
@@ -27,14 +27,14 @@ namespace Domain
             this.created = DateTime.Now;
             this.lastModified = this.created;
 
-		}
+        }
 
         public Scene(string name)
         {
             this.name = name;
             this._positionedModels = new List<PositionedModel>();
-            this.cameraPosition = new Coordinate(0,2,0);
-            this.cameraObjective = new Coordinate(0,2,5);
+            this.cameraPosition = new Coordinate(0, 2, 0);
+            this.cameraObjective = new Coordinate(0, 2, 5);
             this.FieldOfVision = 30;
             this.created = DateTime.Now;
         }
@@ -94,8 +94,8 @@ namespace Domain
 
         public void Render()
         {
-             lastRendered = DateTime.Now;
-           
+            lastRendered = DateTime.Now;
+
         }
 
         public bool VerifyCoordinate(float x, float y, float z)
@@ -109,47 +109,22 @@ namespace Domain
 
         public bool ModelIsPositioned(Model model)
         {
-            foreach(PositionedModel positionedModel in _positionedModels)
+            foreach (PositionedModel positionedModel in _positionedModels)
             {
-                if(positionedModel.model == model)
+                if (positionedModel.model == model)
                 {
                     return true;
                 }
             }
             return false;
         }
-
-        public bool VerifyCoordinateValuesLens(float coordinate)
-        {
-
-            if (coordinate.ToString().Contains("."))
-            {
-                String radiusLetter = coordinate.ToString();
-
-
-                for (int i = 0; i < radiusLetter.Length - 1; i++)
-                {
-                    if (radiusLetter[i].Equals("."))
-                    {
-                        if (char.IsDigit(radiusLetter[i + 1]))
-                        {
-                            return true;
-                        }
-
-
-                    }
-
-                }
-
-
-            }
-
-            return false;
-
-
+        //REFACTORING
+        public bool VerifyCoordinateValuesLens(Object coordinate) 
+        { 
+            return coordinate.GetType() == typeof(float);
         }
-
-        public bool VerifyFoV(int fov)
+	
+		public bool VerifyFoV(int fov)
         {
             return fov >= 1 && fov <=160;
         }
@@ -173,6 +148,14 @@ namespace Domain
 
         }
 
-    }
+
+		public void DeletePositionedModel(PositionedModel positionedModel)
+		{
+			this._positionedModels.Remove(positionedModel);
+		}
+
+
+
+	}
 }
 

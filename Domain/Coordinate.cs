@@ -33,8 +33,15 @@ namespace Domain
             return VerifyCoordinateValues(x) && VerifyCoordinateValues(y) && VerifyCoordinateValues(z);
         }
 
-       
-        public bool VerifyCoordinateValues (float coordinate)
+        // HACER REFACTORING
+		public bool VerifyCoordinateValues(Object coordinate)
+		{
+			return coordinate.GetType() == typeof(float) ? (float)coordinate > 0 : false;
+		}
+
+
+
+		/*public bool VerifyCoordinateValues (float coordinate)
         {
             if (coordinate.ToString().Contains("."))
             {
@@ -52,6 +59,7 @@ namespace Domain
             }
             return false;
         }
+        */
 
 		public override string ToString()
 		{

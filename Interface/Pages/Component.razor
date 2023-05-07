@@ -3,7 +3,8 @@
 @using Domain;
 @inject Manager manager;
 
-<h3>Scene @name</h3>
+
+<h3>Scene:  @name</h3>
 
 
 <div class="form-group">
@@ -15,15 +16,64 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var model in manager.GetModels())
-			{
-				<tr>
-					<td>@model.name</td>
-				</tr>
-			}
+
+
+			<ul>
+				@foreach (var model in manager.GetModels())
+				{
+
+					<li><button type="button" class="btn btn-danger btn-sm" @onclick="(() => SeleccionarModelo(model))">@model.name</button></li>
+				}
+			</ul>
+
+			
+		
+
 		</tbody>
 	</table>
 </div>
+
+<form id="myForm1" style="display:none">
+	
+	<input type="number" @bind-value="CoordenadaX" />
+</form>
+@if (mostrarFormulario)
+{
+	<form id="myForm1">
+		<label>CoordenadaX:</label>
+		<input type="number" @bind-value="CoordenadaX" />
+	</form>
+}
+
+
+<form id="myForm2" style="display:none">
+
+	<input type="number" @bind-value="CoordenadaY" />
+</form>
+@if (mostrarFormulario)
+{
+	<form id="myForm2">
+		<label>CoordenadaY:</label>
+		<input type="number" @bind-value="CoordenadaY" />
+	</form>
+}
+
+<form id="myForm3" style="display:none">
+	
+	<input type="number" @bind-value="CoordenadaZ" />
+</form>
+@if (mostrarFormulario)
+{
+	<form id="myForm3">
+		<label>CoordenadaZ:</label>
+		<input type="number" @bind-value="CoordenadaZ" />
+
+	</form>
+
+	<button @onclick="AgregarModeloPosiconado">Agregar Modelo Posicionado</button>
+
+}
+
 
 
 
@@ -39,6 +89,8 @@
 			{
 				<tr>
 					<td>@positionedModel.ToString()</td>
+					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => scene.DeletePositionedModel(positionedModel))">Eliminar</button></td>
+
 				</tr>
 			}
 		</tbody>
@@ -47,38 +99,183 @@
 
 
 
+
 <div class="form-group">
 	<label for="lookFrom">Look From:</label>
-	<input type="text" class="form-control" id="lookFrom" @bind="@scene.cameraPosition">
+
+	<form id="LookFrom">
+		<input type="number" @bind-value="LookFromCoordenadaX" />	
+		<input type="number" @bind-value="LookFromCoordenadaY" />
+		<input type="number" @bind-value="LookFromCoordenadaZ" />
+	</form>
+	@if (showValidationMessageLookFrom)
+	{
+		<div class="alert alert-danger" role="alert">
+			LookFrom no es válido.
+		</div>
+	}
+	
 </div>
-
-
 
 
 <div class="form-group">
 	<label for="lookAt">Look At:</label>
-	<input type="text" class="form-control" id="lookAt" @bind="@scene.cameraObjective">
+
+	<form id="LookAt">
+		<input type="number" @bind-value="LookAtCoordenadaX" />
+		<input type="number" @bind-value="LookAtCoordenadaY" />
+		<input type="number" @bind-value="LookAtCoordenadaZ" />
+	</form>
+
+	@if (showValidationMessageLookAt)
+	{
+		<div class="alert alert-danger" role="alert">
+			LookA no es válido.
+		</div>
+	}
+
+
+
 </div>
-
-
 
 
 <div class="form-group">
 	<label for="FoV">FoV:</label>
-	<input type="text" class="form-control" id="FoV" @bind="@scene.FieldOfVision">
+	
+	<form id="Fov">
+
+		<input type="number" @bind-value="Fov"/>
+
+	</form>
+	@if (showValidationMessageFov)
+	{
+		<div class="alert alert-danger" role="alert">
+			FoV no es válido.
+		</div>
+	}
+
+
+
 </div>
 
+<button @onclick="adjustframe">Ajustar camara</button>
+
+
+
+
+
+
+<button @onclick="Renderizar">Renderizar</button>
 
 
 <div class="form-group">
 	<label for="name">Preview:</label>
-	<input type="text" class="form-control" id="name" @bind="@name">
+	
 </div>
 
 
 
 
 @code {
+
+
+
+
+	private bool mostrarFormulario = false;
+	private int CoordenadaX = 0;
+	private int CoordenadaY = 0;
+	private int CoordenadaZ = 0;
+
+	private int LookFromCoordenadaX = 0;
+	private int LookFromCoordenadaY = 2;
+	private int LookFromCoordenadaZ = 0;
+
+	private int LookAtCoordenadaX = 0;
+	private int LookAtCoordenadaY = 2;
+	private int LookAtCoordenadaZ = 5;
+
+	private int Fov = 30;
+
+	private string nameError = "";
+	private bool showValidationMessageFov = false;
+	private bool showValidationMessageLookFrom = false;
+	private bool showValidationMessageLookAt = false;
+
+
+	private Model modeloSeleccionado;
+
+	private void SeleccionarModelo(Model modelo)
+	{
+		modeloSeleccionado = modelo;
+
+		mostrarFormulario = true;
+
+	}
+
+
+	void AgregarModeloPosiconado()
+	{
+
+		Coordinate coordinates = new Coordinate();
+
+		if (coordinates.VerifyCoordinate(CoordenadaX,CoordenadaY,CoordenadaZ))
+		{
+			Coordinate coordinateCreate = new Coordinate(CoordenadaX, CoordenadaY, CoordenadaZ);
+
+			PositionedModel PositionedModel = new PositionedModel(modeloSeleccionado, coordinateCreate);
+
+			scene.addPositionedModel(PositionedModel);
+
+		}
+		CoordenadaX = 0;
+		CoordenadaY = 0;
+		CoordenadaZ = 0;
+
+
+	}
+
+	//MIRAR ESTO:
+	void adjustframe()
+	{
+		if (!scene.VerifyFoV(Fov))
+		{
+			showValidationMessageFov = true;
+		}
+		else
+		{
+			showValidationMessageFov = false;
+
+		}
+
+		if (!scene.VerifyCoordinate(LookFromCoordenadaX, LookFromCoordenadaY, LookFromCoordenadaZ))
+		{
+			showValidationMessageLookFrom = true;
+		}
+		else
+		{
+			showValidationMessageLookFrom = false;
+		}
+
+
+		if (!scene.VerifyCoordinate(LookAtCoordenadaX, LookAtCoordenadaY, LookAtCoordenadaZ))
+		{
+			showValidationMessageLookAt = true;
+		}
+		else
+		{
+			showValidationMessageLookAt = false;
+		}
+
+	}
+	
+
+	void Renderizar()
+	{
+		//renderizar
+	}
+
+
+
 
 
 	[Parameter]
