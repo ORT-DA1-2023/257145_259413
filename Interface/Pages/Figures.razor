@@ -36,13 +36,18 @@
 
     <button type="button" class="btn btn-primary" @onclick="VerFiguras">Ver Figuras</button>
 
-
+    @if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @successMessage
+    </div>
+}
 
 @code {
     private string name = "";
     private string radius;
     private string mensajeError;
-
+    private string successMessage;
 
     void CrearFigura()
     {
@@ -61,10 +66,11 @@
             manager.addFigure(newFig);
             name = "";
             radius = "";
+            successMessage = "Creación Exitosa";
         }
         else
         {
-            mensajeError = "Incorrect name or radius";
+            mensajeError = "Radio o Nombre Incorrecto";
         }
     }
 

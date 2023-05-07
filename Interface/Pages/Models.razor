@@ -40,7 +40,21 @@
     <div class="alert alert-danger"> @mensajeError </div>
 }
 
+ @if (!string.IsNullOrEmpty(successMessage))
+ {
+    <div class="alert alert-success" role="alert">
+        @successMessage
+    </div>
+ }
+
+
+
+
+
 <button type="button" class="btn btn-primary" @onclick="VerModelo">Ver Modelos</button>
+
+
+
 
 @code {
     private string name;
@@ -51,6 +65,7 @@
     private string selectedFigure;
     private Figure figure;
     private bool isChecked = false;
+    private string successMessage;
 
     Model model = new Model();
 
@@ -73,6 +88,7 @@
         {
             model = new Model(name, figure, material);
             manager.addModel(model);
+            successMessage= "Creación Exitosa";
             name = "";
 
         }
