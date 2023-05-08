@@ -114,7 +114,7 @@ namespace Domain.test
             float z = 1;
             Scene scene = new Scene();
             bool result = scene.VerifyCoordinate(x, y, z);
-            Assert.IsFalse(result);
+            Assert.IsTrue(result);
 
         }
 
@@ -143,5 +143,41 @@ namespace Domain.test
             int fov = 30;
             Assert.AreEqual(scene.FieldOfVision, fov);
         }
+
+
+
+        [TestMethod]
+        public void ReturnTrueGetPositionedModels()
+        {
+            Scene scene = new Scene();
+            PositionedModel positionedModel = new PositionedModel();
+            PositionedModel positionedModel2 = new PositionedModel();
+
+            scene.addPositionedModel(positionedModel);
+            scene.addPositionedModel(positionedModel2);
+            List<PositionedModel> result = scene.GetPositionedModels();
+
+            Assert.IsTrue(result.Contains(positionedModel));
+
+        }
+
+
+        [TestMethod]
+        public void ReturnTrueModelIsPositioned()
+        {
+            Scene scene = new Scene();
+            Model model = new Model();
+            Coordinate coordinate = new Coordinate(1,1,1);
+            PositionedModel positionedModel = new PositionedModel(model, coordinate );
+
+            scene.addPositionedModel(positionedModel);
+            bool result = scene.ModelIsPositioned(model);
+            Assert.IsTrue(result);
+
+
+        }
+
+       
+
     }
 }

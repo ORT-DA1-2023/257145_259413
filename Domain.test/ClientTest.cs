@@ -1,4 +1,6 @@
+using System.Drawing;
 namespace Domain.test
+
 {
     [TestClass]
     public class ClientTest
@@ -107,14 +109,162 @@ namespace Domain.test
 
 
         }
-    
-    
-    
-    
-    
+        [TestMethod]
+        public void returnFalseIfNoFigureList()
+        {
+            Client client = new Client();
+            bool result = client.VerifyListFigures();
+            Assert.IsFalse(result);
+
+        }
+
+
+        [TestMethod]
+        public void returnTrueIfOneFigureList()
+        {
+            Client client = new Client();
+            Figure figure = new Figure();
+            client.AddFigure(figure);
+            bool result = client.VerifyListFigures();
+            Assert.IsTrue(result);
+
+        }
+
+
+        [TestMethod]
+        public void VerifyListFiguresReturnTrue()
+        {
+      
+            Client client = new Client();
+            Figure figure1 = new Figure("figure1", 1);
+            Figure figure2 = new Figure("figure2", 1);
+            Figure figure3 = new Figure("figure3", 1);
+
+            client.AddFigure(figure1);
+            client.AddFigure(figure2);
+            client.AddFigure(figure3);
+
+            bool result1 = client.VerifyListFigures();
+            Assert.IsTrue(result1);
+           
+        }
+
+        [TestMethod]
+        public void returnFalseIfNoModelList()
+        {
+            Client client = new Client();
+            bool result = client.VerifyListModels();
+            Assert.IsFalse(result);
+
+        }
+
+        [TestMethod]
+        public void returnTrueIfOneModelList()
+        {
+            Client client = new Client();
+            Model model = new Model();
+            client.AddModel(model);
+            bool result = client.VerifyListModels();
+            Assert.IsTrue(result);
+
+        }
+
+        [TestMethod]
+        public void VerifyListModelReturnTrue()
+        {
+
+            Client client = new Client();
+            Model model1 = new Model("model1");
+            Model model2 = new Model("model2");
+            Model model3 = new Model("model3");
+
+            client.AddModel(model1);
+            client.AddModel(model2);
+            client.AddModel(model3);
+
+            bool result1 = client.VerifyListModels();
+            Assert.IsTrue(result1);
+
+        }
+
+
+        [TestMethod]
+        public void returnFalseIfNoSceneList()
+        {
+            Client client = new Client();
+            bool result = client.VerifyListScene();
+            Assert.IsFalse(result);
+
+        }
+
+        [TestMethod]
+        public void returnTrueIfOneSceneList()
+        {
+            Client client = new Client();
+            Scene scene = new Scene();
+            client.AddScene(scene);
+            bool result = client.VerifyListScene();
+            Assert.IsTrue(result);
+
+        }
+
+        [TestMethod]
+        public void VerifyListSceneReturnTrue()
+        {
+
+            Client client = new Client();
+            Scene scene1 = new Scene("scene1");
+            Scene scene2 = new Scene("scene2");
+            Scene scene3 = new Scene("scene3");
+
+            client.AddScene(scene1);
+            client.AddScene(scene2);
+            client.AddScene(scene3);
+
+            bool result1 = client.VerifyListScene();
+            Assert.IsTrue(result1);
+
+        }
+
+        [TestMethod]
+        public void returnFalseIfNomMaterialList()
+        {
+            Client client = new Client();
+            bool result = client.VerifyMaterials();
+            Assert.IsFalse(result);
+
+        }
+
+        [TestMethod]
+        public void returnTrueIfOneMaterialList()
+        {
+            Client client = new Client();
+            Material mat = new Material();
+            client.AddMaterial(mat);
+            bool result = client.VerifyMaterials();
+            Assert.IsTrue(result);
+
+        }
+        [TestMethod]
+        public void VerifyListMaterialReturnTrue()
+        {
+
+            Client client = new Client();
+            Material mat1 = new Material("mat1",Color.Red);
+            Material mat2 = new Material("mat2",Color.Blue);
+            Material mat3 = new Material("mat3",Color.Black);
+
+            client.AddMaterial(mat1);
+            client.AddMaterial(mat2);
+            client.AddMaterial(mat3);
+
+            bool result1 = client.VerifyMaterials();
+            Assert.IsTrue(result1);
+
+        }
+
+
+
+
     }
-
-
-
-
 }

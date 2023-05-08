@@ -56,5 +56,44 @@ namespace Domain.test
             bool result = material.VerifyColor(red, green, blue);
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void constructor()
+        {
+            string name = "Material";
+            Color color1 = Color.Red;
+            Material material1 = new Material(name, color1);
+            Assert.AreEqual(name, material1.name);
+            Assert.AreEqual(color1, material1.color);
+        }
+
+        [TestMethod]
+        public void constructorTwo()
+        {
+            string name = "Material";
+            Color color1 = Color.Red;
+            string type= "type";
+            Material material1 = new Material(name, color1,type);
+            Assert.AreEqual(name, material1.name);
+            Assert.AreEqual(color1, material1.color);
+            Assert.AreEqual(type, material1.type);
+
+        }
+
+
+
+        [TestMethod]
+        public void toString()
+        {
+            string name = "Material";
+            Color color1 = Color.Red;
+            Material material1 = new Material(name, color1);
+            Assert.AreEqual("R: " + color1.R + " G: " + color1.G + " B: " + color1.B, material1.ToString());
+
+        }
+
+
+
+
     }
 }
