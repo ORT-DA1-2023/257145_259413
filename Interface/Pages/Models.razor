@@ -1,5 +1,6 @@
 ﻿@using BusinessLogic;
 @using Domain;
+@using Engine;
 @inject Manager manager;
 @inject NavigationManager NavigationManager; 
 @page "/model";
@@ -92,12 +93,29 @@
             model = new Model(name, figure, material);
             manager.addModel(model);
             successMessage= "Creación Exitosa";
-            name = "";
+            
             //selectedMaterial = "";
-           // selectedFigure = "";
-           // isChecked = false;
+            // selectedFigure = "";
+            // isChecked = false;
 
+            if (isChecked)
+            {
+                Scene scene = new Scene("model_"+name);
+                Material gray = new Material("floor", System.Drawing.Color.White);
+                Figure floor = new Figure("floor", 1000);
+                Model earth = new Model("earth", floor, gray);
+                Coordinate position = new Coordinate(0, -999, 5);
+                scene.addPositionedModel(new PositionedModel(earth, position));
 
+                Figure test = new Figure("test", 1);
+                Model temp = new Model("object", test, material);
+                position = new Coordinate(0, 2, 5);
+                scene.addPositionedModel(new PositionedModel(temp, position));
+
+                Render render = new Render(scene,150,100,30,20);
+                render.RenderScene(manager.logged.name);
+            }
+            name = "";
 
 
         }

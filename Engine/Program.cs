@@ -1,13 +1,12 @@
 ﻿using Domain;
 using Engine;
 using System;
-using System.Drawing;
 
 Scene scene = new Scene();
 
 Figure figure = new Figure("prueba", 0.5);
 
-Material material = new Material("prueba", Color.FromArgb(50,40,30));
+Material material = new Material("prueba", System.Drawing.Color.FromArgb(50,40,30));
 
 Model model = new Model("prueba", figure, material);
 
@@ -18,7 +17,7 @@ PositionedModel positionedModel = new PositionedModel(model, position);
 scene.addPositionedModel(positionedModel);
 
 Render render = new Render(scene);
-render.RenderScene();
+//render.RenderScene();
 
 
 

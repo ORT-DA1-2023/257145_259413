@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Engine
 {
@@ -57,7 +58,60 @@ namespace Engine
             this.maxDepth = 20;
         }
 
-        public void RenderScene()
+        public string RenderPPMImage(string filePath, string client)
+        {
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new Exception("File does not exist");
+            }
+            string fileContents = System.IO.File.ReadAllText(filePath);
+            string filename = Path.GetFileName(filePath);
+            var data = fileContents.Trim().Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+            Console.WriteLine(data);
+            if (data[0] != "P3")
+            {
+                throw new ArgumentException("File is not a PPM");
+            }
+            int.TryParse(data[1], out int width);
+            int.TryParse(data[2], out int height);
+            int.TryParse(data[3], out int maxColors);
+            if (maxColors != 255)
+            {
+                throw new ArgumentException("MaxColors is not 255");
+            }
+            if (data.Length != 3 * width * height + 4)
+            {
+                throw new ArgumentException($"Not enough pixel data. Found: {data.Length - 4}, Expecting: {3 * width * height}, Based on width = {width} and height = {height}");
+            }
+            using var img = new Image<Rgba32>(width, height);
+            int index = 4;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int.TryParse(data[index], out int r);
+                    int.TryParse(data[index + 1], out int g);
+                    int.TryParse(data[index + 2], out int b);
+                    img[x, y] = new Rgba32((byte)r, (byte)g, (byte)b);
+                    index += 3;
+                }
+            }
+
+
+            var imagePath = Path.Combine("wwwroot", "images", client);
+            if (!Directory.Exists(imagePath))
+            {
+                Directory.CreateDirectory(imagePath);
+            }
+            imagePath = Path.Combine(imagePath, this.scene.name + ".png");
+            img.Save(imagePath, new SixLabors.ImageSharp.Formats.Png.PngEncoder());
+            string imgUrl = "/images/" + filename + ".png";
+
+            return imgUrl;
+        }
+
+
+        public void RenderScene(string client)
         {
             Random random = new Random();
             for(var row = this._resolutionY-1; row >= 0; row--)
@@ -88,10 +142,15 @@ namespace Engine
                 }
             }
 
-            string path = "D:\\reposvs\\Obligatorio\\imagen.ppm";
+            string path = Path.Combine(Directory.GetCurrentDirectory(), @"Images\\" + client);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            path = Path.Combine(path, @""+this.scene.name+ ".ppm");
 
             File.WriteAllText(path, imageString);
-
+            RenderPPMImage(path, client);
         }
 
         public void SavePixel(int row, int column, Vector pixelRGB)
