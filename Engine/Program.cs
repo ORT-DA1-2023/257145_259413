@@ -1,6 +1,38 @@
-﻿using Engine;
+﻿using Domain;
+using Engine;
+using System;
+using System.Drawing;
 
-int resolutionX = 200;
+Scene scene = new Scene();
+
+Figure figure = new Figure("prueba", 0.5);
+
+Material material = new Material("prueba", Color.FromArgb(50,40,30));
+
+Model model = new Model("prueba", figure, material);
+
+Coordinate position = new Coordinate(0,2,5);
+
+PositionedModel positionedModel = new PositionedModel(model, position);
+
+scene.addPositionedModel(positionedModel);
+
+Render render = new Render(scene);
+render.RenderScene();
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*int resolutionX = 200;
 int resolutionY = 100;
 
 Vector[][] pixels = new Vector[resolutionX][];
@@ -51,4 +83,4 @@ void savePixel(int row, int column, Vector pixelRGB, int resolutionY, Vector[][]
     {
         throw new Exception("Pixel Overflow Error");
     }
-}
+}*/

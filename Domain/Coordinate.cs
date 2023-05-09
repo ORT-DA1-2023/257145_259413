@@ -9,9 +9,9 @@ namespace Domain
     public class Coordinate
     {
 
-        public float x;
-        public float y;
-        public float z;
+        public double x;
+        public double y;
+        public double z;
 
         public Coordinate()
         {
@@ -20,7 +20,7 @@ namespace Domain
             this.z = 0;
         }
 
-        public Coordinate(float x, float y, float z)
+        public Coordinate(double x, double y, double z)
         {
             this.x = x;
             this.y = y;
@@ -28,7 +28,7 @@ namespace Domain
 
         }
 
-		public bool VerifyCoordinate(float x, float y, float z)
+		public bool VerifyCoordinate(double x, double y, double z)
         {
             return VerifyCoordinateValues(x) && VerifyCoordinateValues(y) && VerifyCoordinateValues(z);
         }
@@ -36,7 +36,7 @@ namespace Domain
         // HACER REFACTORING
 		public bool VerifyCoordinateValues(Object coordinate)
 		{
-			return coordinate.GetType() == typeof(float) ? (float)coordinate > 0 : false;
+			return coordinate.GetType() == typeof(double);
 		}
 
 

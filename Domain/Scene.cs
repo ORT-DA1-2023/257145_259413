@@ -14,8 +14,6 @@ namespace Domain
         public DateTime lastModified;
         public DateTime lastRendered;
         public DateTime created;
-        public Coordinate cameraPosition;
-        public Coordinate cameraObjective;
 
         public string name { get; set; }
         public int FieldOfVision { get; set; }
@@ -33,8 +31,6 @@ namespace Domain
         {
             this.name = name;
             this._positionedModels = new List<PositionedModel>();
-            this.cameraPosition = new Coordinate(0, 2, 0);
-            this.cameraObjective = new Coordinate(0, 2, 5);
             this.FieldOfVision = 30;
             this.created = DateTime.Now;
         }

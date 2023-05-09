@@ -32,7 +32,7 @@ namespace Engine
             set { this._direction = value; }
         }
 
-        public Vector PointAt(int i)
+        public Vector PointAt(double i)
         {
             return this.Origin.Add(this.Direction.Multiply(i));
         }

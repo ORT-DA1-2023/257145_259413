@@ -58,17 +58,17 @@
             return new Vector(this._x + v._x, this._y + v._y, this._z + v._z);
         }
 
-        public Vector Subtract(Vector v)
+        public Vector Substract(Vector v)
         {
-            return new Vector(this._x - v._x, this._y + v._y, this._z + v._z);
+            return new Vector(this._x - v._x, this._y - v._y, this._z - v._z);
         }
 
-        public Vector Multiply(int i)
+        public Vector Multiply(double i)
         {
             return new Vector(this._x * i, this._y * i, this._z * i);
         }
 
-        public Vector Divide(int i)
+        public Vector Divide(double i)
         {
             return new Vector(this._x / i, this._y / i, this._z / i);
         }
@@ -106,9 +106,9 @@
             return (this._x * this._x) + (this._y * this._y) + (this._z * this._z);
         }
 
-        public int Length()
+        public double Length()
         {
-            return (int)Math.Sqrt(this.SquaredLength());
+            return Math.Sqrt(this.SquaredLength());
         }
 
         public Vector getUnit()

@@ -1,6 +1,7 @@
 ﻿@page "/scene/{name}"
 @using BusinessLogic;
 @using Domain;
+@using Engine;
 @inject Manager manager;
 
 
@@ -267,11 +268,13 @@
 		}
 
 	}
-	
+
 
 	void Renderizar()
 	{
-		//renderizar
+		Render render = new Render(scene);
+		render.RenderScene();
+
 	}
 
 

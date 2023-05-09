@@ -12,17 +12,17 @@ namespace Domain
 
 
         public string name;
-        public float radio;
+        public double radius;
 
         public Figure()
         {
 
         }
 
-        public Figure( string name, float radio)
+        public Figure( string name, double radius)
         {
             this.name = name;
-            this.radio = radio;
+            this.radius = radius;
 
         }
 
@@ -41,7 +41,7 @@ namespace Domain
 
         public bool VerifyRadiusFigure(Object radius)
         {
-            return radius.GetType() == typeof(float)? (float)radius >0 : false;
+            return radius.GetType() == typeof(double)? (double)radius >0 : false;
         }
     }
 }
