@@ -24,8 +24,9 @@ namespace Domain
             this.FieldOfVision = 30;
             this.created = DateTime.Now;
             this.lastModified = this.created;
+		
 
-        }
+		}
 
         public Scene(string name)
         {
@@ -33,7 +34,8 @@ namespace Domain
             this._positionedModels = new List<PositionedModel>();
             this.FieldOfVision = 30;
             this.created = DateTime.Now;
-        }
+			this.lastModified = this.created;
+		}
 
         public List<PositionedModel> GetPositionedModels()
         {

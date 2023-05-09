@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain;
 using static System.Exception;
-// lo puse yo al ultimo
+
 namespace BusinessLogic
 {
     public class Manager
