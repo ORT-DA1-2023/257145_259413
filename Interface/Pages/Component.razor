@@ -22,7 +22,8 @@
 				@foreach (var model in manager.GetModels())
 				{
 
-					<li><button type="button" class="btn btn-danger btn-sm" @onclick="(() => SeleccionarModelo(model))">@model.name</button></li>
+				
+					<button type="button" class="btn btn-success btn-sm" @onclick="(() => SeleccionarModelo(model))">@model.name</button>
 				}
 			</ul>
 
@@ -104,9 +105,9 @@
 	<label for="lookFrom">Look From:</label>
 
 	<form id="LookFrom">
-		<input type="number" @bind-value="LookFromCoordenadaX" />	
-		<input type="number" @bind-value="LookFromCoordenadaY" />
-		<input type="number" @bind-value="LookFromCoordenadaZ" />
+		<input type="number" @bind-value="LookFromCoordenadaX" readonly />
+		<input type="number" @bind-value="LookFromCoordenadaY" readonly />
+		<input type="number" @bind-value="LookFromCoordenadaZ" readonly />
 	</form>
 	@if (showValidationMessageLookFrom)
 	{
@@ -122,9 +123,9 @@
 	<label for="lookAt">Look At:</label>
 
 	<form id="LookAt">
-		<input type="number" @bind-value="LookAtCoordenadaX" />
-		<input type="number" @bind-value="LookAtCoordenadaY" />
-		<input type="number" @bind-value="LookAtCoordenadaZ" />
+		<input type="number" @bind-value="LookAtCoordenadaX" readonly />
+		<input type="number" @bind-value="LookAtCoordenadaY" readonly />
+		<input type="number" @bind-value="LookAtCoordenadaZ" readonly />
 	</form>
 
 	@if (showValidationMessageLookAt)
@@ -144,7 +145,7 @@
 	
 	<form id="Fov">
 
-		<input type="number" @bind-value="Fov"/>
+		<input type="number" @bind-value="Fov" readonly />
 
 	</form>
 	@if (showValidationMessageFov)

@@ -4,7 +4,7 @@
 @inject NavigationManager NavigationManager; 
 @page "/model";
 
-<h3>model</h3>
+<h3>Model</h3>
 
 <InputText @bind-Value="name"/>
 @if (!string.IsNullOrEmpty(nameError))
@@ -13,7 +13,10 @@
 
 }
 
+<div>
+
 <label for="Figures">Figuras</label>
+
 <select class="form-control" id="Figures" @onchange="figureSelection">
     <option disabled selected value= "">Selecciona la figura</option>
     @foreach (var figure in manager.GetFigures())
@@ -21,7 +24,7 @@
         <option value="@figure.name">@figure.name</option>
     }
 </select>
-
+</div>
 <label for="Material">Materiales</label>
 <select class="form-control" id="Material" @onchange="materialSelection">
     <option disabled selected value="">Selecciona el material</option>
@@ -90,6 +93,12 @@
             manager.addModel(model);
             successMessage= "Creación Exitosa";
             name = "";
+            //selectedMaterial = "";
+           // selectedFigure = "";
+           // isChecked = false;
+
+
+
 
         }
         else
