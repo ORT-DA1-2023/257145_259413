@@ -59,90 +59,85 @@ namespace Engine
         }
 
         public string RenderPPMImage(string filePath, string client)
-        {
-            if (!System.IO.File.Exists(filePath))
-            {
-                throw new Exception("File does not exist");
-            }
-            string fileContents = System.IO.File.ReadAllText(filePath);
-            string filename = Path.GetFileName(filePath);
-            var data = fileContents.Trim().Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-            Console.WriteLine(data);
-            if (data[0] != "P3")
-            {
-                throw new ArgumentException("File is not a PPM");
-            }
-            int.TryParse(data[1], out int width);
-            int.TryParse(data[2], out int height);
-            int.TryParse(data[3], out int maxColors);
-            if (maxColors != 255)
-            {
-                throw new ArgumentException("MaxColors is not 255");
-            }
-            if (data.Length != 3 * width * height + 4)
-            {
-                throw new ArgumentException($"Not enough pixel data. Found: {data.Length - 4}, Expecting: {3 * width * height}, Based on width = {width} and height = {height}");
-            }
-            using var img = new Image<Rgba32>(width, height);
-            int index = 4;
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    int.TryParse(data[index], out int r);
-                    int.TryParse(data[index + 1], out int g);
-                    int.TryParse(data[index + 2], out int b);
-                    img[x, y] = new Rgba32((byte)r, (byte)g, (byte)b);
-                    index += 3;
-                }
-            }
+		{
+			if (!System.IO.File.Exists(filePath))
+			{
+				throw new Exception("File does not exist");
+			}
+			string fileContents = System.IO.File.ReadAllText(filePath);
+			string filename = Path.GetFileName(filePath);
+			var data = fileContents.Trim().Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+			Console.WriteLine(data);
+			if (data[0] != "P3")
+			{
+				throw new ArgumentException("File is not a PPM");
+			}
+			int.TryParse(data[1], out int width);
+			int.TryParse(data[2], out int height);
+			int.TryParse(data[3], out int maxColors);
+			if (maxColors != 255)
+			{
+				throw new ArgumentException("MaxColors is not 255");
+			}
+			if (data.Length != 3 * width * height + 4)
+			{
+				throw new ArgumentException($"Not enough pixel data. Found: {data.Length - 4}, Expecting: {3 * width * height}, Based on width = {width} and height = {height}");
+			}
+			using var img = new Image<Rgba32>(width, height);
+			int index = 4;
+			for (int y = 0; y < height; y++)
+			{
+				index = writePNG(data, width, img, index, y);
+			}
 
+			string imgUrl = saveImage(client, filename, img);
 
-            var imagePath = Path.Combine("wwwroot", "images", client);
-            if (!Directory.Exists(imagePath))
-            {
-                Directory.CreateDirectory(imagePath);
-            }
-            imagePath = Path.Combine(imagePath, this.scene.name + ".png");
-            img.Save(imagePath, new SixLabors.ImageSharp.Formats.Png.PngEncoder());
-            string imgUrl = "/images/" + filename + ".png";
+			return imgUrl;
+		}
 
-            return imgUrl;
-        }
+		private string saveImage(string client, string filename, Image<Rgba32> img)
+		{
+			var imagePath = Path.Combine("wwwroot", "images", client);
+			if (!Directory.Exists(imagePath))
+			{
+				Directory.CreateDirectory(imagePath);
+			}
+			imagePath = Path.Combine(imagePath, this.scene.name + ".png");
+			img.Save(imagePath, new SixLabors.ImageSharp.Formats.Png.PngEncoder());
+			string imgUrl = "/images/" + filename + ".png";
+			return imgUrl;
+		}
 
+		private  int writePNG(string[] data, int width, Image<Rgba32> img, int index, int y)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				int.TryParse(data[index], out int r);
+				int.TryParse(data[index + 1], out int g);
+				int.TryParse(data[index + 2], out int b);
+				img[x, y] = new Rgba32((byte)r, (byte)g, (byte)b);
+				index += 3;
+			}
 
-        public void RenderScene(string client)
+			return index;
+		}
+
+		public void RenderScene(string client)
         {
             Random random = new Random();
             for(var row = this._resolutionY-1; row >= 0; row--)
-            {
-                for(var column = 0; column < this._resolutionX; column++)
-                {
-                    var pixelColor = new Vector(0, 0, 0);
-                    for(var sample = 0; sample < samplesPerPixel; sample++)
-                    {
-                        var u = (column + random.NextDouble()) / this._resolutionX;
-                        var v = (row + random.NextDouble()) / this._resolutionY;
-                        var ray = this._camera.getRay(u, v);
-                        pixelColor.AddTo(ShootRay(ray, this.maxDepth));
-                    }
-                    pixelColor = pixelColor.Divide(this.samplesPerPixel);
-                    SavePixel(row, column, pixelColor);
-                }
-            }
+			{
+				writePixel(random, row);
+			}
 
-            var imageString = "P3\n" + this._resolutionX + " " + this._resolutionY + "\n255\n";
+			var imageString = "P3\n" + this._resolutionX + " " + this._resolutionY + "\n255\n";
 
             for (var j = 0; j < this._resolutionY; j++)
-            {
-                for(var i = 0; i< this._resolutionX; i++)
-                {
-                    var color = _pixels[i][j];
-                    imageString += color.Red() + " " + color.Green() + " " + color.Blue() + "\n";
-                }
-            }
+			{
+				imageString = toRGB(imageString, j);
+			}
 
-            string path = Path.Combine(Directory.GetCurrentDirectory(), @"Images\\" + client);
+			string path = Path.Combine(Directory.GetCurrentDirectory(), @"Images\\" + client);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -153,7 +148,35 @@ namespace Engine
             RenderPPMImage(path, client);
         }
 
-        public void SavePixel(int row, int column, Vector pixelRGB)
+		private string toRGB(string imageString, int j)
+		{
+			for (var i = 0; i < this._resolutionX; i++)
+			{
+				var color = _pixels[i][j];
+				imageString += color.Red() + " " + color.Green() + " " + color.Blue() + "\n";
+			}
+
+			return imageString;
+		}
+
+		private void writePixel(Random random, int row)
+		{
+			for (var column = 0; column < this._resolutionX; column++)
+			{
+				var pixelColor = new Vector(0, 0, 0);
+				for (var sample = 0; sample < samplesPerPixel; sample++)
+				{
+					var u = (column + random.NextDouble()) / this._resolutionX;
+					var v = (row + random.NextDouble()) / this._resolutionY;
+					var ray = this._camera.getRay(u, v);
+					pixelColor.AddTo(ShootRay(ray, this.maxDepth));
+				}
+				pixelColor = pixelColor.Divide(this.samplesPerPixel);
+				SavePixel(row, column, pixelColor);
+			}
+		}
+
+		public void SavePixel(int row, int column, Vector pixelRGB)
         {
             int posX = column;
             int posY = this._resolutionY - row - 1;
@@ -200,10 +223,8 @@ namespace Engine
             {
                 return new HitRecord(t, intersectionPoint, normal, originalColor);
             }
-            else
-            {
-                return null;
-            }
+             return null;
+            
         }
 
         public Vector ShootRay(Ray ray, int depth)
@@ -230,19 +251,18 @@ namespace Engine
                     Vector attenuation = hitRecord.attenuation;
                     return new Vector(color.X * attenuation.X, color.Y * attenuation.Y, color.Z * attenuation.Z);
                 }
-                else
-                {
+                
+                
                     return new Vector();
-                }
+               
             }
-            else
-            {
-                Vector directionUnit = ray.Direction.getUnit();
-                double posY = 0.5 * (directionUnit.Y + 1);
-                Vector start = new Vector(1, 1, 1);
-                Vector end = new Vector(0.5, 0.7, 1.0);
-                return start.Multiply(1 - posY).Add(end.Multiply(posY));
-            }
+           
+                    Vector directionUnit = ray.Direction.getUnit();
+                    double posY = 0.5 * (directionUnit.Y + 1);
+                    Vector start = new Vector(1, 1, 1);
+                    Vector end = new Vector(0.5, 0.7, 1.0);
+                    return start.Multiply(1 - posY).Add(end.Multiply(posY));
+            
         }
     }
 }

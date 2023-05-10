@@ -6,20 +6,22 @@
 
 <a href="/material">Volver</a>
 
-<table>
+<table class="table">
     <thead>
         <tr>
-            <th>Nombre</th>
-            <th>Color</th>
-            <th>Acciones</th>
+            
+            <th scope="col">Nombre</th>
+            <th scope="col">Color</th>
+            <th scope="col">Acciones</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var material in manager.GetMaterials())
         {
-            <tr style="width: 100px; height: 100px; background-color:rgb(@material.color.R, @material.color.G, @material.color.B);">
+            <tr style="width: 100px; height: 100px; ">
+               
                 <td>@material.name</td>
-                <td>@material.ToString()</td>
+                <td style=" background-color:rgb(@material.color.R, @material.color.G, @material.color.B);"> @material.ToString() </td>
                 <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteMaterial(material))">Eliminar</button></td>
             </tr>
         }
