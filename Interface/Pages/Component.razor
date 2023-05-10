@@ -3,6 +3,7 @@
 @using Domain;
 @using Engine;
 @inject Manager manager;
+@inject NavigationManager NavigationManager;
 
 
 <h3>Scene:  @name</h3>
@@ -106,17 +107,8 @@
 	<label for="lookFrom">Look From:</label>
 
 	<form id="LookFrom">
-		<input type="number" @bind-value="LookFromCoordenadaX" readonly />
-		<input type="number" @bind-value="LookFromCoordenadaY" readonly />
-		<input type="number" @bind-value="LookFromCoordenadaZ" readonly />
+		<input type="text" @bind-value="LookFrom" readonly />
 	</form>
-	@if (showValidationMessageLookFrom)
-	{
-		<div class="alert alert-danger" role="alert">
-			LookFrom no es válido.
-		</div>
-	}
-	
 </div>
 
 
@@ -124,20 +116,8 @@
 	<label for="lookAt">Look At:</label>
 
 	<form id="LookAt">
-		<input type="number" @bind-value="LookAtCoordenadaX" readonly />
-		<input type="number" @bind-value="LookAtCoordenadaY" readonly />
-		<input type="number" @bind-value="LookAtCoordenadaZ" readonly />
+		<input type="text" @bind-value="LookAt" readonly />
 	</form>
-
-	@if (showValidationMessageLookAt)
-	{
-		<div class="alert alert-danger" role="alert">
-			LookA no es válido.
-		</div>
-	}
-
-
-
 </div>
 
 
@@ -145,34 +125,16 @@
 	<label for="FoV">FoV:</label>
 	
 	<form id="Fov">
-
 		<input type="number" @bind-value="Fov" readonly />
-
 	</form>
-	@if (showValidationMessageFov)
-	{
-		<div class="alert alert-danger" role="alert">
-			FoV no es válido.
-		</div>
-	}
-
-
-
 </div>
-
-<button @onclick="adjustframe">Ajustar camara</button>
-
-
-
-
-
 
 <button @onclick="Renderizar">Renderizar</button>
 
 
 <div class="form-group">
 	<label for="name">Preview:</label>
-	
+	<img src="@String.Concat("images/",manager.logged.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
 </div>
 
 
@@ -188,20 +150,13 @@
 	private int CoordenadaY = 0;
 	private int CoordenadaZ = 0;
 
-	private int LookFromCoordenadaX = 0;
-	private int LookFromCoordenadaY = 2;
-	private int LookFromCoordenadaZ = 0;
+	private string LookFrom = "( 0, 2, 0 )";
 
-	private int LookAtCoordenadaX = 0;
-	private int LookAtCoordenadaY = 2;
-	private int LookAtCoordenadaZ = 5;
+	private string LookAt="( 0, 2, 5 )";
 
 	private int Fov = 30;
 
 	private string nameError = "";
-	private bool showValidationMessageFov = false;
-	private bool showValidationMessageLookFrom = false;
-	private bool showValidationMessageLookAt = false;
 
 
 	private Model modeloSeleccionado;
@@ -236,45 +191,14 @@
 
 	}
 
-	//MIRAR ESTO:
-	void adjustframe()
-	{
-		if (!scene.VerifyFoV(Fov))
-		{
-			showValidationMessageFov = true;
-		}
-		else
-		{
-			showValidationMessageFov = false;
-
-		}
-
-		if (!scene.VerifyCoordinate(LookFromCoordenadaX, LookFromCoordenadaY, LookFromCoordenadaZ))
-		{
-			showValidationMessageLookFrom = true;
-		}
-		else
-		{
-			showValidationMessageLookFrom = false;
-		}
-
-
-		if (!scene.VerifyCoordinate(LookAtCoordenadaX, LookAtCoordenadaY, LookAtCoordenadaZ))
-		{
-			showValidationMessageLookAt = true;
-		}
-		else
-		{
-			showValidationMessageLookAt = false;
-		}
-
-	}
-
 
 	void Renderizar()
 	{
-		Render render = new Render(scene);
+		Render render = new Render(scene,50,40,10,10);
 		render.RenderScene(manager.logged.name);
+
+
+		NavigationManager.NavigateTo("/scene/"+name,true);
 
 	}
 

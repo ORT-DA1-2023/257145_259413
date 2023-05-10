@@ -63,6 +63,11 @@
 	private bool muestroCasilla=false;
 	private List<Scene> listScene = new List<Scene>();
 
+	protected override void OnInitialized()
+    {
+        listScene = manager.GetScenes();
+    }
+
 	void tocoNuevaScena()
 	{
 		muestroCasilla = true;

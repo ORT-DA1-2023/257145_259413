@@ -46,13 +46,14 @@
     void IniciarSesion1()
     {
         manager.logged = pablin;
-        NavigationManager.NavigateTo("/figure");
+        NavigationManager.NavigateTo("/figure", true);
     }
 
     void IniciarSesion2()
     {
         manager.logged = nachin;
-        NavigationManager.NavigateTo("/figure");
+        NavigationManager.NavigateTo("/figure", true);
+        
     }
 
     void IniciarSesion()
@@ -66,7 +67,7 @@
         if (toLogIn != null)
         {
             // El usuario está registrado, redirigir a la página principal
-            NavigationManager.NavigateTo("/Logged");
+            NavigationManager.NavigateTo("/Logged", true);
         }
         else
         {

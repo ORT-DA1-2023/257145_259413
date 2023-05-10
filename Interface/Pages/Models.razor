@@ -28,7 +28,7 @@
 </div>
 <label for="Material">Materiales</label>
 <select class="form-control" id="Material" @onchange="materialSelection">
-    <option disabled selected value="">Selecciona el material</option>
+    <option  disabled selected value="">Selecciona el material</option>
     @foreach(var material in manager.GetMaterials())
     {
         <option value="@material.name">@material.name</option>

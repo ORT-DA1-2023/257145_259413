@@ -5,7 +5,7 @@
 
         private static string message = "Actor Duplicado";
 
-       public UsuarioRepetidoException() : base(message)
+       public UsuarioRepetidoException(string message) : base(message)
         {
            
         }
