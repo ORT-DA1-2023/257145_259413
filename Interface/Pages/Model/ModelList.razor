@@ -1,0 +1,67 @@
+﻿@using BusinessLogic;
+@using Domain;
+@inject Manager manager;
+@inject NavigationManager NavigationManager;
+
+
+
+@page "/model/list";
+
+<h3>ModelList</h3>
+
+<a href="/model">Volver</a>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Preview</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Figura</th>
+            <th scope="col">Material</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var model in manager.GetModels())
+        {
+            <tr>
+                <td>
+                    <img class="img-thumbnail" src="@String.Concat("images/" , manager.logged.name, "/model_", model.name, ".png")" style="width: 150px; height: 100px;" />
+                </td>
+                <td>@model.name</td>
+                <td>@model.material.name</td>
+                <td>@model.figure.name</td>
+                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => DeleteModel(model))">Eliminar</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (linkedModel)
+{
+    <div class="  alert alert-danger" role="alert">
+        @exceptionMessage
+    </div>
+}
+
+@code {
+    private bool linkedModel = false;
+    private string exceptionMessage = "";
+
+private void DeleteModel(Model model)
+    {
+        try
+        {
+            linkedModel = false;
+            manager.DeleteModel(model);
+        }
+        catch (InvalidOperationException ex)
+        {
+            linkedModel = true;
+            exceptionMessage = ex.Message;
+        }
+    }
+
+}
+

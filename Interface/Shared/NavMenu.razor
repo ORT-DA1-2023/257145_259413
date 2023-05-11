@@ -1,0 +1,59 @@
+﻿@using BusinessLogic;
+@using Domain;
+@inject Manager manager
+
+    <div class="top-row ps-3 navbar navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="">RTX ON</a>
+            <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+
+@if (manager.logged != null)
+{
+    <div class="@NavMenuCssClass nav-scrollable"  @onclick="ToggleNavMenu">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="logged" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span>  Inicio
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="figure">
+                    <span class="fa-sharp fa-regular fa-circle" aria-hidden="true"></span>  Figuras
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="material">
+
+                    <span class="fa-sharp fa-solid fa-paint-roller" aria-hidden="true"></span>  Materiales
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="model">
+                    <span class="fa-sharp fa-solid fa-circle" aria-hidden="true"></span>  Modelos
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="scene">
+                    <span class="fa-sharp fa-regular fa-image" aria-hidden="true"></span>  Escenas
+                </NavLink>
+            </div>
+        </nav>
+    </div>
+}
+
+@code {
+    private bool collapseNavMenu = true;
+
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
