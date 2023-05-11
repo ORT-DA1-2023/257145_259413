@@ -11,72 +11,29 @@
 
 <div class="form-group">
 	<label for="name">Modelos Disponibles:</label>
-	<table>
-		<thead>
-			<tr>
-				<th>Nombre</th>
-			</tr>
-		</thead>
-		<tbody>
-
-
-			<ul>
-				@foreach (var model in manager.GetModels())
-				{
-
-				
-					<button type="button" class="btn btn-success btn-sm" @onclick="(() => SelectedModel(model))">@model.name</button>
-				}
-			</ul>
-
-			
-		
-
-		</tbody>
-	</table>
+	
+	<ul>
+	@foreach (var model in manager.GetModels())
+	{			
+		<button type="button" class="btn btn-success btn-sm" @onclick="(() => SelectedModel(model))">@model.name</button>
+	}
+	</ul>
 </div>
 
-<form id="myForm1" style="display:none">
-	
-	<input type="number" @bind-value="coordinateX" />
-</form>
-@if (showForm)
-{
-	<form id="myForm1">
-		<label>CoordenadaX:</label>
-		<input type="number" @bind-value="coordinateX" />
-	</form>
-}
-
-
-<form id="myForm2" style="display:none">
-
-	<input type="number" @bind-value="coordinateY" />
-</form>
-@if (showForm)
-{
-	<form id="myForm2">
-		<label>CoordenadaY:</label>
-		<input type="number" @bind-value="coordinateY" />
-	</form>
-}
-
-<form id="myForm3" style="display:none">
-	
-	<input type="number" @bind-value="coordinateZ" />
-</form>
-@if (showForm)
-{
-	<form id="myForm3">
-		<label>CoordenadaZ:</label>
-		<input type="number" @bind-value="coordinateZ" />
-
-	</form>
-
-	<button @onclick="AddPositionedModel">Agregar Modelo Posicionado</button>
-
-}
-
+<div>
+	@if (showForm)
+	{
+		<form id="myForm1">
+			<label>CoordenadaX:</label>
+			<input type="number" style="width:100px" class="form-control" @bind-value="coordinateX" />
+			<label>CoordenadaY:</label>
+			<input type="number" style="width:100px" class="form-control" @bind-value="coordinateY" />
+			<label>CoordenadaZ:</label>
+			<input type="number" style="width:100px" class="form-control" @bind-value="coordinateZ" />
+			<button @onclick="AddPositionedModel">Agregar Modelo Posicionado</button>
+		</form>
+	}
+</div>
 
 
 
@@ -107,9 +64,9 @@
 	<label for="lookFrom">Look From:</label>
 
 	<form id="LookFrom">
-		<input type="number" @bind-value="LookFromX" />
-		<input type="number" @bind-value="LookFromY" />
-		<input type="number" @bind-value="LookFromZ" />
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookFromX" />
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookFromY" />
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookFromZ" />
 
 	</form>
 </div>
@@ -119,9 +76,9 @@
 	<label for="lookAt">Look At:</label>
 
 	<form id="LookAt">
-		<input type="number" @bind-value="LookAtX"/>
-		<input type="number" @bind-value="LookAtY"/>
-		<input type="number" @bind-value="LookAtZ"/>
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookAtX" />
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookAtY" />
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookAtZ" />
 
 	</form>
 </div>
@@ -131,7 +88,7 @@
 	<label for="FoV">FoV:</label>
 	
 	<form id="Fov">
-		<input type="number" @bind-value="fov" />
+		<input type="number" class="form-control" @bind-value="fov" />
 	</form>
 </div>
 
@@ -160,18 +117,18 @@
 
 
 	private bool showForm = false;
-	private int coordinateX = 0;
-	private int coordinateY = 0;
-	private int coordinateZ = 0;
+	private double coordinateX = 0;
+	private double coordinateY = 0;
+	private double coordinateZ = 0;
 
-	private int LookFromX = 0;
-	private int LookFromY = 2;
-	private int LookFromZ = 0;
+	private double LookFromX = 0;
+	private double LookFromY = 2;
+	private double LookFromZ = 0;
 
 
-	private int LookAtX=0;
-	private int LookAtY = 2;
-	private int LookAtZ = 5;
+	private double LookAtX=0;
+	private double LookAtY = 2;
+	private double LookAtZ = 5;
 
 
 	private int fov = 30;

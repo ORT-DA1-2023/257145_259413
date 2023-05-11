@@ -1,4 +1,5 @@
 ﻿@using BusinessLogic;
+@using Domain;
 @inject Manager manager;
 @page "/material/list";
 
@@ -22,13 +23,36 @@
                
                 <td>@material.name</td>
                 <td style=" background-color:rgb(@material.color.R, @material.color.G, @material.color.B);"> @material.ToString() </td>
-                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteMaterial(material))">Eliminar</button></td>
+                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => DeleteMaterial(material))">Eliminar</button></td>
             </tr>
         }
     </tbody>
 </table>
 
+@if (linkedMaterial)
+{
+    <div class="  alert alert-danger" role="alert">
+        @exceptionMessage
+    </div>
+}
 
 @code {
+
+    private bool linkedMaterial = false;
+    private string exceptionMessage = "";
+
+private void DeleteMaterial(Material material)
+    {
+        try
+        {
+            linkedMaterial = false;
+            manager.DeleteMaterial(material);
+        }
+        catch (InvalidOperationException ex)
+        {
+            linkedMaterial = true;
+            exceptionMessage = ex.Message;
+        }
+    }
 
 }

@@ -53,8 +53,26 @@
 
     void CreateFigure()
     {
+        double radiusNumber;
 
-        double radiusNumber = double.Parse(radius, CultureInfo.InvariantCulture.NumberFormat);
+        try
+        {
+            radiusNumber = double.Parse(radius, CultureInfo.InvariantCulture.NumberFormat);
+        }
+        catch (FormatException)
+        {
+            errorMessage = "El radio no debe contener letras";
+            return;
+        }
+        catch (ArgumentNullException)
+        {
+            errorMessage = "Los campos no deben estar vacíos";
+            return;
+        }
+
+
+
+        errorMessage = "";
 
         Figure figure = new Figure();
 

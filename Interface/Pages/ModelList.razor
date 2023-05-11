@@ -1,4 +1,5 @@
 ﻿@using BusinessLogic;
+@using Domain;
 @inject Manager manager;
 @inject NavigationManager NavigationManager;
 
@@ -31,13 +32,36 @@
                 <td>@model.name</td>
                 <td>@model.material.name</td>
                 <td>@model.figure.name</td>
-                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteModel(model))">Eliminar</button></td>
+                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => DeleteModel(model))">Eliminar</button></td>
             </tr>
         }
     </tbody>
 </table>
 
+@if (linkedModel)
+{
+    <div class="  alert alert-danger" role="alert">
+        @exceptionMessage
+    </div>
+}
+
 @code {
+    private bool linkedModel = false;
+    private string exceptionMessage = "";
+
+private void DeleteModel(Model model)
+    {
+        try
+        {
+            linkedModel = false;
+            manager.DeleteModel(model);
+        }
+        catch (InvalidOperationException ex)
+        {
+            linkedModel = true;
+            exceptionMessage = ex.Message;
+        }
+    }
 
 }
 

@@ -40,7 +40,7 @@ namespace Domain
         {
             if (name.Length == 0 || !Regex.IsMatch(name, @"^[^\s].*[^\s]$"))
             {
-                return false;
+                throw new InvalidDataException("El nombre es incorrecto");
             }
 
             return true;
