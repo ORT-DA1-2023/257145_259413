@@ -48,7 +48,7 @@
 				<td><img class="img-thumbnail" src="@($"images/{manager.logged.name}/{scene.name}.png")" width="150" height="100" /></td>
 				<td><a href="@($"/scene/{scene.name}")">@scene.name</a></td>
 				<td> @scene.lastModified</td>
-				<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteSceness(scene))">Eliminar</button></td>
+				<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteScene(scene))">Eliminar</button></td>
 			</tr>
 		}
 	</tbody>

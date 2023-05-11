@@ -10,21 +10,6 @@ namespace BusinessLogic.test
     public class SystemTest
     {
         [TestMethod]
-        public void ReturnsTrueIfUniqueClients()
-        {
-            Manager system = new Manager();
-            Client client1 = new Client("juan2", "myPassw1");
-            Client client2 = new Client("Juan2", "myPassw2");
-            Client client3 = new Client("Juan2", "myPassw3");
-            system.add(client1);
-            system.add(client2);
-            system.add(client3);
-            bool result = system.Verify();
-            Assert.IsTrue(result);
-        }
-    
-
-        [TestMethod]
         public void ReturnsTrueIfUserLoggedIn()
         {
             string name = "Pedro";
@@ -36,6 +21,16 @@ namespace BusinessLogic.test
             Assert.IsTrue(system.logged.Equals(actualLogged));
         }
 
+        [TestMethod]
+        public void ReturnsTrueIfUsersAreUnique()
+        {
+            Client client = new Client("Pedro1", "Contra1");
+            Client repeated = new Client("Pedro1", "Contra1");
+            Manager manager = new Manager();
+            manager.add(client);
+            manager.add(repeated);
+            Assert.IsTrue(manager.clients.Count == 1);
+        }
 
 
         [TestMethod]
@@ -168,7 +163,7 @@ namespace BusinessLogic.test
             Scene scene1 = new Scene();
             manager.addScene(scene);
             manager.addScene(scene1);
-            manager.DeleteSceness(scene);
+            manager.DeleteScene(scene);
             Assert.IsTrue(!client.getScenes().Contains(scene));
         }
 
@@ -275,13 +270,21 @@ namespace BusinessLogic.test
             Client client = new Client("Juan", "JuanPas2");
             manager.logged = client;
 
-            manager.clients.Add(client);
+            manager.add(client);
             bool result = manager.Exists("Tomas");
             Assert.IsFalse(result);
 
 
 
         }
-    
+
+
+        [TestMethod]
+        public void ReturnsTrueIfWrongUserCannotSignUp()
+        {
+            Manager manager = new Manager();
+            Client signedIn = manager.SignUp("a", "a");
+            Assert.IsTrue(signedIn.name == "");
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Exceptions;
 
 namespace Domain
 {
@@ -57,6 +58,12 @@ namespace Domain
 
         public bool VerifyName(string name)
         {
+            if(name == "")
+            {
+				
+				throw new EmptyUserNameException();
+				
+			}
             if (name.Length<3 || name.Length>20 || !Regex.IsMatch(name, @"^\S+$"))
             { 
                 return false;
@@ -79,6 +86,10 @@ namespace Domain
 
         public bool VerifyPassword(string password)
         {
+            if(password == "")
+            {
+						throw new EmptyUserNameException();	
+			}
             if(password.Length < 5 || password.Length > 25)
             {
                 return false;
@@ -353,10 +364,6 @@ namespace Domain
                 }
             }
             return true;
-
-            int hola = 51;
-
-            hola = 965;
         }
 
 

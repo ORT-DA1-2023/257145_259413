@@ -1,3 +1,4 @@
+using Exceptions;
 using System.Drawing;
 namespace Domain.test
 
@@ -8,9 +9,18 @@ namespace Domain.test
         [TestMethod]
         public void ReturnsFalseIfNameisVoid()
         {
-            string name = "";
             Client client = new Client();
-            bool result = client.VerifyName(name);
+            bool result = true;
+            string name = "";
+            try
+            {
+                client.VerifyName(name);
+            }
+            catch(EmptyUserNameException ex)
+            {
+
+                result = false;
+            }
             Assert.IsFalse(result);
         }
 
@@ -53,9 +63,17 @@ namespace Domain.test
         [TestMethod]
         public void ReturnsFalseIfVoidPassword()
         {
-            string password = "";
             Client client = new Client();
-            bool result = client.VerifyPassword(password);
+            bool result = true;
+            string password = "";
+            try
+            {
+                client.VerifyPassword(password);
+            }
+            catch (EmptyUserNameException ex)
+            {
+                result = false;
+            }
             Assert.IsFalse(result);
         }
 
@@ -263,8 +281,44 @@ namespace Domain.test
 
         }
 
+        [TestMethod]
+        public void ReturnsTrueIfFigureIsLinked()
+        {
+            Client client = new Client();
+            Figure figure = new Figure();
+            Material material = new Material();
+            Model model = new Model("", figure,material);
+            client.AddFigure(figure);
+            client.AddMaterial(material);
+            client.AddModel(model);
+            Assert.IsTrue(client.FigureIsLinked(figure));
+        }
 
+        [TestMethod]
+        public void ReturnsTrueIfMaterialIsLinked()
+        {
+            Client client = new Client();
+            Figure figure = new Figure();
+            Material material = new Material();
+            Model model = new Model("", figure, material);
+            client.AddFigure(figure);
+            client.AddMaterial(material);
+            client.AddModel(model);
+            Assert.IsTrue(client.MaterialIsLinked(material));
+        }
 
+        [TestMethod]
+        public void ReturnsTrueIfModelIsLinked()
+        {
+            Client client = new Client();
+            Model model = new Model();
+            PositionedModel positioned = new PositionedModel(model, new Coordinate());
+            Scene scene = new Scene("");
+            scene.addPositionedModel(positioned);
+            client.AddModel(model);
+            client.AddScene(scene);
+            Assert.IsTrue(client.ModelIsLinked(model));
+        }
 
     }
 }

@@ -69,29 +69,6 @@ namespace BusinessLogic
             return null;
         }
 
-        public bool Verify()
-        {
-            if(clients.Count == 0)
-            {
-                return false;
-            }
-            if(clients.Count == 1)
-            {
-                return true;
-            }
-            for(int i= 0; i < clients.Count; i++)
-            {
-                for(int j = i+1; j < clients.Count; j++)
-                {
-                    if (clients[i].name == clients[j].name)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
         public Client SignUp(string name, string password)
         {
             Client client= new Client();
@@ -106,13 +83,6 @@ namespace BusinessLogic
 
         public bool Exists(string name)
         {
-            if (name == "")
-            {
-                throw new EmptyUserNameException();
-            }
-
-
-
             foreach(Client client in clients)
             {
                 if (client.MatchingUsername(name))
@@ -122,18 +92,6 @@ namespace BusinessLogic
             }
             return false;
         }
-
-
-        public bool ValPass(string password)
-        {
-            if (password == "")
-            {
-                throw new EmptyUserNameException();
-            }
-            return false;
-        }
-
-
 
 
         public void addFigure(Figure figure)
@@ -225,10 +183,8 @@ namespace BusinessLogic
             return null;
         }
 
-		public void DeleteSceness(Scene scene)
+		public void DeleteScene(Scene scene)
 		{
-
-
 			GetScenes().Remove(scene);
 
 		}

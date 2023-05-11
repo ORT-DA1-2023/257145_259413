@@ -133,15 +133,13 @@
     {
         try
         {
-            manager.Exists(name);
-            manager.ValPass(password);
-            newClient = new Client(name, password);
-            manager.add(newClient);
-            manager.logIn(name, password);
-            startSessions = "Se creo un cliente nuevo";
+            if(newClient.VerifyName(name) && newClient.VerifyPassword(password) && !manager.Exists(name)){
+                manager.add(manager.SignUp(name, password));
+                manager.logIn(name, password);
+                startSessions = "Se creo un cliente nuevo";
 
-            NavigationManager.NavigateTo("/logged");
-
+                NavigationManager.NavigateTo("/logged");
+            }
         }
         catch (DuplicateUserException ex)
         {

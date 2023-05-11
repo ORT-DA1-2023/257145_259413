@@ -44,8 +44,8 @@
 <a href="/SignUp">Sign up</a>
 </div>
 @code {
-    string name;
-    string password;
+    string name = "";
+    string password = "";
     string errorMessage;
 
     private string exceptionMessage = "";
@@ -73,11 +73,6 @@
     {
         try
         {
-
-
-            manager.ValPass(password);
-            manager.ValPass(name);
-
             if (toLogIn.VerifyName(name) && toLogIn.VerifyPassword(password))
             {
                 toLogIn = manager.logIn(name, password);
