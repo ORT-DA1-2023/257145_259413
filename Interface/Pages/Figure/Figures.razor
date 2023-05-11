@@ -49,6 +49,8 @@
     private string errorMessage;
     private string successMessage;
 
+     
+
     void CreateFigure()
     {
         successMessage = "";
@@ -86,6 +88,9 @@
             name = "";
             radius = "";
             successMessage = "Creación Exitosa";
+            StateHasChanged();
+            //NavigationManager.NavigateTo("/logged");
+
         }
         else
         {
