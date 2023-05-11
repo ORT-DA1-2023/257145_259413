@@ -12,7 +12,7 @@
 
 
 
-<InputText @bind-Value="name" @oninput="ValidateName" />
+<InputText @bind-Value="name" @oninput="ValidateName" placeholder="Mi material Lambertiano gris" />
 @if (!string.IsNullOrEmpty(nameError))
 {
     <div class="alert alert-danger">@nameError</div>
@@ -78,19 +78,19 @@
 
 
 
-<button type="button" class="btn btn-primary" @onclick="CrearMaterial">Guardar</button>
-@if(!string.IsNullOrEmpty(mensajeError))
+<button type="button" class="btn btn-primary" @onclick="CreateMaterial">Guardar</button>
+@if(!string.IsNullOrEmpty(errorMessage))
 {
-    <div class="alert alert-danger"> @mensajeError </div>
+    <div class="alert alert-danger"> @errorMessage </div>
 }
 
-<button type="button" class="btn btn-primary" @onclick="VerMateriales">Ver Materiales</button>
+<button type="button" class="btn btn-primary" @onclick="SeeMaterial">Ver Materiales</button>
 
 @code {
 
     private string name="";
     private Color color;
-    private string mensajeError;
+    private string errorMessage;
     private int red;
     private int green;
     private int blue;
@@ -130,7 +130,7 @@
         nameError = string.Empty;
     }
 
-    void CrearMaterial()
+    void CreateMaterial()
     {
 
         if (material.VerifyName(name) && material.VerifyColor(red, green, blue) && !string.IsNullOrEmpty(selectedMaterial))
@@ -149,13 +149,13 @@
         }
         else
         {
-            mensajeError = " Nombre  o  color incorrecto o material no seleccionado";
+            errorMessage = " Nombre  o  color incorrecto o material no seleccionado";
         }
 
 
     }
 
-    void VerMateriales()
+    void SeeMaterial()
     {
         NavigationManager.NavigateTo("/material/list");
     }

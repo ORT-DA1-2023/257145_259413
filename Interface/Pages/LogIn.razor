@@ -10,27 +10,26 @@
 
 <div>
     <label for="nombre">Nombre de usuario:</label>
-    <input type="text" id="nombre" @bind="nombre" />
-</div>
+    <input type="text" placeholder="Nombre de Usuario" id="nombre" @bind="name" />
 
-<div>
+
     <label for="contrasena">Contraseña:</label>
-    <input type="password" id="contrasena" @bind="contrasena" />
+    <input type="password" placeholder="Contraseña" id="contrasena" @bind="password" />
 </div>
 
-<button @onclick="IniciarSesion">Iniciar sesión</button>
-@if (!string.IsNullOrEmpty(mensajeError))
+<button class="btn btn-primary"  @onclick="IniciarSesion">Iniciar sesión</button>
+@if (!string.IsNullOrEmpty(errorMessage))
 {
-    <div class="alert alert-danger">@mensajeError</div>
+    <div class="alert alert-danger">@errorMessage</div>
 }
 
 
 <a href="/SignUp">Sign up</a>
-
+</div>
 @code {
-    string nombre;
-    string contrasena;
-    string mensajeError;
+    string name;
+    string password;
+    string errorMessage;
 
 
 
@@ -38,7 +37,7 @@
     Client toLogIn = new Client();
     Client pablin = new Client("Pablo", "123");
     Client nachin = new Client("Ignacio", "nashe1");
-
+    
     void IniciarSesion1()
     {
         manager.logged = pablin;
@@ -51,24 +50,24 @@
         NavigationManager.NavigateTo("/figure", true);
         
     }
-
+    
     void IniciarSesion()
     {
         
-        if(toLogIn.VerifyName(nombre) && toLogIn.VerifyPassword(contrasena))
+        if(toLogIn.VerifyName(name) && toLogIn.VerifyPassword(password))
         {
-            toLogIn = manager.logIn(nombre, contrasena);
+            toLogIn = manager.logIn(name, password);
         }
 
         if (toLogIn != null)
         {
-            // El usuario está registrado, redirigir a la página principal
+         
             NavigationManager.NavigateTo("/Logged", true);
         }
         else
         {
         
-            mensajeError = "Incorrect username or password";
+            errorMessage = "Incorrect username or password";
            
         }
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain;
 using static System.Exception;
+using Exceptions; 
 
 namespace BusinessLogic
 {
@@ -105,13 +106,20 @@ namespace BusinessLogic
 
         public bool Exists(string name)
         {
+            if (name == "")
+            {
+                throw new EmptyUserNameException();
+            }
+
+
+
             foreach(Client client in clients)
             {
                 if (client.MatchingUsername(name))
                 {
+                    throw new DuplicateUserException();
 
-
-                    return true;
+                  //  return true;
                 }
             }
             return false;

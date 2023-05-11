@@ -8,22 +8,22 @@
 <h3> Scene </h3>
 
 
-@if (!muestroCasilla)
+@if (!showBox)
 {
-	<button type="button" class="btn btn-primary" @onclick="tocoNuevaScena">Nueva escena en blanco</button>
+	<button type="button" class="btn btn-primary" @onclick="ShowSceneCreation">Nueva escena en blanco</button>
 }
 
-@if (!string.IsNullOrEmpty(mensajeError))
+@if (!string.IsNullOrEmpty(errorMessage))
 {
-	<div class="alert alert-danger"> @mensajeError </div>
+	<div class="alert alert-danger"> @errorMessage </div>
 }
 
-@if (muestroCasilla)
+@if (showBox)
 {
 	<form>
 		<label> Nombre de la escena</label>
-		<input type="text" @bind="name" />
-		<button button type="button" class=" btn btn-primary" @onclick="CrearScene">Crear escena</button>
+		<input type="text" @bind="name" placeholder="Mi primer escena" />
+		<button button type="button" class=" btn btn-primary" @onclick="CreateScene">Crear escena</button>
 
 	</form>	
 
@@ -61,8 +61,8 @@
 
 	private int id { get; set; }
 	private string name;
-	private string mensajeError;
-	private bool muestroCasilla=false;
+	private string errorMessage;
+	private bool showBox=false;
 	private List<Scene> listScene = new List<Scene>();
 
 	protected override void OnInitialized()
@@ -70,19 +70,19 @@
         listScene = manager.GetScenes();
     }
 
-	void tocoNuevaScena()
+	void ShowSceneCreation()
 	{
-		muestroCasilla = true;
+		showBox = true;
 	}
 
 
-	void CrearScene()
+	void CreateScene()
 	{
 		Scene scene = new Scene();
 
 		if (scene.VerifyName(name))
 		{
-			muestroCasilla = false;
+			showBox = false;
 			scene = new Scene(name);
 			manager.addScene(scene);
 			name = "";
@@ -92,7 +92,7 @@
 		}
 		else
 		{
-			mensajeError = "nombre no debe tener espacios (Principio, ni final)";
+			errorMessage = "nombre no debe tener espacios (Principio, ni final)";
 		}
 
 
