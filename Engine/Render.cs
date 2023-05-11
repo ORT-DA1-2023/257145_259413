@@ -10,18 +10,18 @@ using System.IO;
 
 namespace Engine
 {
-    public class Render
-    {
-        public Scene scene;
-        public int _resolutionX;
-        public int _resolutionY;
-        private Vector[][] _pixels;
-        private Camera _camera;
-        public int samplesPerPixel;
-        public int maxDepth;
+	public class Render
+	{
+		public Scene scene;
+		public int _resolutionX;
+		public int _resolutionY;
+		private Vector[][] _pixels;
+		private Camera _camera;
+		public int samplesPerPixel;
+		public int maxDepth;
 
-        public Render(Scene scene)
-        {
+		public Render(Scene scene)
+		{
 			this.scene = scene;
 			this._resolutionX = 300;
 			this._resolutionY = 200;
@@ -39,8 +39,8 @@ namespace Engine
 			this.maxDepth = 20;
 		}
 
-        public Render(Scene scene, Coordinate lookFrom, Coordinate lookAt, int fov)
-        {
+		public Render(Scene scene, Coordinate lookFrom, Coordinate lookAt, int fov)
+		{
 			this.scene = scene;
 			this._resolutionX = 300;
 			this._resolutionY = 200;
@@ -58,26 +58,26 @@ namespace Engine
 			this.maxDepth = 20;
 		}
 
-        public Render(Scene scene, int resolutionX, int resolutionY, int samplesPerPixel, int maxDepth)
-        {
-            this.scene = scene;
-            this._resolutionX = resolutionX;
-            this._resolutionY = resolutionY;
-            this._pixels = new Vector[resolutionX][];
-            for(int i = 0; i< resolutionX; i++)
-            {
-                this._pixels[i] = new Vector[resolutionY];
-            }
+		public Render(Scene scene, int resolutionX, int resolutionY, int samplesPerPixel, int maxDepth)
+		{
+			this.scene = scene;
+			this._resolutionX = resolutionX;
+			this._resolutionY = resolutionY;
+			this._pixels = new Vector[resolutionX][];
+			for (int i = 0; i < resolutionX; i++)
+			{
+				this._pixels[i] = new Vector[resolutionY];
+			}
 
-            Vector lookFrom = new Vector(0, 2, 0);
-            Vector lookAt = new Vector(0, 2, 5);
-            Vector up = new Vector(0, 1, 0);
-            this._camera = new Camera(lookFrom, lookAt, up, 30, resolutionX / resolutionY);
-            this.samplesPerPixel = samplesPerPixel;
-            this.maxDepth = maxDepth;
-        }
+			Vector lookFrom = new Vector(0, 2, 0);
+			Vector lookAt = new Vector(0, 2, 5);
+			Vector up = new Vector(0, 1, 0);
+			this._camera = new Camera(lookFrom, lookAt, up, 30, resolutionX / resolutionY);
+			this.samplesPerPixel = samplesPerPixel;
+			this.maxDepth = maxDepth;
+		}
 
-        private string RenderPPMImage(string filePath, string client)
+		private string RenderPPMImage(string filePath, string client)
 		{
 			if (!System.IO.File.Exists(filePath))
 			{
@@ -127,7 +127,7 @@ namespace Engine
 			return imgUrl;
 		}
 
-		private  int writePNG(string[] data, int width, Image<Rgba32> img, int index, int y)
+		private int writePNG(string[] data, int width, Image<Rgba32> img, int index, int y)
 		{
 			for (int x = 0; x < width; x++)
 			{
@@ -142,30 +142,30 @@ namespace Engine
 		}
 
 		public void RenderScene(string client)
-        {
-            Random random = new Random();
-            for(var row = this._resolutionY-1; row >= 0; row--)
+		{
+			Random random = new Random();
+			for (var row = this._resolutionY - 1; row >= 0; row--)
 			{
 				writePixel(random, row);
 			}
 
 			var imageString = "P3\n" + this._resolutionX + " " + this._resolutionY + "\n255\n";
 
-            for (var j = 0; j < this._resolutionY; j++)
+			for (var j = 0; j < this._resolutionY; j++)
 			{
 				imageString = toRGB(imageString, j);
 			}
 
 			string path = Path.Combine(Directory.GetCurrentDirectory(), @"Images\\" + client);
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            path = Path.Combine(path, @""+this.scene.name+ ".ppm");
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+			path = Path.Combine(path, @"" + this.scene.name + ".ppm");
 
-            File.WriteAllText(path, imageString);
-            RenderPPMImage(path, client);
-        }
+			File.WriteAllText(path, imageString);
+			RenderPPMImage(path, client);
+		}
 
 		private string toRGB(string imageString, int j)
 		{
@@ -196,92 +196,92 @@ namespace Engine
 		}
 
 		private void SavePixel(int row, int column, Vector pixelRGB)
-        {
-            int posX = column;
-            int posY = this._resolutionY - row - 1;
-            if(posY < this._resolutionY)
-            {
-                this._pixels[posX][posY] = pixelRGB;
-            }
-            else
-            {
-                throw new Exception("Pixel Overflow Error");
-            }
-        }
+		{
+			int posX = column;
+			int posY = this._resolutionY - row - 1;
+			if (posY < this._resolutionY)
+			{
+				this._pixels[posX][posY] = pixelRGB;
+			}
+			else
+			{
+				throw new Exception("Pixel Overflow Error");
+			}
+		}
 
-        private Vector getRandomInUnitModel()
-        {
-            Random random = new Random();
-            Vector vector;
-            do
-            {
-                Vector temp = new Vector(random.NextDouble(), random.NextDouble(), random.NextDouble());
-                vector = temp.Multiply(2).Substract(new Vector(1,1,1));
-            }
-            while(vector.SquaredLength()  >= 1);
-            return vector;
-        }
+		private Vector getRandomInUnitModel()
+		{
+			Random random = new Random();
+			Vector vector;
+			do
+			{
+				Vector temp = new Vector(random.NextDouble(), random.NextDouble(), random.NextDouble());
+				vector = temp.Multiply(2).Substract(new Vector(1, 1, 1));
+			}
+			while (vector.SquaredLength() >= 1);
+			return vector;
+		}
 
-        private HitRecord isModelHit(PositionedModel model, Ray ray, double tMin, double tMax) 
-        {
-            Vector originalColor = new Vector(model.model.material.color.R, model.model.material.color.G, model.model.material.color.B).getUnit();
-            Vector modelCenter = new Vector(model.position.x, model.position.y, model.position.z);
-            Vector originCenter = ray.Origin.Substract(modelCenter);
-            var a = ray.Direction.Dot(ray.Direction);
-            var b = originCenter.Dot(ray.Direction) * 2;
-            double c = originCenter.Dot(originCenter) - Math.Pow(model.model.figure.radius, 2);
-            double discriminant = (b * b) - (4 * a * c);
-            if(discriminant < 0)
-            {
-                return null;
-            }
-            var t = ((-1 * b) - Math.Sqrt(discriminant)) / (2 * a);
-            Vector intersectionPoint = ray.PointAt(t);
-            Vector normal = intersectionPoint.Substract(modelCenter).Divide(model.model.figure.radius);
-            if(t < tMax &&  t > tMin)
-            {
-                return new HitRecord(t, intersectionPoint, normal, originalColor);
-            }
-             return null;
-            
-        }
+		private HitRecord isModelHit(PositionedModel model, Ray ray, double tMin, double tMax)
+		{
+			Vector originalColor = new Vector(model.model.material.color.R, model.model.material.color.G, model.model.material.color.B).getUnit();
+			Vector modelCenter = new Vector(model.position.x, model.position.y, model.position.z);
+			Vector originCenter = ray.Origin.Substract(modelCenter);
+			var a = ray.Direction.Dot(ray.Direction);
+			var b = originCenter.Dot(ray.Direction) * 2;
+			double c = originCenter.Dot(originCenter) - Math.Pow(model.model.figure.radius, 2);
+			double discriminant = (b * b) - (4 * a * c);
+			if (discriminant < 0)
+			{
+				return null;
+			}
+			var t = ((-1 * b) - Math.Sqrt(discriminant)) / (2 * a);
+			Vector intersectionPoint = ray.PointAt(t);
+			Vector normal = intersectionPoint.Substract(modelCenter).Divide(model.model.figure.radius);
+			if (t < tMax && t > tMin)
+			{
+				return new HitRecord(t, intersectionPoint, normal, originalColor);
+			}
+			return null;
 
-        private Vector ShootRay(Ray ray, int depth)
-        {
-            HitRecord hitRecord = null;
-            double tMax = Math.Pow(10, 28);
-            foreach(PositionedModel model in this.scene.GetPositionedModels())
-            {
-                HitRecord hit = isModelHit(model, ray, 0.001, tMax);
-                if(hit != null)
-                {
-                    hitRecord = hit;
-                    tMax = hit.t;
-                }
-            }
-            if(hitRecord != null)
-            {
-                if(depth > 0)
-                {
-                    Vector newPoint = hitRecord.intersection.Add(hitRecord.normal).Add(getRandomInUnitModel());
-                    Vector newVector = newPoint.Substract(hitRecord.intersection);
-                    Ray newRay = new Ray(hitRecord.intersection, newVector);
-                    Vector color = ShootRay(newRay, depth - 1);
-                    Vector attenuation = hitRecord.attenuation;
-                    return new Vector(color.X * attenuation.X, color.Y * attenuation.Y, color.Z * attenuation.Z);
-                }
-                
-                
-                    return new Vector(0,0,0);
-               
-            }
-           
-                    Vector directionUnit = ray.Direction.getUnit();
-                    double posY = 0.5 * (directionUnit.Y + 1);
-                    Vector start = new Vector(1, 1, 1);
-                    Vector end = new Vector(0.5, 0.7, 1.0);
-                    return start.Multiply(1 - posY).Add(end.Multiply(posY));
-            
-        }
-    }
+		}
+
+		private Vector ShootRay(Ray ray, int depth)
+		{
+			HitRecord hitRecord = null;
+			double tMax = Math.Pow(10, 28);
+			foreach (PositionedModel model in this.scene.GetPositionedModels())
+			{
+				HitRecord hit = isModelHit(model, ray, 0.001, tMax);
+				if (hit != null)
+				{
+					hitRecord = hit;
+					tMax = hit.t;
+				}
+			}
+			if (hitRecord != null)
+			{
+				if (depth > 0)
+				{
+					Vector newPoint = hitRecord.intersection.Add(hitRecord.normal).Add(getRandomInUnitModel());
+					Vector newVector = newPoint.Substract(hitRecord.intersection);
+					Ray newRay = new Ray(hitRecord.intersection, newVector);
+					Vector color = ShootRay(newRay, depth - 1);
+					Vector attenuation = hitRecord.attenuation;
+					return new Vector(color.X * attenuation.X, color.Y * attenuation.Y, color.Z * attenuation.Z);
+				}
+
+
+				return new Vector(0, 0, 0);
+
+			}
+
+			Vector directionUnit = ray.Direction.getUnit();
+			double posY = 0.5 * (directionUnit.Y + 1);
+			Vector start = new Vector(1, 1, 1);
+			Vector end = new Vector(0.5, 0.7, 1.0);
+			return start.Multiply(1 - posY).Add(end.Multiply(posY));
+
+		}
+	}
 }
