@@ -7,7 +7,7 @@
 
 <h3>Model</h3>
 
-<InputText @bind-Value="name"/>
+<InputText @bind-Value="name"   placeholder="Mi modelo planeta"/>
 @if (!string.IsNullOrEmpty(nameError))
 {
     <div class="alert alert-danger">@nameError</div>
@@ -38,7 +38,7 @@
 <p>Generar preview al guardar</p>
 <InputCheckbox @bind-Value="@isChecked"/>
 
-<button type="button" class="btn btn-primary" @onclick="CrearModelo">Guardar</button>
+<button type="button" class="btn btn-primary" @onclick="CreateModel">Guardar</button>
 @if (!string.IsNullOrEmpty(mensajeError))
 {
     <div class="alert alert-danger"> @mensajeError </div>
@@ -55,7 +55,7 @@
 
 
 
-<button type="button" class="btn btn-primary" @onclick="VerModelo">Ver Modelos</button>
+<button type="button" class="btn btn-primary" @onclick="SeeModel">Ver Modelos</button>
 
 
 
@@ -85,7 +85,7 @@
         material = manager.MatchingMaterial(selectedMaterial);
     }
 
-    void CrearModelo()
+    void CreateModel()
     {
 
         if (model.VerifyName(name))
@@ -93,11 +93,8 @@
             model = new Model(name, figure, material);
             manager.addModel(model);
             successMessage= "Creación Exitosa";
-            
-            //selectedMaterial = "";
-            // selectedFigure = "";
-            // isChecked = false;
-
+          
+           
             if (isChecked)
             {
                 Scene scene = new Scene("model_"+name);
@@ -116,7 +113,7 @@
                 render.RenderScene(manager.logged.name);
             }
             name = "";
-
+            NavigationManager.NavigateTo("/model", true);
 
         }
         else
@@ -125,7 +122,7 @@
         }
     }
 
-    void VerModelo()
+    void SeeModel()
     {
         NavigationManager.NavigateTo("/model/list");
     }

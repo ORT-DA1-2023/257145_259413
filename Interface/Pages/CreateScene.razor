@@ -25,7 +25,7 @@
 				{
 
 				
-					<button type="button" class="btn btn-success btn-sm" @onclick="(() => SeleccionarModelo(model))">@model.name</button>
+					<button type="button" class="btn btn-success btn-sm" @onclick="(() => SelectedModel(model))">@model.name</button>
 				}
 			</ul>
 
@@ -38,42 +38,42 @@
 
 <form id="myForm1" style="display:none">
 	
-	<input type="number" @bind-value="CoordenadaX" />
+	<input type="number" @bind-value="coordinateX" />
 </form>
-@if (mostrarFormulario)
+@if (showForm)
 {
 	<form id="myForm1">
 		<label>CoordenadaX:</label>
-		<input type="number" @bind-value="CoordenadaX" />
+		<input type="number" @bind-value="coordinateX" />
 	</form>
 }
 
 
 <form id="myForm2" style="display:none">
 
-	<input type="number" @bind-value="CoordenadaY" />
+	<input type="number" @bind-value="coordinateY" />
 </form>
-@if (mostrarFormulario)
+@if (showForm)
 {
 	<form id="myForm2">
 		<label>CoordenadaY:</label>
-		<input type="number" @bind-value="CoordenadaY" />
+		<input type="number" @bind-value="coordinateY" />
 	</form>
 }
 
 <form id="myForm3" style="display:none">
 	
-	<input type="number" @bind-value="CoordenadaZ" />
+	<input type="number" @bind-value="coordinateZ" />
 </form>
-@if (mostrarFormulario)
+@if (showForm)
 {
 	<form id="myForm3">
 		<label>CoordenadaZ:</label>
-		<input type="number" @bind-value="CoordenadaZ" />
+		<input type="number" @bind-value="coordinateZ" />
 
 	</form>
 
-	<button @onclick="AgregarModeloPosiconado">Agregar Modelo Posicionado</button>
+	<button @onclick="AddPositionedModel">Agregar Modelo Posicionado</button>
 
 }
 
@@ -107,7 +107,7 @@
 	<label for="lookFrom">Look From:</label>
 
 	<form id="LookFrom">
-		<input type="text" @bind-value="LookFrom" readonly />
+		<input type="text" @bind-value="lookFrom" readonly />
 	</form>
 </div>
 
@@ -116,7 +116,7 @@
 	<label for="lookAt">Look At:</label>
 
 	<form id="LookAt">
-		<input type="text" @bind-value="LookAt" readonly />
+		<input type="text" @bind-value="lookAt" readonly />
 	</form>
 </div>
 
@@ -125,11 +125,11 @@
 	<label for="FoV">FoV:</label>
 	
 	<form id="Fov">
-		<input type="number" @bind-value="Fov" readonly />
+		<input type="number" @bind-value="fov" readonly />
 	</form>
 </div>
 
-<button @onclick="Renderizar">Renderizar</button>
+<button @onclick="ToRender">Renderizar</button>
 
 
 <div class="form-group">
@@ -145,54 +145,54 @@
 
 
 
-	private bool mostrarFormulario = false;
-	private int CoordenadaX = 0;
-	private int CoordenadaY = 0;
-	private int CoordenadaZ = 0;
+	private bool showForm = false;
+	private int coordinateX = 0;
+	private int coordinateY = 0;
+	private int coordinateZ = 0;
 
-	private string LookFrom = "( 0, 2, 0 )";
+	private string lookFrom = "( 0, 2, 0 )";
 
-	private string LookAt="( 0, 2, 5 )";
+	private string lookAt="( 0, 2, 5 )";
 
-	private int Fov = 30;
+	private int fov = 30;
 
 	private string nameError = "";
 
 
-	private Model modeloSeleccionado;
+	private Model selectedModel;
 
-	private void SeleccionarModelo(Model modelo)
+	private void SelectedModel(Model modelo)
 	{
-		modeloSeleccionado = modelo;
+		selectedModel = modelo;
 
-		mostrarFormulario = true;
+		showForm = true;
 
 	}
 
 
-	void AgregarModeloPosiconado()
+	void AddPositionedModel()
 	{
 
 		Coordinate coordinates = new Coordinate();
 
-		if (coordinates.VerifyCoordinate(CoordenadaX,CoordenadaY,CoordenadaZ))
+		if (coordinates.VerifyCoordinate(coordinateX,coordinateY,coordinateZ))
 		{
-			Coordinate coordinateCreate = new Coordinate(CoordenadaX, CoordenadaY, CoordenadaZ);
+			Coordinate coordinateCreate = new Coordinate(coordinateX, coordinateY, coordinateZ);
 
-			PositionedModel PositionedModel = new PositionedModel(modeloSeleccionado, coordinateCreate);
+			PositionedModel PositionedModel = new PositionedModel(selectedModel, coordinateCreate);
 
 			scene.addPositionedModel(PositionedModel);
 
 		}
-		CoordenadaX = 0;
-		CoordenadaY = 0;
-		CoordenadaZ = 0;
+		coordinateX = 0;
+		coordinateY = 0;
+		coordinateZ = 0;
 
 
 	}
 
 
-	void Renderizar()
+	void ToRender()
 	{
 		Render render = new Render(scene,50,40,10,10);
 		render.RenderScene(manager.logged.name);

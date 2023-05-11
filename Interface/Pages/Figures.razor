@@ -15,26 +15,26 @@
 
     <div class="form-group">
         <label for="name">Nombre de la figura:</label>
-        <input type="text" class="form-control" id="name" @bind="@name">
+        <input type="text" class="form-control" id="name" @bind="@name"  placeholder="Esfera del Dragón" >
     </div>
     <div class="form-group">
         <label for="radius">Radio de la figura:</label>
-        <input type="text" class="form-control" id="radius" @bind="@radius">
+        <input type="text" class="form-control" id="radius" @bind="@radius" placeholder="5">
     </div>
 
 
 
-    <button type="button" class="btn btn-primary" @onclick="CrearFigura">Crear Figura</button>
-    @if (!string.IsNullOrEmpty(mensajeError))
+    <button type="button" class="btn btn-primary" @onclick="CreateFigure">Crear Figura</button>
+    @if (!string.IsNullOrEmpty(errorMessage))
     {
-        <div class="alert alert-danger">@mensajeError</div>
+        <div class="alert alert-danger">@errorMessage</div>
 
     }
 
-    <button type="button" class="btn btn-primary" @onclick="CancelarFigura">Cancelar</button>
+    <button type="button" class="btn btn-primary" @onclick="CancelFigure">Cancelar</button>
 
 
-    <button type="button" class="btn btn-primary" @onclick="VerFiguras">Ver Figuras</button>
+    <button type="button" class="btn btn-primary" @onclick="SeeFigure">Ver Figuras</button>
 
     @if (!string.IsNullOrEmpty(successMessage))
 {
@@ -46,10 +46,10 @@
 @code {
     private string name = "";
     private string radius;
-    private string mensajeError;
+    private string errorMessage;
     private string successMessage;
 
-    void CrearFigura()
+    void CreateFigure()
     {
 
         double radiusNumber = double.Parse(radius, CultureInfo.InvariantCulture.NumberFormat);
@@ -70,17 +70,17 @@
         }
         else
         {
-            mensajeError = "Radio o Nombre Incorrecto";
+            errorMessage = "Radio o Nombre Incorrecto";
         }
     }
 
-    void CancelarFigura()
+    void CancelFigure()
     {
 
         NavigationManager.NavigateTo("/logged");
     }
 
-    void VerFiguras()
+    void SeeFigure()
     {
         NavigationManager.NavigateTo("/figures/list");
     }
