@@ -1,5 +1,6 @@
 ﻿using BusinessLogic;
 using Domain;
+using Exceptions;
 using NuGet.Frameworks;
 using System.Drawing;
 
@@ -248,8 +249,18 @@ namespace BusinessLogic.test
             Client client = new Client("Juan","JuanPas2");
             manager.logged = client;
 
-            manager.clients.Add(client);
-            bool result = manager.Exists(client.name);
+            manager.add(client);
+
+            bool result = false;
+            try
+            {
+				result = manager.Exists(client.name);
+			}
+            catch(DuplicateUserException ex)
+            {
+                result = true;
+            }
+            
             Assert.IsTrue(result);
 
 

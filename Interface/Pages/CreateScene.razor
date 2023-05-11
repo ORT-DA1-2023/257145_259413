@@ -131,7 +131,7 @@
 	<label for="FoV">FoV:</label>
 	
 	<form id="Fov">
-		<input type="number" @bind-value="Fov" />
+		<input type="number" @bind-value="fov" />
 	</form>
 </div>
 
@@ -208,7 +208,7 @@
 		coordinateY = 0;
 		coordinateZ = 0;
 
-		mostrarFormulario = false;
+		showForm = false;
 
 	}
 
@@ -218,7 +218,7 @@
 		Coordinate lookFrom = new Coordinate(LookFromX, LookFromY, LookFromZ);
 		Coordinate lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
 
-		Render render = new Render(scene, lookFrom, lookAt, Fov);
+		Render render = new Render(scene, lookFrom, lookAt, fov);
 		render.RenderScene(manager.logged.name);
 		scene.Render();
 

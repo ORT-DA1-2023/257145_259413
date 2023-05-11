@@ -118,8 +118,6 @@ namespace BusinessLogic
                 if (client.MatchingUsername(name))
                 {
                     throw new DuplicateUserException();
-
-                  //  return true;
                 }
             }
             return false;
