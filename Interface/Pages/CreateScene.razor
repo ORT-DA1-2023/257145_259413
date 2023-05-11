@@ -92,7 +92,7 @@
 			{
 				<tr>
 					<td>@positionedModel.ToString()</td>
-					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => scene.DeletePositionedModel(positionedModel))">Eliminar</button></td>
+					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => scene.deletePositionedModel(positionedModel))">Eliminar</button></td>
 
 				</tr>
 			}
@@ -107,7 +107,10 @@
 	<label for="lookFrom">Look From:</label>
 
 	<form id="LookFrom">
-		<input type="text" @bind-value="lookFrom" readonly />
+		<input type="number" @bind-value="LookFromX" />
+		<input type="number" @bind-value="LookFromY" />
+		<input type="number" @bind-value="LookFromZ" />
+
 	</form>
 </div>
 
@@ -116,7 +119,10 @@
 	<label for="lookAt">Look At:</label>
 
 	<form id="LookAt">
-		<input type="text" @bind-value="lookAt" readonly />
+		<input type="number" @bind-value="LookAtX"/>
+		<input type="number" @bind-value="LookAtY"/>
+		<input type="number" @bind-value="LookAtZ"/>
+
 	</form>
 </div>
 
@@ -125,7 +131,7 @@
 	<label for="FoV">FoV:</label>
 	
 	<form id="Fov">
-		<input type="number" @bind-value="fov" readonly />
+		<input type="number" @bind-value="Fov" />
 	</form>
 </div>
 
@@ -135,6 +141,14 @@
 <div class="form-group">
 	<label for="name">Preview:</label>
 	<img src="@String.Concat("images/",manager.logged.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
+
+	<p class="text-start">Último renderizado: @scene.lastRendered</p>
+	@if(scene.lastRendered<scene.lastModified)
+    {
+		<div class="alert alert-warning" role="alert">
+			<i class="fa-solid fa-triangle-exclamation">Imagen desactualizada</i>
+		</div>
+    }
 </div>
 
 
@@ -150,9 +164,15 @@
 	private int coordinateY = 0;
 	private int coordinateZ = 0;
 
-	private string lookFrom = "( 0, 2, 0 )";
+	private int LookFromX = 0;
+	private int LookFromY = 2;
+	private int LookFromZ = 0;
 
-	private string lookAt="( 0, 2, 5 )";
+
+	private int LookAtX=0;
+	private int LookAtY = 2;
+	private int LookAtZ = 5;
+
 
 	private int fov = 30;
 
@@ -188,14 +208,19 @@
 		coordinateY = 0;
 		coordinateZ = 0;
 
+		mostrarFormulario = false;
 
 	}
 
 
 	void ToRender()
 	{
-		Render render = new Render(scene,50,40,10,10);
+		Coordinate lookFrom = new Coordinate(LookFromX, LookFromY, LookFromZ);
+		Coordinate lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
+
+		Render render = new Render(scene, lookFrom, lookAt, Fov);
 		render.RenderScene(manager.logged.name);
+		scene.Render();
 
 
 		NavigationManager.NavigateTo("/scene/"+name,true);

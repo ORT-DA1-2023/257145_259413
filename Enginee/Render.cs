@@ -12,13 +12,13 @@ namespace Engine
 {
     public class Render
     {
-        private Scene scene;
-        private int _resolutionX;
-        private int _resolutionY;
+        public Scene scene;
+        public int _resolutionX;
+        public int _resolutionY;
         private Vector[][] _pixels;
         private Camera _camera;
-        private int samplesPerPixel;
-        private int maxDepth;
+        public int samplesPerPixel;
+        public int maxDepth;
 
         public Render(Scene scene)
         {
@@ -39,6 +39,25 @@ namespace Engine
 			this.maxDepth = 20;
 		}
 
+        public Render(Scene scene, Coordinate lookFrom, Coordinate lookAt, int fov)
+        {
+			this.scene = scene;
+			this._resolutionX = 300;
+			this._resolutionY = 200;
+			this._pixels = new Vector[300][];
+			for (int i = 0; i < 300; i++)
+			{
+				this._pixels[i] = new Vector[200];
+			}
+
+			Vector lookFromVector = new Vector(lookFrom.x, lookFrom.y, lookFrom.z);
+			Vector lookAtVector = new Vector(lookAt.x, lookAt.y, lookAt.z);
+			Vector up = new Vector(0, 1, 0);
+			this._camera = new Camera(lookFromVector, lookAtVector, up, fov, (double)300 / 200);
+			this.samplesPerPixel = 50;
+			this.maxDepth = 20;
+		}
+
         public Render(Scene scene, int resolutionX, int resolutionY, int samplesPerPixel, int maxDepth)
         {
             this.scene = scene;
@@ -54,11 +73,11 @@ namespace Engine
             Vector lookAt = new Vector(0, 2, 5);
             Vector up = new Vector(0, 1, 0);
             this._camera = new Camera(lookFrom, lookAt, up, 30, resolutionX / resolutionY);
-            this.samplesPerPixel = 50;
-            this.maxDepth = 20;
+            this.samplesPerPixel = samplesPerPixel;
+            this.maxDepth = maxDepth;
         }
 
-        public string RenderPPMImage(string filePath, string client)
+        private string RenderPPMImage(string filePath, string client)
 		{
 			if (!System.IO.File.Exists(filePath))
 			{
@@ -176,7 +195,7 @@ namespace Engine
 			}
 		}
 
-		public void SavePixel(int row, int column, Vector pixelRGB)
+		private void SavePixel(int row, int column, Vector pixelRGB)
         {
             int posX = column;
             int posY = this._resolutionY - row - 1;
@@ -190,7 +209,7 @@ namespace Engine
             }
         }
 
-        public Vector getRandomInUnitModel()
+        private Vector getRandomInUnitModel()
         {
             Random random = new Random();
             Vector vector;
@@ -203,7 +222,7 @@ namespace Engine
             return vector;
         }
 
-        public HitRecord isModelHit(PositionedModel model, Ray ray, double tMin, double tMax) 
+        private HitRecord isModelHit(PositionedModel model, Ray ray, double tMin, double tMax) 
         {
             Vector originalColor = new Vector(model.model.material.color.R, model.model.material.color.G, model.model.material.color.B).getUnit();
             Vector modelCenter = new Vector(model.position.x, model.position.y, model.position.z);
@@ -227,7 +246,7 @@ namespace Engine
             
         }
 
-        public Vector ShootRay(Ray ray, int depth)
+        private Vector ShootRay(Ray ray, int depth)
         {
             HitRecord hitRecord = null;
             double tMax = Math.Pow(10, 28);
@@ -253,7 +272,7 @@ namespace Engine
                 }
                 
                 
-                    return new Vector();
+                    return new Vector(0,0,0);
                
             }
            
