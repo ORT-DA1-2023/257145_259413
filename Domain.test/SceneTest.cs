@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -123,7 +124,15 @@ namespace Domain.test
         {
             Scene scene = new Scene();
             int fov = -2;
-            bool result = scene.VerifyFoV(fov);
+            bool result;
+            try
+            {
+                    result = scene.VerifyFoV(fov);
+            }
+            catch(FovOutOfBoundException)
+            {
+                result=false;
+            }
             Assert.IsFalse(result);
         }
 
@@ -132,9 +141,17 @@ namespace Domain.test
         {
             Scene scene = new Scene();
             int fov = 165;
-            bool result = scene.VerifyFoV(fov);
-            Assert.IsFalse(result);
-        }
+			bool result;
+			try
+			{
+				result = scene.VerifyFoV(fov);
+			}
+			catch (FovOutOfBoundException)
+			{
+				result = false;
+			}
+			Assert.IsFalse(result);
+		}
 
         [TestMethod]
         public void ReturnsTrueIfFoVDefaultValueIs30()

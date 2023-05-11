@@ -133,6 +133,8 @@
     void CreateMaterial()
     {
 
+        successMessage = "";
+
         if (material.VerifyName(name) && material.VerifyColor(red, green, blue) && !string.IsNullOrEmpty(selectedMaterial))
         {
             color = Color.FromArgb(red, green, blue);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Exceptions;
 
 namespace Domain
 {
@@ -124,7 +125,7 @@ namespace Domain
 	
 		public bool VerifyFoV(int fov)
         {
-            return fov >= 1 && fov <=160;
+            return (fov >= 1 && fov <=160) ? true : throw new FovOutOfBoundException();
         }
 
         public int CompareTo(Scene scene)

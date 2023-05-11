@@ -2,6 +2,7 @@
 @using BusinessLogic;
 @using Domain;
 @using Engine;
+@using Exceptions;
 @inject Manager manager;
 @inject NavigationManager NavigationManager;
 
@@ -92,7 +93,7 @@
 	</form>
 </div>
 
-<button @onclick="ToRender">Renderizar</button>
+<button class="btn btn-primary" @onclick="ToRender">Renderizar</button>
 
 
 <div class="form-group">
@@ -174,13 +175,20 @@
 	{
 		Coordinate lookFrom = new Coordinate(LookFromX, LookFromY, LookFromZ);
 		Coordinate lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
+		try
+		{
+			scene.VerifyFoV(fov);
+			Render render = new Render(scene, lookFrom, lookAt, fov);
+			render.RenderScene(manager.logged.name);
+			scene.Render();
+			NavigationManager.NavigateTo("/scene/"+name,true);
+		}
+		catch (FovOutOfBoundException e)
+        {
+            nameError = e.Message;
+        }
 
-		Render render = new Render(scene, lookFrom, lookAt, fov);
-		render.RenderScene(manager.logged.name);
-		scene.Render();
 
-
-		NavigationManager.NavigateTo("/scene/"+name,true);
 
 	}
 

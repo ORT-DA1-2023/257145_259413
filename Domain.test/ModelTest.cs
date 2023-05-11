@@ -15,8 +15,17 @@ namespace Domain.test
         {
             string name = "";
             Model model = new Model();
-            bool result = model.VerifyName(name);
-            Assert.IsFalse(result);
+			bool result;
+			try
+			{
+				result = model.VerifyName(name);
+			}
+			catch (InvalidDataException)
+			{
+				result = false;
+			}
+			Assert.IsFalse(result);
+			Assert.IsFalse(result);
         }
 
         [TestMethod]
@@ -25,7 +34,15 @@ namespace Domain.test
 
             string name = " aa2 ";
             Model model = new Model();
-            bool result = model.VerifyName(name);
+            bool result;
+            try
+            {
+                result = model.VerifyName(name);
+            }
+            catch (InvalidDataException)
+            {
+                result = false;
+            }
             Assert.IsFalse(result);
 
         }
