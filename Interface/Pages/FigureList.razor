@@ -1,5 +1,6 @@
 ﻿@page "/figures/list"
 @using BusinessLogic;
+@using Domain;
 @inject Manager manager;
 
 <h3>FigureList</h3>
@@ -21,12 +22,36 @@
             <tr>
                 <td>@figura.name</td>
                 <td>@figura.radius</td>
-                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteFigure(figura))">Eliminar</button></td>
+                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => DeleteFigure(figura))">Eliminar</button></td>
             </tr>
         }
     </tbody>
 </table>
 
+@if (linkedFigure)
+{
+    <div class="  alert alert-danger" role="alert">
+        @exceptionMessage
+    </div>
+}
+
 @code {
+
+    private bool linkedFigure = false;
+    private string exceptionMessage = "";
+
+    private void DeleteFigure(Figure figure)
+    {
+        try
+        {
+            linkedFigure = false;
+            manager.DeleteFigure(figure);
+        }
+        catch (InvalidOperationException ex)
+        {
+            linkedFigure = true;
+            exceptionMessage = ex.Message;
+        }
+    }
 
 }

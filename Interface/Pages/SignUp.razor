@@ -40,7 +40,7 @@
     }
 
 
-@if (duplicateActorError || emptyActorError)
+@if (duplicateUserError || emptyUserError)
 {
     <div class="  alert alert-danger" role="alert">
       @exceptionMessage
@@ -59,11 +59,9 @@
     private string differentPassword = "";
     private string startSessions = "";
 
-    // exception
-
-    private bool duplicateActorError =false; 
+    private bool duplicateUserError =false; 
     private string exceptionMessage = "";
-    private bool emptyActorError = false;
+    private bool emptyUserError = false;
 
     Client newClient = new Client();
 
@@ -76,9 +74,17 @@
     {
         name = (string)e.Value;
 
-        if (!newClient.VerifyName(name))
+        try
         {
-            nameError = "El nombre debe contener:Mayuscula - Numero- Sin espacios -Entre 3 a 20 letras";
+            if (!newClient.VerifyName(name))
+            {
+                nameError = "El nombre debe contener:Mayuscula - Numero- Sin espacios -Entre 3 a 20 letras";
+                return;
+            }
+        }
+        catch(EmptyUserNameException ex)
+        {
+            nameError = ex.Message;
             return;
         }
 
@@ -88,10 +94,17 @@
     private void ValidatePassword(ChangeEventArgs e)
     {
         password = (string)e.Value;
-
-        if (!newClient.VerifyPassword(password))
+        try
         {
-            passwordError = "La contraseña debe contener: Mayuscula- Numero- Entre 5 y 25 letras";
+            if (!newClient.VerifyPassword(password))
+            {
+                passwordError = "La contraseña debe contener: Mayuscula- Numero- Entre 5 y 25 letras";
+                return;
+            }
+        }
+        catch(EmptyUserNameException ex)
+        {
+            passwordError = ex.Message;
             return;
         }
 
@@ -102,27 +115,32 @@
     {
         passwordConfirmation = (string)e.Value;
 
-        if (!MatchingPasswords(password, passwordConfirmation))
+        try
         {
-            differentPassword = "Las contraseñas no coinciden";
+            MatchingPasswords(password, passwordConfirmation);
+
+        }
+        catch(MatchingException ex)
+        {
+            differentPassword = ex.Message;
             return;
         }
 
         differentPassword = string.Empty;
     }
 
-    public bool MatchingPasswords(string password, string confirmation)
+    private bool MatchingPasswords(string password, string confirmation)
     {
         if (password.Length != confirmation.Length)
         {
-            return false;
+            throw new MatchingException();
         }
 
         for (int i = 0; i < password.Length; i++)
         {
             if (password[i] != confirmation[i])
             {
-                return false;
+                throw new MatchingException();
             }
         }
 
@@ -133,23 +151,28 @@
     {
         try
         {
-            if(newClient.VerifyName(name) && newClient.VerifyPassword(password) && !manager.Exists(name)){
+            if (newClient.VerifyName(name) && newClient.VerifyPassword(password) && MatchingPasswords(password, passwordConfirmation) && !manager.Exists(name)){
                 manager.add(manager.SignUp(name, password));
                 manager.logIn(name, password);
                 startSessions = "Se creo un cliente nuevo";
 
-                NavigationManager.NavigateTo("/logged");
+                NavigationManager.NavigateTo("/logged", true);
             }
         }
         catch (DuplicateUserException ex)
         {
-            duplicateActorError = true;
+            duplicateUserError = true;
             exceptionMessage= ex.Message;
 
-        }catch(EmptyUserNameException ex)
+        }
+        catch(EmptyUserNameException ex)
         {
-            emptyActorError = true;
+            emptyUserError = true;
             exceptionMessage = ex.Message;
+        }
+        catch(MatchingException ex)
+        {
+            differentPassword = ex.Message;
         }
 
         

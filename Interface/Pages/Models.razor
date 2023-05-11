@@ -35,13 +35,15 @@
     }
 </select>
 
-<p>Generar preview al guardar</p>
-<InputCheckbox @bind-Value="@isChecked"/>
+<div>
+    <p>Generar preview al guardar</p>
+    <InputCheckbox @bind-Value="@isChecked"/>
+</div>
 
 <button type="button" class="btn btn-primary" @onclick="CreateModel">Guardar</button>
-@if (!string.IsNullOrEmpty(mensajeError))
+@if (!string.IsNullOrEmpty(errorMessage))
 {
-    <div class="alert alert-danger"> @mensajeError </div>
+    <div class="alert alert-danger"> @errorMessage </div>
 }
 
  @if (!string.IsNullOrEmpty(successMessage))
@@ -61,9 +63,9 @@
 
 
 @code {
-    private string name;
+    private string name="";
     private string nameError;
-    private string mensajeError;
+    private string errorMessage;
     private string selectedMaterial;
     private Material material;
     private string selectedFigure;
@@ -87,42 +89,53 @@
 
     void CreateModel()
     {
-
-        if (model.VerifyName(name))
+        try
         {
-            model = new Model(name, figure, material);
-            manager.addModel(model);
-            successMessage= "Creación Exitosa";
-          
-           
-            if (isChecked)
+            if (model.VerifyName(name) && !String.IsNullOrEmpty(selectedMaterial) && !String.IsNullOrEmpty(selectedFigure))
             {
-                Scene scene = new Scene("model_"+name);
-                Material gray = new Material("floor", System.Drawing.Color.White);
-                Figure floor = new Figure("floor", 1000);
-                Model earth = new Model("earth", floor, gray);
-                Coordinate position = new Coordinate(0, -999, 5);
-                scene.addPositionedModel(new PositionedModel(earth, position));
+                model = new Model(name, figure, material);
+                manager.addModel(model);
+                successMessage = "Creación Exitosa";
 
-                Figure test = new Figure("test", 1);
-                Model temp = new Model("object", test, material);
-                position = new Coordinate(0, 2, 5);
-                scene.addPositionedModel(new PositionedModel(temp, position));
 
-                Render render = new Render(scene,150,100,30,20);
-                render.RenderScene(manager.logged.name);
+                if (isChecked)
+                {
+                    CreatePreview();
+                }
+                name = "";
+                NavigationManager.NavigateTo("/model", true);
+
             }
-            name = "";
-            NavigationManager.NavigateTo("/model", true);
-
+            else
+            {
+                errorMessage = "Por favor seleccione una figura y un material";
+            }
         }
-        else
+        catch(InvalidDataException ex)
         {
-            mensajeError = "figura " + selectedFigure + " material " + selectedMaterial;
+            errorMessage = ex.Message;
         }
     }
 
-    void SeeModel()
+    private void CreatePreview()
+    {
+        Scene scene = new Scene("model_" + name);
+        Material floorColor = new Material("floor", System.Drawing.Color.White);
+        Figure floor = new Figure("floor", 1000);
+        Model earth = new Model("earth", floor, floorColor);
+        Coordinate position = new Coordinate(0, -999, 5);
+        scene.addPositionedModel(new PositionedModel(earth, position));
+
+        Figure test = new Figure("test", 1);
+        Model temp = new Model("object", test, material);
+        position = new Coordinate(0, 2, 5);
+        scene.addPositionedModel(new PositionedModel(temp, position));
+
+        Render render = new Render(scene, 150, 100, 30, 20);
+        render.RenderScene(manager.logged.name);
+    }
+
+    private void SeeModel()
     {
         NavigationManager.NavigateTo("/model/list");
     }
