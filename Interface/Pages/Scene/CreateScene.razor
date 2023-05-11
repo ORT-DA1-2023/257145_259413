@@ -1,0 +1,214 @@
+﻿@page "/scene/{name}"
+@using BusinessLogic;
+@using Domain;
+@using Engine;
+@using Exceptions;
+@inject Manager manager;
+@inject NavigationManager NavigationManager;
+
+
+<h3>Scene:  @name</h3>
+
+
+<div class="form-group">
+	<label for="name">Modelos Disponibles:</label>
+	
+	<ul>
+	@foreach (var model in manager.GetModels())
+	{			
+		<button type="button" class="btn btn-success btn-sm" @onclick="(() => SelectedModel(model))">@model.name</button>
+	}
+	</ul>
+</div>
+
+<div>
+	@if (showForm)
+	{
+		<form id="myForm1">
+			<label>CoordenadaX:</label>
+			<input type="number" style="width:100px" class="form-control" @bind-value="coordinateX" />
+			<label>CoordenadaY:</label>
+			<input type="number" style="width:100px" class="form-control" @bind-value="coordinateY" />
+			<label>CoordenadaZ:</label>
+			<input type="number" style="width:100px" class="form-control" @bind-value="coordinateZ" />
+			<button @onclick="AddPositionedModel">Agregar Modelo Posicionado</button>
+		</form>
+	}
+</div>
+
+
+
+<div class="form-group">
+	<table>
+		<thead>
+			<tr>
+				<th>Modelos Posicionados</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (PositionedModel positionedModel in scene.GetPositionedModels())
+			{
+				<tr>
+					<td>@positionedModel.ToString()</td>
+					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => scene.deletePositionedModel(positionedModel))">Eliminar</button></td>
+
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+
+
+
+<div class="form-group">
+	<label for="lookFrom">Look From:</label>
+
+	<form id="LookFrom">
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookFromX" />
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookFromY" />
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookFromZ" />
+
+	</form>
+</div>
+
+
+<div class="form-group">
+	<label for="lookAt">Look At:</label>
+
+	<form id="LookAt">
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookAtX" />
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookAtY" />
+		<input type="number" style="width:100px" class="form-control" @bind-value="LookAtZ" />
+
+	</form>
+</div>
+
+
+<div class="form-group">
+	<label for="FoV">FoV:</label>
+	
+	<form id="Fov">
+		<input type="number" class="form-control" @bind-value="fov" />
+	</form>
+</div>
+
+<button class="btn btn-primary" @onclick="ToRender">Renderizar</button>
+
+@if (showFovError)
+{
+	<div class="alert alert-danger"> @invalidFov </div>
+}
+
+
+<div class="form-group">
+	<label for="name">Preview:</label>
+	<img src="@String.Concat("images/",manager.logged.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
+
+	<p class="text-start">Último renderizado: @scene.lastRendered</p>
+	@if(scene.lastRendered<scene.lastModified)
+    {
+		<div class="alert alert-warning" role="alert">
+			<i class="fa-solid fa-triangle-exclamation">Imagen desactualizada</i>
+		</div>
+    }
+</div>
+
+
+
+
+@code {
+
+
+
+
+	private bool showForm = false;
+	private double coordinateX = 0;
+	private double coordinateY = 0;
+	private double coordinateZ = 0;
+
+	private double LookFromX = 0;
+	private double LookFromY = 2;
+	private double LookFromZ = 0;
+
+
+	private double LookAtX=0;
+	private double LookAtY = 2;
+	private double LookAtZ = 5;
+
+
+	private int fov = 30;
+
+	private bool showFovError = false;
+	private string invalidFov = "";
+
+
+	private Model selectedModel;
+
+	private void SelectedModel(Model modelo)
+	{
+		selectedModel = modelo;
+
+		showForm = true;
+
+	}
+
+
+	void AddPositionedModel()
+	{
+
+		Coordinate coordinates = new Coordinate();
+
+		if (coordinates.VerifyCoordinate(coordinateX,coordinateY,coordinateZ))
+		{
+			Coordinate coordinateCreate = new Coordinate(coordinateX, coordinateY, coordinateZ);
+
+			PositionedModel PositionedModel = new PositionedModel(selectedModel, coordinateCreate);
+
+			scene.addPositionedModel(PositionedModel);
+
+		}
+		coordinateX = 0;
+		coordinateY = 0;
+		coordinateZ = 0;
+
+		showForm = false;
+
+	}
+
+
+	void ToRender()
+	{
+		showFovError = false;
+		Coordinate lookFrom = new Coordinate(LookFromX, LookFromY, LookFromZ);
+		Coordinate lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
+		try
+		{
+			scene.VerifyFoV(fov);
+			Render render = new Render(scene, lookFrom, lookAt, fov);
+			render.RenderScene(manager.logged.name);
+			scene.Render();
+			NavigationManager.NavigateTo("/scene/"+name,true);
+		}
+		catch (FovOutOfBoundException e)
+        {
+			showFovError = true;
+            invalidFov = e.Message;
+        }
+
+
+
+	}
+
+
+
+
+
+	[Parameter]
+	public string name { get; set; }
+	private Scene scene;
+	protected override void OnInitialized()
+	{
+		scene = manager.GetScenebyName(name);
+	}
+}

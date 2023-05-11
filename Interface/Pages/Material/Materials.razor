@@ -1,0 +1,173 @@
+﻿@page "/material"
+@using Domain;
+@using BusinessLogic;
+@using System.Globalization;
+@using System.Drawing;
+@inject NavigationManager NavigationManager
+@inject Manager manager;
+
+<h1>Crea tu material</h1>
+
+
+
+
+
+<InputText @bind-Value="name" @oninput="ValidateName" placeholder="Mi material Lambertiano gris" />
+@if (!string.IsNullOrEmpty(nameError))
+{
+    <div class="alert alert-danger">@nameError</div>
+}
+
+
+
+
+
+<h3> Color:</h3>
+
+<div class="form-group">
+    <label for="radius">Red:</label>
+    <input type="number"  class="form-control" id="red" @bind="@red" >
+
+
+    <p>Color entre 0-255</p>
+
+
+
+</div>
+
+<div class="form-group">
+    <label for="radius">Green:</label>
+    <input type="number" class="form-control" id="green" @bind="@green" >
+
+
+    <p>Color entre 0-255</p>
+
+
+</div>
+
+<div class="form-group">
+    <label for="radius">Blue:</label>
+    <input type="number"class="form-control" id="blue" @bind="@blue" >
+
+
+    <p>Color entre 0-255</p>
+
+</div>
+
+
+
+<button @onclick="ToggleDropdown">Elegir material</button>
+
+@if (showDropdown)
+{
+    <select @onchange="HandleSelection">
+        <option value="">Selecciona el tipo de material</option>
+        <option value="lambertiano">Lambertiano</option>
+    
+    </select>
+}
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+    <div class="alert alert-success" role="alert">
+        @successMessage
+    </div>
+    }
+
+
+
+
+
+<button type="button" class="btn btn-primary" @onclick="CreateMaterial">Guardar</button>
+@if(!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger"> @errorMessage </div>
+}
+
+<button type="button" class="btn btn-primary" @onclick="SeeMaterial">Ver Materiales</button>
+
+@code {
+
+    private string name="";
+    private Color color;
+    private string errorMessage;
+    private int red;
+    private int green;
+    private int blue;
+    private string nameError ="";
+    private string successMessage;
+
+
+
+    bool showDropdown = false;
+    string selectedMaterial = "";
+
+    void ToggleDropdown()
+    {
+        showDropdown = !showDropdown;
+    }
+
+    void HandleSelection(ChangeEventArgs args)
+    {
+        selectedMaterial = args.Value.ToString();
+        showDropdown = false;
+        // Aquí puedes realizar alguna acción con el material seleccionado
+    }
+
+
+    Material material = new Material();
+
+    private void ValidateName(ChangeEventArgs e)
+    {
+        name = (string)e.Value;
+
+        if (!material.VerifyName(name))
+        {
+            nameError = "Nombre Sin espacios al Principio ni al final";
+            return;
+        }
+
+        nameError = string.Empty;
+    }
+
+    void CreateMaterial()
+    {
+
+        successMessage = "";
+
+        if (material.VerifyName(name) && material.VerifyColor(red, green, blue) && !string.IsNullOrEmpty(selectedMaterial))
+        {
+            color = Color.FromArgb(red, green, blue);
+            Material newMaterial = new Material(name, color, selectedMaterial);
+            manager.addMaterial(newMaterial);
+            successMessage= "Creación Exitosa";
+            name = "";
+            red = 0;
+            green = 0;
+            blue = 0;
+
+            errorMessage = "";
+
+        }
+        else
+        {
+            errorMessage = " Nombre  o  color incorrecto o material no seleccionado";
+        }
+
+
+    }
+
+    void SeeMaterial()
+    {
+        NavigationManager.NavigateTo("/material/list");
+    }
+
+}
+    
+
+
+  
+
+
+
+

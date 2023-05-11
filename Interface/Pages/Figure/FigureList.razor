@@ -1,0 +1,57 @@
+﻿@page "/figures/list"
+@using BusinessLogic;
+@using Domain;
+@inject Manager manager;
+
+<h3>FigureList</h3>
+
+<a href="/figure">Volver</a>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Radio</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var figura in manager.GetFigures())
+        {
+            <tr>
+                <td>@figura.name</td>
+                <td>@figura.radius</td>
+                <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => DeleteFigure(figura))">Eliminar</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (linkedFigure)
+{
+    <div class="  alert alert-danger" role="alert">
+        @exceptionMessage
+    </div>
+}
+
+@code {
+
+    private bool linkedFigure = false;
+    private string exceptionMessage = "";
+
+    private void DeleteFigure(Figure figure)
+    {
+        try
+        {
+            linkedFigure = false;
+            manager.DeleteFigure(figure);
+        }
+        catch (InvalidOperationException ex)
+        {
+            linkedFigure = true;
+            exceptionMessage = ex.Message;
+        }
+    }
+
+}

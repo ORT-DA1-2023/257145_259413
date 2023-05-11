@@ -1,0 +1,77 @@
+﻿@page "/"
+
+@using Domain;
+@using BusinessLogic;
+@using Exceptions;
+@inject NavigationManager NavigationManager
+@inject Manager manager
+
+<h3>Iniciar sesión</h3>
+
+<div>
+    <label for="nombre">Nombre de usuario:</label>
+    <input type="text" placeholder="Nombre de Usuario" id="nombre" @bind="name" />
+
+
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" placeholder="Contraseña" id="contrasena" @bind="password" />
+</div>
+
+<button class="btn btn-primary"  @onclick="IniciarSesion">Iniciar sesión</button>
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+
+
+@if ( emptyUserError)
+{
+    <div class="  alert alert-danger" role="alert">
+        @exceptionMessage
+    </div>
+}
+
+
+<div>
+<a href="/SignUp">Sign up</a>
+</div>
+@code {
+    string name = "";
+    string password = "";
+    string errorMessage;
+
+    private string exceptionMessage = "";
+    private bool emptyUserError = false;
+
+    Client verifier = new Client();
+    Client toLogIn = null;
+
+    void IniciarSesion()
+    {
+        try
+        {
+            if (verifier.VerifyName(name) && verifier.VerifyPassword(password))
+            {
+                toLogIn = manager.logIn(name, password);
+            }
+
+            if (toLogIn != null)
+            {
+
+                NavigationManager.NavigateTo("/Logged", true);
+            }
+            else
+            {
+
+                errorMessage = "Incorrect username or password";
+
+            }
+        }
+        catch(EmptyUserNameException ex)
+          {
+                emptyUserError = true;
+                exceptionMessage = ex.Message;
+        }
+    }
+}

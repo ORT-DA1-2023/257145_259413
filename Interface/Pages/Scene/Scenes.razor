@@ -1,0 +1,105 @@
+﻿@using BusinessLogic;
+@using Domain;
+@inject Manager manager;
+@inject NavigationManager NavigationManager;
+@page "/scene"
+
+
+<h3> Scene </h3>
+
+
+@if (!showBox)
+{
+	<button type="button" class="btn btn-primary" @onclick="ShowSceneCreation">Nueva escena en blanco</button>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+	<div class="alert alert-danger"> @errorMessage </div>
+}
+
+@if (showBox)
+{
+	<form>
+		<label> Nombre de la escena</label>
+		<input type="text" @bind="name" placeholder="Mi primer escena" />
+		<button button type="button" class=" btn btn-primary" @onclick="CreateScene">Crear escena</button>
+
+	</form>	
+
+
+}
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">Preview</th>
+			<th scope="col">Nombre</th>
+			<th scope="col">Ultima modificación</th>
+			
+
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var scene in listScene)
+		{
+			<tr>
+				<td><img class="img-thumbnail" src="@($"images/{manager.logged.name}/{scene.name}.png")" width="150" height="100" /></td>
+				<td><a href="@($"/scene/{scene.name}")">@scene.name</a></td>
+				<td> @scene.lastModified</td>
+				<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteScene(scene))">Eliminar</button></td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
+
+@code {
+
+
+	private int id { get; set; }
+	private string name;
+	private string errorMessage;
+	private bool showBox=false;
+	private List<Scene> listScene = new List<Scene>();
+
+	protected override void OnInitialized()
+    {
+        listScene = manager.GetScenes();
+    }
+
+	void ShowSceneCreation()
+	{
+		showBox = true;
+	}
+
+
+	void CreateScene()
+	{
+		Scene scene = new Scene();
+
+		if (scene.VerifyName(name))
+		{
+			showBox = false;
+			scene = new Scene(name);
+			manager.addScene(scene);
+			name = "";
+
+			listScene = manager.GetScenes();
+			listScene.Sort();
+		}
+		else
+		{
+			errorMessage = "nombre no debe tener espacios (Principio, ni final)";
+		}
+
+
+	}
+
+
+
+
+}
+

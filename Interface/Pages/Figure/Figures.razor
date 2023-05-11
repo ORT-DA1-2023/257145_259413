@@ -1,0 +1,112 @@
+﻿@page "/figure"
+@using Domain;
+@using BusinessLogic;
+@using System.Globalization;
+@inject NavigationManager NavigationManager
+@inject Manager manager;
+
+
+
+
+<h3>Figure</h3>
+
+<h3>Crear una figura (esfera)</h3>
+
+
+    <div class="form-group">
+        <label for="name">Nombre de la figura:</label>
+        <input type="text" class="form-control" id="name" @bind="@name"  placeholder="Esfera del Dragón" >
+    </div>
+    <div class="form-group">
+        <label for="radius">Radio de la figura:</label>
+        <input type="text" class="form-control" id="radius" @bind="@radius" placeholder="5">
+    </div>
+
+
+
+    <button type="button" class="btn btn-primary" @onclick="CreateFigure">Crear Figura</button>
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+
+    }
+
+    <button type="button" class="btn btn-primary" @onclick="CancelFigure">Cancelar</button>
+
+
+    <button type="button" class="btn btn-primary" @onclick="SeeFigure">Ver Figuras</button>
+
+    @if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @successMessage
+    </div>
+}
+
+@code {
+    private string name = "";
+    private string radius;
+    private string errorMessage;
+    private string successMessage;
+
+     
+
+    void CreateFigure()
+    {
+        successMessage = "";
+        double radiusNumber;
+
+        try
+        {
+            radiusNumber = double.Parse(radius, CultureInfo.InvariantCulture.NumberFormat);
+        }
+        catch (FormatException)
+        {
+            errorMessage = "El radio no debe contener letras";
+            return;
+        }
+        catch (ArgumentNullException)
+        {
+            errorMessage = "Los campos no deben estar vacíos";
+            return;
+        }
+
+
+
+        errorMessage = "";
+
+        Figure figure = new Figure();
+
+
+
+        if (figure.VerifyNameFigure(name) && figure.VerifyRadiusFigure(radiusNumber))
+        {
+
+
+            Figure newFig = new Figure(name, radiusNumber);
+            manager.addFigure(newFig);
+            name = "";
+            radius = "";
+            successMessage = "Creación Exitosa";
+            StateHasChanged();
+            //NavigationManager.NavigateTo("/logged");
+
+        }
+        else
+        {
+            errorMessage = "Radio o Nombre Incorrecto";
+        }
+    }
+
+    void CancelFigure()
+    {
+
+        NavigationManager.NavigateTo("/logged");
+    }
+
+    void SeeFigure()
+    {
+        NavigationManager.NavigateTo("/figures/list");
+    }
+
+}

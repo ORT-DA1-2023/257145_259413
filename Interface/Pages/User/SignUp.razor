@@ -1,0 +1,185 @@
+﻿@page "/SignUp"
+@using Domain;
+@using BusinessLogic;
+@using Exceptions;
+@inject NavigationManager NavigationManager
+@inject Manager manager;
+
+<h1>Crear Usuario</h1>
+
+
+    <label>Nombre:</label>
+    <InputText @bind-Value="name" @oninput="ValidateName" placeholder="Nombre"/>
+    @if (!string.IsNullOrEmpty(nameError))
+    {
+        <div class="alert alert-danger">@nameError</div>
+    }
+
+    <label>Contraseña:</label>
+    <InputText type="password" placeholder="Contraseña"    @bind-Value="password" @oninput="ValidatePassword" />
+    @if (!string.IsNullOrEmpty(passwordError))
+    {
+        <div class="alert alert-danger">@passwordError</div>
+    }
+
+    <label>Confirmar contraseña:</label>
+    <InputText type="password" @bind-Value="passwordConfirmation" placeholder="Confirmar contraseña"  @oninput="ValidatePasswordConfirmation" />
+    @if (!string.IsNullOrEmpty(differentPassword))
+    {
+        <div class="alert alert-danger">@differentPassword</div>
+    }
+
+    <button class="btn btn-primary" @onclick="SendForm" disabled="@(!CanSubmit())">Enviar</button>
+
+
+   
+    
+    @if (!string.IsNullOrEmpty(startSessions))
+    {
+        <div class="alert alert-danger">@startSessions</div>
+    }
+
+
+@if (duplicateUserError || emptyUserError)
+{
+    <div class="  alert alert-danger" role="alert">
+      @exceptionMessage
+    </div>
+}
+
+
+
+
+@code {
+    private string name = "";
+    private string password = "";
+    private string passwordConfirmation = "";
+    private string nameError = "";
+    private string passwordError = "";
+    private string differentPassword = "";
+    private string startSessions = "";
+
+    private bool duplicateUserError =false; 
+    private string exceptionMessage = "";
+    private bool emptyUserError = false;
+
+    Client newClient = new Client();
+
+    private bool CanSubmit()
+    {
+        return string.IsNullOrEmpty(nameError) && string.IsNullOrEmpty(passwordError) && string.IsNullOrEmpty(differentPassword);
+    }
+
+    private void ValidateName(ChangeEventArgs e)
+    {
+        name = (string)e.Value;
+
+        try
+        {
+            if (!newClient.VerifyName(name))
+            {
+                nameError = "El nombre debe contener:Mayuscula - Numero- Sin espacios -Entre 3 a 20 letras";
+                return;
+            }
+        }
+        catch(EmptyUserNameException ex)
+        {
+            nameError = ex.Message;
+            return;
+        }
+
+        nameError = string.Empty;
+    }
+
+    private void ValidatePassword(ChangeEventArgs e)
+    {
+        password = (string)e.Value;
+        try
+        {
+            if (!newClient.VerifyPassword(password))
+            {
+                passwordError = "La contraseña debe contener: Mayuscula- Numero- Entre 5 y 25 letras";
+                return;
+            }
+        }
+        catch(EmptyUserNameException ex)
+        {
+            passwordError = ex.Message;
+            return;
+        }
+
+        passwordError = string.Empty;
+    }
+
+    private void ValidatePasswordConfirmation(ChangeEventArgs e)
+    {
+        passwordConfirmation = (string)e.Value;
+
+        try
+        {
+            MatchingPasswords(password, passwordConfirmation);
+
+        }
+        catch(MatchingException ex)
+        {
+            differentPassword = ex.Message;
+            return;
+        }
+
+        differentPassword = string.Empty;
+    }
+
+    private bool MatchingPasswords(string password, string confirmation)
+    {
+        if (password.Length != confirmation.Length)
+        {
+            throw new MatchingException();
+        }
+
+        for (int i = 0; i < password.Length; i++)
+        {
+            if (password[i] != confirmation[i])
+            {
+                throw new MatchingException();
+            }
+        }
+
+        return true;
+    }
+
+    private void SendForm()
+    {
+        try
+        {
+            if (newClient.VerifyName(name) && newClient.VerifyPassword(password) && MatchingPasswords(password, passwordConfirmation) && !manager.Exists(name)){
+                manager.add(manager.SignUp(name, password));
+                manager.logIn(name, password);
+                startSessions = "Se creo un cliente nuevo";
+
+                NavigationManager.NavigateTo("/logged", true);
+            }
+        }
+        catch (DuplicateUserException ex)
+        {
+            duplicateUserError = true;
+            exceptionMessage= ex.Message;
+
+        }
+        catch(EmptyUserNameException ex)
+        {
+            emptyUserError = true;
+            exceptionMessage = ex.Message;
+        }
+        catch(MatchingException ex)
+        {
+            differentPassword = ex.Message;
+        }
+
+        
+
+
+      
+    
+     }
+    
+}

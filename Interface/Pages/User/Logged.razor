@@ -1,0 +1,24 @@
+﻿@page "/Logged"
+@using Domain;
+@using BusinessLogic;
+@inject NavigationManager NavigationManager
+@inject Manager manager;
+
+<h3>Loged</h3>
+
+
+<a href="/figure" class="btn btn-primary">Empezar a Crear</a>
+<button @onclick="SignOut">Cerrar sesión</button>
+
+
+
+@code {
+
+	private void SignOut()
+	{
+		manager.logged = null;
+		NavigationManager.NavigateTo("/", true);
+
+	}
+
+}
