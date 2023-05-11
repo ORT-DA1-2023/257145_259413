@@ -133,18 +133,8 @@
     {
         try
         {
-            if (manager.Exists(name))
-            {
-                // nameError = "El nombre de usuario ya existe";
-
-                //   return;
-            }
-
-            if (!CanSubmit())
-            {
-                return;
-            }
-
+            manager.Exists(name);
+            manager.ValPass(password);
             newClient = new Client(name, password);
             manager.add(newClient);
             manager.logIn(name, password);
@@ -157,6 +147,7 @@
         {
             duplicateActorError = true;
             exceptionMessage= ex.Message;
+
         }catch(EmptyUserNameException ex)
         {
             emptyActorError = true;

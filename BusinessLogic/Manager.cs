@@ -125,6 +125,19 @@ namespace BusinessLogic
             return false;
         }
 
+
+        public bool ValPass(string password)
+        {
+            if (password == "")
+            {
+                throw new EmptyUserNameException();
+            }
+            return false;
+        }
+
+
+
+
         public void addFigure(Figure figure)
         {
             logged.AddFigure(figure);

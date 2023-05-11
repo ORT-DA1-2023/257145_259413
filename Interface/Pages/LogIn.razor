@@ -2,7 +2,7 @@
 
 @using Domain;
 @using BusinessLogic;
-
+@using Exceptions;
 @inject NavigationManager NavigationManager
 @inject Manager manager
 
@@ -23,11 +23,23 @@
     <div class="alert alert-danger">@errorMessage</div>
 }
 
- 
+
+
+@if ( emptyActorError)
+{
+    <div class="  alert alert-danger" role="alert">
+        @exceptionMessage
+    </div>
+}
+
+
+
+
+<!-- Aquí puedes escribir tu comentario 
 <button @onclick="IniciarSesion1">Test 1</button>
 
 <button @onclick="IniciarSesion2">Test 2</button>
-
+-->
 <div>
 <a href="/SignUp">Sign up</a>
 </div>
@@ -36,46 +48,57 @@
     string password;
     string errorMessage;
 
-
+    private string exceptionMessage = "";
+    private bool emptyActorError = false;
 
 
     Client toLogIn = new Client();
-    Client pablin = new Client("Pablo", "123");
-    Client nachin = new Client("Ignacio", "nashe1");
-    
+    //Client pablin = new Client("Pablo", "123");
+    // Client nachin = new Client("Ignacio", "nashe1");
+    /*
     void IniciarSesion1()
     {
-        manager.logged = pablin;
-        NavigationManager.NavigateTo("/figure", true);
+    manager.logged = pablin;
+    NavigationManager.NavigateTo("/figure", true);
     }
 
     void IniciarSesion2()
     {
-        manager.logged = nachin;
-        NavigationManager.NavigateTo("/figure", true);
-        
+    manager.logged = nachin;
+    NavigationManager.NavigateTo("/figure", true);
+
     }
-    
+    */
     void IniciarSesion()
     {
-        
-        if(toLogIn.VerifyName(name) && toLogIn.VerifyPassword(password))
+        try
         {
-            toLogIn = manager.logIn(name, password);
-        }
-
-        if (toLogIn != null)
-        {
-         
-            NavigationManager.NavigateTo("/Logged", true);
-        }
-        else
-        {
-        
-            errorMessage = "Incorrect username or password";
-           
-        }
 
 
+            manager.ValPass(password);
+            manager.ValPass(name);
+
+            if (toLogIn.VerifyName(name) && toLogIn.VerifyPassword(password))
+            {
+                toLogIn = manager.logIn(name, password);
+            }
+
+            if (toLogIn != null)
+            {
+
+                NavigationManager.NavigateTo("/Logged", true);
+            }
+            else
+            {
+
+                errorMessage = "Incorrect username or password";
+
+            }
+        }
+        catch(EmptyUserNameException ex)
+          {
+                emptyActorError = true;
+                exceptionMessage = ex.Message;
+        }
     }
 }
