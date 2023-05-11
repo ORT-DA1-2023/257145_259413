@@ -90,7 +90,7 @@ namespace Domain.test
             scene.addPositionedModel(positionedModel2);
             scene.addPositionedModel(positionedModel3);
             DateTime date = scene.lastModified;
-            scene.deletePositionedModel(1);
+            scene.deletePositionedModel(positionedModel);
             Assert.IsTrue(DateTime.Compare(scene.lastModified, date) >= 1);
         }
 

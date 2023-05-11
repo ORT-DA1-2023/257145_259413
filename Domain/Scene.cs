@@ -84,9 +84,9 @@ namespace Domain
             lastModified = DateTime.Now;
         }
 
-        public void deletePositionedModel(int v)
+        public void deletePositionedModel(PositionedModel positionedModel)
         {
-            _positionedModels.RemoveAt(v);
+            _positionedModels.Remove(positionedModel);
             lastModified = DateTime.Now;
         }
 
@@ -145,15 +145,6 @@ namespace Domain
             
 
         }
-
-
-		public void DeletePositionedModel(PositionedModel positionedModel)
-		{
-			this._positionedModels.Remove(positionedModel);
-		}
-
-
-
 	}
 }
 

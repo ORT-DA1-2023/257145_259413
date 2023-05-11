@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace Engine
 {
-    public class Ray
+    internal class Ray
     {
 
         private Vector _origin;
         private Vector _direction;
-        public Ray()
-        {
-            _origin = new Vector();
-            _direction = new Vector();
-        }
+        
         public Ray(Vector origin, Vector direction)
         {
             _origin = origin;
@@ -24,12 +20,10 @@ namespace Engine
         public Vector Origin
         {
             get { return this._origin; }
-            set { this._origin = value; }
         }
         public Vector Direction
         {
             get { return this._direction; }
-            set { this._direction = value; }
         }
 
         public Vector PointAt(double i)

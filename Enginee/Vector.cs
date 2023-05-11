@@ -6,12 +6,6 @@
         private double _y;
         private double _z;
 
-        public Vector()
-        {
-            _x = 0;
-            _y = 0;
-            _z = 0;
-        }
 
         public Vector(double x, double y, double z)
         {
@@ -23,19 +17,16 @@
         public double X
         {
             get { return this._x; }
-            set { this._x = value; }
         }
 
         public double Y
         {
             get { return this._y; }
-            set { this._y = value; }
         }
 
         public double Z
         {
             get { return this._z; }
-            set { this._z = value; }
         }
 
         public double Red()
@@ -78,27 +69,6 @@
             this._x += v._x;
             this._y += v._y;
             this._z += v._z;
-        }
-
-        public void SubstractFrom(Vector v)
-        {
-            this._x -= v._x;
-            this._y -= v._y;
-            this._z -= v._z;
-        }
-
-        public void ScaleUpBy(int i)
-        {
-            this._x *= i;
-            this._y *= i;
-            this._z *= i;
-        }
-
-        public void ScaleDownBy(int i)
-        {
-            this._x /= i;
-            this._y /= i;
-            this._z /= i;
         }
 
         public double SquaredLength()

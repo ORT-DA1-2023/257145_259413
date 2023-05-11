@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Engine
 {
-    public class Camera
+    internal class Camera
     {
         private Vector _origin;
         private Vector _corner_lowerLeft;
