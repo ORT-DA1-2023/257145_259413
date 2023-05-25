@@ -19,6 +19,7 @@
             <th scope="col">Nombre</th>
             <th scope="col">Figura</th>
             <th scope="col">Material</th>
+            <th scope="col">Tipo de Material </th>
             <th scope="col">Acciones</th>
         </tr>
     </thead>
@@ -30,8 +31,17 @@
                     <img class="img-thumbnail" src="@String.Concat("images/" , manager.logged.name, "/model_", model.name, ".png")" style="width: 150px; height: 100px;" />
                 </td>
                 <td>@model.name</td>
-                <td>@model.material.name</td>
+                <td>@model.material.name </td>
                 <td>@model.figure.name</td>
+                @if (@model.material is MetalicMaterial)
+                {
+
+                    <td>Metálico</td>
+                }
+                else
+                {
+                    <td>Lambertiano</td>
+                }
                 <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => DeleteModel(model))">Eliminar</button></td>
             </tr>
         }
