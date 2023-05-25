@@ -63,8 +63,15 @@
     <select @onchange="HandleSelection">
         <option value="">Selecciona el tipo de material</option>
         <option value="lambertiano">Lambertiano</option>
-    
+        <option value="Metálico">Metálico</option> <!-- AGREGUE ESTO-->
     </select>
+}
+<!-- AGREGUE ESTO-->
+@if (selectedMaterial == "Metálico")
+{
+
+    <input type="number" class="form-control" @bind="@valueMetalic" placeholder="Difuminado">
+    <p>Difuminado entre 0-255</p>
 }
 
     @if (!string.IsNullOrEmpty(successMessage))
@@ -96,7 +103,7 @@
     private int blue;
     private string nameError ="";
     private string successMessage;
-
+    private decimal valueMetalic;
 
 
     bool showDropdown = false;
@@ -137,17 +144,37 @@
 
         if (material.VerifyName(name) && material.VerifyColor(red, green, blue) && !string.IsNullOrEmpty(selectedMaterial))
         {
+
+            if (selectedMaterial == "Metálico"){
+                
+            }
+
+
             color = Color.FromArgb(red, green, blue);
-            Material newMaterial = new Material(name, color, selectedMaterial);
-            manager.addMaterial(newMaterial);
+            
+            //Esto lo use yo
+            Material newMaterial;
+
+            switch (selectedMaterial)
+            {
+                case "Metálico":
+                    newMaterial = new Material(name, color, selectedMaterial, valueMetalic);
+                    manager.addMaterial(newMaterial);
+                    break;
+                default:
+
+                    newMaterial = new Material(name, color, selectedMaterial);
+                    manager.addMaterial(newMaterial);
+                    break;
+            }
             successMessage= "Creación Exitosa";
             name = "";
             red = 0;
             green = 0;
             blue = 0;
-
+            valueMetalic = 0;
             errorMessage = "";
-
+            NavigationManager.NavigateTo("/material", forceLoad: true);
         }
         else
         {

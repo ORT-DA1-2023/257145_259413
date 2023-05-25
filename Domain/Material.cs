@@ -13,7 +13,7 @@ namespace Domain
         public string name;
         public Color color;
         public string type;
-
+        public decimal blurred;
         public Material() 
         {
         
@@ -31,7 +31,14 @@ namespace Domain
             this.color = color;
             this.type = type;
         }
-
+        //AGREGUE ESTO
+        public Material(string name, Color color, string type, decimal blurred)
+        {
+            this.name = name;
+            this.color = color;
+            this.type = type;
+            this.blurred = blurred;
+        }
         public bool VerifyColor(int red, int green, int blue)
         {
             if(red < 0 || green < 0 || blue < 0 || red >255 || green > 255 || blue > 255)
@@ -49,6 +56,13 @@ namespace Domain
             }
             return true;
         }
+        //VALIDAR QUE SEA MAYOR A 0 0 
+
+
+        //  public bool VeryfyBlurred(int value)
+        //{
+        //    if (value>=)
+        // }
 
         public override string ToString()
         {

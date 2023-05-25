@@ -13,6 +13,8 @@
             
             <th scope="col">Nombre</th>
             <th scope="col">Color</th>
+            <th scope="col">Tipo</th> <!-- AGREGUE ESTO-->
+            <th scope="col">Disfuminado</th>  <!-- AGREGUE ESTO-->
             <th scope="col">Acciones</th>
         </tr>
     </thead>
@@ -23,6 +25,17 @@
                
                 <td>@material.name</td>
                 <td style=" background-color:rgb(@material.color.R, @material.color.G, @material.color.B);"> @material.ToString() </td>
+                <td>@material.type</td>  <!-- AGREGUE ESTO-->
+                @if (material.type == "Metálico")
+                {
+                       <!-- AGREGUE ESTO-->
+                    <td> @material.blurred</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+
                 <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => DeleteMaterial(material))">Eliminar</button></td>
             </tr>
         }
