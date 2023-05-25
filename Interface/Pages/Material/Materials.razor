@@ -104,7 +104,7 @@
     private string nameError ="";
     private string successMessage;
     private decimal valueMetalic;
-
+    private bool useBlurred=false;
 
     bool showDropdown = false;
     string selectedMaterial = "";
@@ -118,12 +118,10 @@
     {
         selectedMaterial = args.Value.ToString();
         showDropdown = false;
-        // Aquí puedes realizar alguna acción con el material seleccionado
     }
 
 
-    Material material = new Material();
-
+    Material material= new LambertianoMaterial();  //Puse uno generico
     private void ValidateName(ChangeEventArgs e)
     {
         name = (string)e.Value;
@@ -142,19 +140,35 @@
 
         successMessage = "";
 
-        if (material.VerifyName(name) && material.VerifyColor(red, green, blue) && !string.IsNullOrEmpty(selectedMaterial))
+        bool isMetalicBlurred = selectedMaterial == "Metálico" && material.VeryfyBlurred(valueMetalic);
+        bool isMaterialSelected = !string.IsNullOrEmpty(selectedMaterial);
+        bool isColorValid = material.VerifyColor(red, green, blue);
+        bool isNameValid = material.VerifyName(name);
+
+
+        if ((isNameValid && isColorValid && isMaterialSelected) || isMetalicBlurred)
         {
 
-            if (selectedMaterial == "Metálico"){
-                
-            }
-
-
             color = Color.FromArgb(red, green, blue);
-            
-            //Esto lo use yo
-            Material newMaterial;
 
+            Material newMateiral = Material.createMaterial(selectedMaterial,name, color, valueMetalic);
+            manager.addMaterial(newMateiral);
+            
+       
+
+
+
+           // Material newMaterial = 
+           // manager.addMaterial(Material.createMaterial(selectedMaterial, name, color, valueMetalic));
+         
+
+
+
+
+
+
+
+           /*
             switch (selectedMaterial)
             {
                 case "Metálico":
@@ -167,14 +181,8 @@
                     manager.addMaterial(newMaterial);
                     break;
             }
-            successMessage= "Creación Exitosa";
-            name = "";
-            red = 0;
-            green = 0;
-            blue = 0;
-            valueMetalic = 0;
-            errorMessage = "";
-            NavigationManager.NavigateTo("/material", forceLoad: true);
+            */
+            reset();
         }
         else
         {
@@ -188,6 +196,20 @@
     {
         NavigationManager.NavigateTo("/material/list");
     }
+
+    void reset()
+    {
+        successMessage = "Creación Exitosa";
+        name = "";
+        red = 0;
+        green = 0;
+        blue = 0;
+        valueMetalic = 0;
+        errorMessage = "";
+        NavigationManager.NavigateTo("/material", forceLoad: true);
+    }
+
+
 
 }
     
