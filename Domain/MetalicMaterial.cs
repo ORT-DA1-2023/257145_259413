@@ -14,15 +14,9 @@ namespace Domain
         {
         }
 
-       // public MetalicMaterial(string name, Color color, decimal blurred)
-        //{
-         //   this.name = name;
-           // this.color = color;
-            //this.blurred = blurred;
-       // }
+ 
 
-
-       public MetalicMaterial(string name,Color color,decimal blurred) : base(name, color, blurred)
+       public MetalicMaterial(string name,Color color, double blurred) : base(name, color, blurred)
         {
             
         }

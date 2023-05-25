@@ -13,12 +13,12 @@ namespace Domain
     {
         public string name;
         public Color color;
-        public decimal blurred;
+        public double blurred;
         public string type;
 
         
 
-        public static Material createMaterial( string selectedMaterial, string name, Color color, decimal valueMetalic)
+        public static Material createMaterial( string selectedMaterial, string name, Color color, double valueMetalic)
         {
             switch (selectedMaterial)
             {
@@ -34,10 +34,6 @@ namespace Domain
 
         }
 
-
-
-        //Material mater=Material.create(lambertiano)
-
         public Material() 
         {
         
@@ -50,7 +46,7 @@ namespace Domain
         }
     
      
-        public Material(string name, Color color, decimal blurred)
+        public Material(string name, Color color, double blurred)
         {
             this.name = name;
             this.color = color;
@@ -75,9 +71,9 @@ namespace Domain
             return true;
         }
          
-        public bool VeryfyBlurred(decimal value)
+        public bool VeryfyBlurred(double value)
         {
-            if (value >= 0.0m)
+            if (value >= 0.0)
             {
                 return true;
             }

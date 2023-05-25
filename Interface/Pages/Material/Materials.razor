@@ -103,7 +103,7 @@
     private int blue;
     private string nameError ="";
     private string successMessage;
-    private decimal valueMetalic;
+    private double valueMetalic;
     private bool useBlurred=false;
 
     bool showDropdown = false;
@@ -154,34 +154,7 @@
             Material newMateiral = Material.createMaterial(selectedMaterial,name, color, valueMetalic);
             manager.addMaterial(newMateiral);
             
-       
-
-
-
-           // Material newMaterial = 
-           // manager.addMaterial(Material.createMaterial(selectedMaterial, name, color, valueMetalic));
-         
-
-
-
-
-
-
-
-           /*
-            switch (selectedMaterial)
-            {
-                case "Metálico":
-                    newMaterial = new Material(name, color, selectedMaterial, valueMetalic);
-                    manager.addMaterial(newMaterial);
-                    break;
-                default:
-
-                    newMaterial = new Material(name, color, selectedMaterial);
-                    manager.addMaterial(newMaterial);
-                    break;
-            }
-            */
+      
             reset();
         }
         else
