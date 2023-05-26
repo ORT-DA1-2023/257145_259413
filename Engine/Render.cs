@@ -39,23 +39,12 @@ namespace Engine
 			this.maxDepth = 20;
 		}
 
-		public Render(Scene scene, Coordinate lookFrom, Coordinate lookAt, int fov)
+		public Render(Scene scene, Coordinate lookFrom, Coordinate lookAt, int fov) : this(scene)
 		{
-			this.scene = scene;
-			this._resolutionX = 300;
-			this._resolutionY = 200;
-			this._pixels = new Vector[300][];
-			for (int i = 0; i < 300; i++)
-			{
-				this._pixels[i] = new Vector[200];
-			}
-
 			Vector lookFromVector = new Vector(lookFrom.x, lookFrom.y, lookFrom.z);
 			Vector lookAtVector = new Vector(lookAt.x, lookAt.y, lookAt.z);
 			Vector up = new Vector(0, 1, 0);
 			this._camera = new Camera(lookFromVector, lookAtVector, up, fov, (double)300 / 200);
-			this.samplesPerPixel = 50;
-			this.maxDepth = 20;
 		}
 
 		public Render(Scene scene, int resolutionX, int resolutionY, int samplesPerPixel, int maxDepth)
@@ -209,24 +198,12 @@ namespace Engine
 			}
 		}
 
-		private Vector getRandomInUnitModel()
-		{
-			Random random = new Random();
-			Vector vector;
-			do
-			{
-				Vector temp = new Vector(random.NextDouble(), random.NextDouble(), random.NextDouble());
-				vector = temp.Multiply(2).Substract(new Vector(1, 1, 1));
-			}
-			while (vector.SquaredLength() >= 1);
-			return vector;
-		}
 
 		private HitRecord isModelHit(PositionedModel model, Ray ray, double tMin, double tMax)
 		{
 			Vector originalColor = new Vector(model.model.material.color.R, model.model.material.color.G, model.model.material.color.B).getUnit();
 			Vector modelCenter = new Vector(model.position.x, model.position.y, model.position.z);
-			Vector originCenter = ray.Origin.Substract(modelCenter);
+			Vector originCenter = ray.Origin.Subtract(modelCenter);
 			var a = ray.Direction.Dot(ray.Direction);
 			var b = originCenter.Dot(ray.Direction) * 2;
 			double c = originCenter.Dot(originCenter) - Math.Pow(model.model.figure.radius, 2);
@@ -237,7 +214,7 @@ namespace Engine
 			}
 			var t = ((-1 * b) - Math.Sqrt(discriminant)) / (2 * a);
 			Vector intersectionPoint = ray.PointAt(t);
-			Vector normal = intersectionPoint.Substract(modelCenter).Divide(model.model.figure.radius);
+			Vector normal = intersectionPoint.Subtract(modelCenter).Divide(model.model.figure.radius);
 			if (t < tMax && t > tMin)
 			{
 				return new HitRecord(t, intersectionPoint, normal, originalColor);
@@ -263,8 +240,8 @@ namespace Engine
 			{
 				if (depth > 0)
 				{
-					Vector newPoint = hitRecord.intersection.Add(hitRecord.normal).Add(getRandomInUnitModel());
-					Vector newVector = newPoint.Substract(hitRecord.intersection);
+					Vector newPoint = hitRecord.intersection.Add(hitRecord.normal).Add(Vector.getRandomInUnitModel());
+					Vector newVector = newPoint.Subtract(hitRecord.intersection);
 					Ray newRay = new Ray(hitRecord.intersection, newVector);
 					Vector color = ShootRay(newRay, depth - 1);
 					Vector attenuation = hitRecord.attenuation;

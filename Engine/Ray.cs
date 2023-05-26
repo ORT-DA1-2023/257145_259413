@@ -20,10 +20,12 @@ namespace Engine
 		public Vector Origin
 		{
 			get { return this._origin; }
+			set { this._origin = value; }
 		}
 		public Vector Direction
 		{
 			get { return this._direction; }
+			set { this._direction = value; }
 		}
 
 		public Vector PointAt(double i)
