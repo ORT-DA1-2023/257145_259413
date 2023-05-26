@@ -114,7 +114,14 @@
     }
 </div>
 
+<div>
 
+	
+	
+		<button @onclick="savePicture">Guarda tu Escena</button>		
+	
+
+</div>
 
 
 @code {
@@ -141,6 +148,7 @@
 
 	private bool showFovError = false;
 	private string invalidFov = "";
+	private bool showButton = false;
 
 
 	private Model selectedModel;
@@ -189,18 +197,24 @@
 			render.RenderScene(manager.logged.name);
 			scene.Render();
 			NavigationManager.NavigateTo("/scene/"+name,true);
+			
+
+
 		}
 		catch (FovOutOfBoundException e)
-        {
+		{
 			showFovError = true;
-            invalidFov = e.Message;
-        }
+			invalidFov = e.Message;
+		}
 
 
 
 	}
 
-
+	private void savePicture()
+	{
+		
+	}
 
 
 
