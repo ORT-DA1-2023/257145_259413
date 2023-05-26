@@ -111,6 +111,5 @@
 			while (vector.SquaredLength() >= 1);
 			return vector;
 		}
-
 	}
 }
