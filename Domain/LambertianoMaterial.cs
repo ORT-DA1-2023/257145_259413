@@ -7,22 +7,23 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class LambertianoMaterial:Material
-    {
-
-
-       
-        public LambertianoMaterial()
-        {
-
-        }
-  
-
-        public LambertianoMaterial(string name, Color color) : base(name, color)
-        {
-        }
+	public class LambertianoMaterial : Material
+	{
 
 
 
-    }
+		public LambertianoMaterial()
+		{
+
+		}
+
+
+		public LambertianoMaterial(string name, Color color) : base(name, color)
+		{
+			this.type = "Lambertian";
+		}
+
+
+
+	}
 }

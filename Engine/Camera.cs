@@ -19,7 +19,7 @@ namespace Engine
 		public Vector vectorW;
 		public Vector vectorU;
 		public Vector vectorV;
-		private bool upgraded; 
+		private bool upgraded;
 
 		public Camera(Vector lookFrom, Vector lookAt, Vector up, int FoV, double aspectRatio)
 		{
@@ -44,23 +44,24 @@ namespace Engine
 		public Camera(Vector lookFrom, Vector lookAt, Vector up, int FoV, double aspectRatio, double aperture) : this(lookFrom, lookAt, up, FoV, aspectRatio)
 		{
 			upgraded = true;
+			this._focalDistance = this._origin.Subtract(lookAt).Length();
 			this._lensRadius = aperture / 2;
-			double theta = FoV * Math.PI / 180;
+			double theta = (FoV * Math.PI) / 180;
 			double heightHalf = Math.Tan(theta / 2);
 			double widthHalf = aspectRatio * heightHalf;
 			this._corner_lowerLeft = this._origin
 				.Subtract(this.vectorU.Multiply(widthHalf * this._focalDistance))
 				.Subtract(this.vectorV.Multiply(heightHalf * this._focalDistance))
 				.Subtract(this.vectorW.Multiply(this._focalDistance));
-			this._horizontal = this.vectorU.Multiply(2 * widthHalf);
-			this._vertical = this.vectorV.Multiply(2 * heightHalf);
+			this._horizontal = this.vectorU.Multiply(2 * widthHalf * this._focalDistance);
+			this._vertical = this.vectorV.Multiply(2 * heightHalf * this._focalDistance);
 		}
 
 		public Ray getRay(double u, double v)
 		{
 			Vector horizontalPosition = this._horizontal.Multiply(u);
 			Vector verticalPosition = this._vertical.Multiply(v);
-			if(upgraded) 
+			if (upgraded)
 			{
 				Vector random = Vector.getRandomInUnitModel().Multiply(this._lensRadius);
 				Vector offset = this.vectorU
@@ -75,5 +76,6 @@ namespace Engine
 			return new Ray(this._origin, this._corner_lowerLeft.Add(horizontalPosition.Add(verticalPosition)).Subtract(this._origin));
 
 		}
+
 	}
 }
