@@ -120,7 +120,8 @@
     private void CreatePreview()
     {
         Scene scene = new Scene("model_" + name);
-        Material floorColor = new Material("floor", System.Drawing.Color.White);
+
+        Material floorColor = new LambertianoMaterial("floor", System.Drawing.Color.White);
         Figure floor = new Figure("floor", 1000);
         Model earth = new Model("earth", floor, floorColor);
         Coordinate position = new Coordinate(0, -999, 5);

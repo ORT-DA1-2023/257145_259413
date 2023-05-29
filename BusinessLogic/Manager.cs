@@ -40,7 +40,7 @@ namespace BusinessLogic
                     return material;
                 }
             }
-            return new Material();
+            return new LambertianoMaterial();   //OJO
         }
 
 

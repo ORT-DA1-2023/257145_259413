@@ -13,6 +13,8 @@
             
             <th scope="col">Nombre</th>
             <th scope="col">Color</th>
+            <th scope="col">Tipo</th> 
+            <th scope="col">Difuminado</th>  
             <th scope="col">Acciones</th>
         </tr>
     </thead>
@@ -21,8 +23,44 @@
         {
             <tr style="width: 100px; height: 100px; ">
                
-                <td>@material.name</td>
-                <td style=" background-color:rgb(@material.color.R, @material.color.G, @material.color.B);"> @material.ToString() </td>
+                @if (material is MetalicMaterial)
+                {
+                    var metalicMaterial = (MetalicMaterial)material;
+                    <td>@metalicMaterial.name</td>
+                }
+                else
+                {
+                    var LambertianMaterial = (LambertianoMaterial)material;
+                    <td>@LambertianMaterial.name</td>
+                    
+                }
+
+             <td style=" background-color:rgb(@material.color.R, @material.color.G, @material.color.B);"> @material.ToString() </td>
+           
+      
+                @if (material is MetalicMaterial)
+                {
+                   
+                    <td>Metálico</td>
+                }
+                else
+                {
+                    <td>Lambertiano</td>
+                }
+
+                @if (material is MetalicMaterial)
+                {
+                    var metalicMaterial = (MetalicMaterial)material;
+                    <td>@metalicMaterial.blurred</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+
+
+
+
                 <td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => DeleteMaterial(material))">Eliminar</button></td>
             </tr>
         }
