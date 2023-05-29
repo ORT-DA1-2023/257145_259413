@@ -47,9 +47,8 @@ namespace Engine
 			this._camera = new Camera(lookFromVector, lookAtVector, up, fov, (double)300 / 200);
 		}
 
-		public Render(Scene scene, int resolutionX, int resolutionY, int samplesPerPixel, int maxDepth)
+		public Render(Scene scene, int resolutionX, int resolutionY, int samplesPerPixel, int maxDepth) : this(scene)
 		{
-			this.scene = scene;
 			this._resolutionX = resolutionX;
 			this._resolutionY = resolutionY;
 			this._pixels = new Vector[resolutionX][];
@@ -64,6 +63,14 @@ namespace Engine
 			this._camera = new Camera(lookFrom, lookAt, up, 30, resolutionX / resolutionY);
 			this.samplesPerPixel = samplesPerPixel;
 			this.maxDepth = maxDepth;
+		}
+
+		public Render(Scene scene, Coordinate lookFrom, Coordinate lookAt, int fov, double aperture) : this(scene)
+		{
+			Vector lookFromVector = new Vector(lookFrom.x, lookFrom.y, lookFrom.z);
+			Vector lookAtVector = new Vector(lookAt.x, lookAt.y, lookAt.z);
+			Vector up = new Vector(0, 1, 0);
+			this._camera = new Camera(lookFromVector, lookAtVector, up, fov, (double)300 / 200, aperture);
 		}
 
 		private string RenderPPMImage(string filePath, string client)
@@ -243,14 +250,14 @@ namespace Engine
 					Ray newRay;
 					switch (hitRecord.Material)
 					{
-						case "Metálico":
+						case "Metallic":
 							newRay = MetalicScatter(ray, hitRecord);
-							if(newRay == null)
+							if (newRay == null)
 							{
 								return new Vector(0, 0, 0);
 							}
 							break;
-						case "Lambertiano":
+						case "Lambertian":
 							newRay = LambertianScatter(ray, hitRecord);
 							break;
 						default:
@@ -292,7 +299,7 @@ namespace Engine
 			scatteredRay.Direction = reflected.Add(
 				Vector.getRandomInUnitModel()
 				.Multiply(hitRecord.Roughness));
-			if(scatteredRay.Direction.Dot(hitRecord.Normal) > 0)
+			if (scatteredRay.Direction.Dot(hitRecord.Normal) > 0)
 			{
 				return scatteredRay;
 			}

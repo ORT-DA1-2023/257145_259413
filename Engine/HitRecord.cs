@@ -18,7 +18,7 @@ namespace Engine
 		private Vector intersection;
 		private Vector normal;
 		private Vector attenuation;
-		private	string material;
+		private string material;
 		private double roughness;
 
 		public HitRecord(double t, Vector intersection, Vector normal, Vector attenuation, Material material)
@@ -31,7 +31,7 @@ namespace Engine
 			this.material = material.type;
 			if (material is MetalMaterial)
 			{
-				this.roughness = material.roughness;
+				this.roughness = material.blurred;
 			}
 		}
 

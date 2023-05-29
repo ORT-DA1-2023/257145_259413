@@ -12,12 +12,12 @@
 
 <div class="form-group">
 	<label for="name">Modelos Disponibles:</label>
-	
+
 	<ul>
-	@foreach (var model in manager.GetModels())
-	{			
-		<button type="button" class="btn btn-success btn-sm" @onclick="(() => SelectedModel(model))">@model.name</button>
-	}
+		@foreach (var model in manager.GetModels())
+		{
+			<button type="button" class="btn btn-success btn-sm" @onclick="(() => SelectedModel(model))">@model.name</button>
+		}
 	</ul>
 </div>
 
@@ -87,18 +87,38 @@
 
 <div class="form-group">
 	<label for="FoV">FoV:</label>
-	
+
 	<form id="Fov">
 		<input type="number" class="form-control" @bind-value="fov" />
 	</form>
 </div>
 
-<button class="btn btn-primary" @onclick="ToRender">Renderizar</button>
-
 @if (showFovError)
 {
 	<div class="alert alert-danger"> @invalidFov </div>
 }
+
+<div>
+	<p>Desenfoque:</p>
+	<InputCheckbox @bind-Value="@isDifuminated" />
+</div>
+
+@if (isDifuminated)
+{
+	<div>
+		<label>Apertura del lente:</label>
+		<input type="number" class="form-control" @bind-value="aperture" />
+	</div>
+
+	@if (showApertureError)
+	{
+		<div class="alert alert-danger"> @apertureError </div>
+	}
+
+}
+
+<button class="btn btn-primary" @onclick="ToRender">Renderizar</button>
+
 
 
 <div class="form-group">
@@ -106,28 +126,29 @@
 	<img src="@String.Concat("images/",manager.logged.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
 
 	<p class="text-start">Último renderizado: @scene.lastRendered</p>
-	@if(scene.lastRendered<scene.lastModified)
-    {
+	@if (scene.lastRendered < scene.lastModified)
+	{
 		<div class="alert alert-warning" role="alert">
 			<i class="fa-solid fa-triangle-exclamation">Imagen desactualizada</i>
 		</div>
-    }
+	}
 </div>
 
 <div>
 
-	
-	
-		<button @onclick="savePicture">Guarda tu Escena</button>		
-	
+
+
+	<button @onclick="savePicture">Guarda tu Escena</button>
+
 
 </div>
 
 
 @code {
 
+	private bool isDifuminated = false;
 
-
+	private double aperture = 0;
 
 	private bool showForm = false;
 	private double coordinateX = 0;
@@ -139,13 +160,15 @@
 	private double LookFromZ = 0;
 
 
-	private double LookAtX=0;
+	private double LookAtX = 0;
 	private double LookAtY = 2;
 	private double LookAtZ = 5;
 
 
 	private int fov = 30;
 
+	private string apertureError = "";
+	private bool showApertureError = false;
 	private bool showFovError = false;
 	private string invalidFov = "";
 	private bool showButton = false;
@@ -167,7 +190,7 @@
 
 		Coordinate coordinates = new Coordinate();
 
-		if (coordinates.VerifyCoordinate(coordinateX,coordinateY,coordinateZ))
+		if (coordinates.VerifyCoordinate(coordinateX, coordinateY, coordinateZ))
 		{
 			Coordinate coordinateCreate = new Coordinate(coordinateX, coordinateY, coordinateZ);
 
@@ -187,17 +210,27 @@
 
 	void ToRender()
 	{
+		showApertureError = false;
 		showFovError = false;
 		Coordinate lookFrom = new Coordinate(LookFromX, LookFromY, LookFromZ);
 		Coordinate lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
 		try
 		{
 			scene.VerifyFoV(fov);
-			Render render = new Render(scene, lookFrom, lookAt, fov);
+			Render render;
+			if (isDifuminated)
+			{
+				scene.VerifyAperture(aperture);
+				render = new Render(scene, lookFrom, lookAt, fov, aperture);
+			}
+			else
+			{
+				render = new Render(scene, lookFrom, lookAt, fov);
+			}
 			render.RenderScene(manager.logged.name);
 			scene.Render();
-			NavigationManager.NavigateTo("/scene/"+name,true);
-			
+			NavigationManager.NavigateTo("/scene/" + name, true);
+
 
 
 		}
@@ -206,6 +239,11 @@
 			showFovError = true;
 			invalidFov = e.Message;
 		}
+		catch (InvalidDataException e)
+		{
+			showApertureError = true;
+			apertureError = e.Message;
+		}
 
 
 
@@ -213,7 +251,7 @@
 
 	private void savePicture()
 	{
-		
+
 	}
 
 
