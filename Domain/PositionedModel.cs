@@ -8,6 +8,7 @@ namespace Domain
 {
     public class PositionedModel
     {
+        public int Id { get; set; }
         public Model model { get; set; }
         public Coordinate position { get; set; }
 

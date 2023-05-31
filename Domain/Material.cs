@@ -11,10 +11,16 @@ namespace Domain
 {
     public class Material
     {
-        public string name;
-        public Color color;
-        public double blurred;
-        public string type;
+        public int Id { get; set; }
+        public string name { get; set; }
+
+
+        public Color color { get; set; }
+
+
+
+        public double blurred { get; set; }
+        public string type { get; set; }
 
         
 

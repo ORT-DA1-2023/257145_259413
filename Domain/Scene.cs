@@ -11,13 +11,16 @@ namespace Domain
 {
 	public class Scene : IComparable<Scene>
 	{
-		private List<PositionedModel> _positionedModels;
-
-		public DateTime lastModified;
-		public DateTime lastRendered;
-		public DateTime created;
+		public int Id { get; set; }
 
 		public string name { get; set; }
+
+		private ICollection<PositionedModel> _positionedModels { get; set; }
+
+		public DateTime lastModified { get; set; }
+		public DateTime lastRendered { get; set; }
+		public DateTime created { get; set; }
+
 		public int FieldOfVision { get; set; }
 
 		public Scene()
@@ -39,7 +42,7 @@ namespace Domain
 			this.lastModified = this.created;
 		}
 
-		public List<PositionedModel> GetPositionedModels()
+		public ICollection<PositionedModel> GetPositionedModels()
 		{
 			return this._positionedModels;
 		}

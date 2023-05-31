@@ -16,10 +16,19 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<Manager>();
 
 
-string connectionString = "Data Source =.\\LAPTOP - 3R9PVFHT; Initial Catalog = BaseDatosObligatorio; Integrated Security = True; TrustServerCertificate=True;";
+string connectionStringIgnacio = "Data Source=LAPTOP-3R9PVFHT;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
+string connectionStringPablo = "Data Source=DESKTOP-G58UOLC;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
+
+
+//string connectionString = connectionStringIgnacio;
+string connectionString = connectionStringPablo;
+
 builder.Services.AddDbContextFactory<ApplicationContext>(
-       options => options.UseSqlServer(connectionString));
-          
+	   options => options.UseSqlServer(
+		   connectionString,
+		   providerOptions => providerOptions.EnableRetryOnFailure()
+		   ));
+
 
 
 

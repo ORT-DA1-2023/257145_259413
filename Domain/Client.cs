@@ -7,8 +7,10 @@ namespace Domain
 {
     public class Client
     {
-        public string name;
-        public string password;   // cambie a publico
+        public int Id { get; set; }
+        public string name { get; set; }
+
+        public string password { get; set; }
         private List<Figure> figures;
         private List<Material> materials;
         private List<Model> models;

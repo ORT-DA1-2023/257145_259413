@@ -9,7 +9,7 @@ namespace Domain
 {
     public class Model
     {
-
+        public int Id { get; set; }
         public string name { get;  set; }
         public Figure figure { get; set; }
         public Material material { get; set; }
