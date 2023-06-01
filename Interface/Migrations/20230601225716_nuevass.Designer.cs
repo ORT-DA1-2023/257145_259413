@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Interface.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230601225716_nuevass")]
+    partial class nuevass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,10 +146,7 @@ namespace Interface.Migrations
             modelBuilder.Entity("Domain.PositionedModel", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("modelId")
                         .HasColumnType("int");
@@ -162,8 +162,6 @@ namespace Interface.Migrations
                     b.HasIndex("modelId");
 
                     b.HasIndex("positionId");
-
-                    b.HasIndex("sceneId");
 
                     b.ToTable("positionedModels");
                 });
@@ -218,6 +216,12 @@ namespace Interface.Migrations
 
             modelBuilder.Entity("Domain.PositionedModel", b =>
                 {
+                    b.HasOne("Domain.Scene", "scene")
+                        .WithMany("_positionedModels")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Model", "model")
                         .WithMany()
                         .HasForeignKey("modelId")
@@ -227,12 +231,6 @@ namespace Interface.Migrations
                     b.HasOne("Domain.Coordinate", "position")
                         .WithMany()
                         .HasForeignKey("positionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Scene", "scene")
-                        .WithMany("_positionedModels")
-                        .HasForeignKey("sceneId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

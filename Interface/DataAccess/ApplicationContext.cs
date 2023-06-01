@@ -7,8 +7,6 @@ namespace DataAccess;
 
 public class ApplicationContext: DbContext
 {
-
-
 	public DbSet<Client> clients { get; set; }
 
 	public DbSet<Figure> figures { get; set; }
