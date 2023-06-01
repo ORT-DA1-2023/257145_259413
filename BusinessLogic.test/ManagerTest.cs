@@ -1,4 +1,4 @@
-﻿using BusinessLogic;
+﻿using Interface.BusinessLogic;
 using Domain;
 using Exceptions;
 using NuGet.Frameworks;
