@@ -172,7 +172,7 @@ namespace Domain.test
 
             scene.addPositionedModel(positionedModel);
             scene.addPositionedModel(positionedModel2);
-            List<PositionedModel> result = scene.GetPositionedModels();
+            List<PositionedModel> result = scene.GetPositionedModels().ToList();
 
             Assert.IsTrue(result.Contains(positionedModel));
 

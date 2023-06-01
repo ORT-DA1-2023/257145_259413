@@ -73,7 +73,7 @@ namespace Domain.test
             string name = "Material";
             Color color1 = Color.Red;
             string type= "type";
-            Material material1 = new Material(name, color1,type);
+            Material material1 = new Material(name, color1, 0);
             Assert.AreEqual(name, material1.name);
             Assert.AreEqual(color1, material1.color);
             Assert.AreEqual(type, material1.type);
