@@ -2,11 +2,10 @@
 @using Domain;
 @using Interface.BusinessLogic;
 @using System.Globalization;
+@using Interface.DataAccess;
 @inject NavigationManager NavigationManager
-@inject Manager manager;
-
-
-
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 
 <h3>Figure</h3>
 
@@ -44,12 +43,13 @@
 }
 
 @code {
+
     private string name = "";
     private string radius;
     private string errorMessage;
     private string successMessage;
+    private FigureRepository figureRepository;
 
-     
 
     void CreateFigure()
     {
@@ -77,26 +77,31 @@
 
         Figure figure = new Figure();
 
-
-
-        if (figure.VerifyNameFigure(name) && figure.VerifyRadiusFigure(radiusNumber))
+        try
         {
+            figureRepository.CreateFigure(name, radiusNumber);
+            errorMessage = "";
+            name="";
+            radius=""; 
+            successMessage = "Figura creada con éxito";
+        }
+        catch(InvalidOperationException e)
+        {
+            errorMessage = e.Message;
 
-
-            Figure newFig = new Figure(name, radiusNumber);
-            manager.addFigure(newFig);
-            name = "";
-            radius = "";
-            successMessage = "Creación Exitosa";
-            StateHasChanged();
-            NavigationManager.NavigateTo("/figure");
 
         }
-        else
-        {
-            errorMessage = "Radio o Nombre Incorrecto";
-        }
+
+      
     }
+
+
+    protected override void OnInitialized()
+	{
+        figureRepository = new FigureRepository(sessionManager, applicationContext);
+
+	}
+
 
     void CancelFigure()
     {

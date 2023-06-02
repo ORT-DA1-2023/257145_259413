@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Domain;
 using Interface.BusinessLogic;
-using DataAccess;
+using Interface.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<Manager>();
-
+builder.Services.AddSingleton<SessionManager>();
 
 string connectionStringIgnacio = "Data Source=LAPTOP-3R9PVFHT;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
 string connectionStringPablo = "Data Source=DESKTOP-G58UOLC;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";

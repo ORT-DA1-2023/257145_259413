@@ -1,10 +1,12 @@
 ﻿using Domain;
 
-namespace Interface.BusinessLogic
+namespace Interface.DataAccess
 {
     public class SessionManager
     {
         private static SessionManager _instance;
+
+
         private Client _logged { get; set; }
 
         public Client CurrentUser

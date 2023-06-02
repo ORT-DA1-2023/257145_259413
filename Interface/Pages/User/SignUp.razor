@@ -2,8 +2,10 @@
 @using Domain;
 @using Interface.BusinessLogic;
 @using Exceptions;
+@using Interface.DataAccess;
 @inject NavigationManager NavigationManager
-@inject Manager manager;
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 
 <h1>Crear Usuario</h1>
 
@@ -62,6 +64,9 @@
     private bool duplicateUserError =false; 
     private string exceptionMessage = "";
     private bool emptyUserError = false;
+    private AuthLogic authLogic;
+
+
 
     Client newClient = new Client();
 
@@ -151,13 +156,14 @@
     {
         try
         {
-            if (newClient.VerifyName(name) && newClient.VerifyPassword(password) && MatchingPasswords(password, passwordConfirmation) && !manager.Exists(name)){
-                manager.add(manager.SignUp(name, password));
-                manager.logIn(name, password);
+            if ( MatchingPasswords(password, passwordConfirmation)){
+
+                authLogic.SignUp(name,password);
+      
                 startSessions = "Se creo un cliente nuevo";
 
                 NavigationManager.NavigateTo("/logged", true);
-            }
+             }
         }
         catch (DuplicateUserException ex)
         {
@@ -175,11 +181,21 @@
             differentPassword = ex.Message;
         }
 
-        
+    }
+
+    protected override void OnInitialized()
+    {
+        authLogic = new AuthLogic(sessionManager, applicationContext);
 
 
-      
-    
-     }
-    
+        if (authLogic.GetCurrentUser() != null){
+
+            NavigationManager.NavigateTo("/logged", true);
+
+        }   
+
+    }
+
+
+
 }

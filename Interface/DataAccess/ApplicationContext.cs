@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain;
 using System.Drawing;
 
-namespace DataAccess;
+namespace Interface.DataAccess;
 
 public class ApplicationContext: DbContext
 {

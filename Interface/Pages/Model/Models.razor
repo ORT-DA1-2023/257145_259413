@@ -20,7 +20,7 @@
 
 <select class="form-control" id="Figures" @onchange="figureSelection">
     <option disabled selected value= "">Selecciona la figura</option>
-    @foreach (var figure in manager.GetFigures())
+        @foreach (var figure in figureRepository.GetFigures())
     {
         <option value="@figure.name">@figure.name</option>
     }
@@ -71,14 +71,17 @@
     private string selectedFigure;
     private Figure figure;
     private bool isChecked = false;
-    private string successMessage;
+    private string successMessage; 
+    private FigureRepository figureRepository;
+
+
 
     Model model = new Model();
 
     void figureSelection(ChangeEventArgs e)
     {
         selectedFigure = e.Value.ToString();
-        figure = manager.MatchingFigure(selectedFigure);
+        figure = figureRepository.MatchingFigure(selectedFigure);
     }
 
     void materialSelection(ChangeEventArgs e)
