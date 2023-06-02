@@ -15,7 +15,10 @@ namespace Domain
 
 		public string name { get; set; }
 
-		public ICollection<PositionedModel> _positionedModels { get; set; }
+		//Se deberia crear una tabla con Scena y PositionModel (relacion) 
+
+
+		private ICollection<PositionedModel> _positionedModels { get; set; }
 
 		public DateTime lastModified { get; set; }
 		public DateTime lastRendered { get; set; }

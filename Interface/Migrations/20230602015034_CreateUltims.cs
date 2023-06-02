@@ -5,31 +5,27 @@
 namespace Interface.Migrations
 {
     /// <inheritdoc />
-    public partial class nuevass : Migration
+    public partial class CreateUltims : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "positionedModels",
-                type: "int",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "int")
-                .OldAnnotation("SqlServer:Identity", "1, 1");
-
             migrationBuilder.AddColumn<int>(
-                name: "sceneId",
+                name: "SceneId",
                 table: "positionedModels",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_positionedModels_scenes_Id",
+            migrationBuilder.CreateIndex(
+                name: "IX_positionedModels_SceneId",
                 table: "positionedModels",
-                column: "Id",
+                column: "SceneId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_positionedModels_scenes_SceneId",
+                table: "positionedModels",
+                column: "SceneId",
                 principalTable: "scenes",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -39,21 +35,16 @@ namespace Interface.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_positionedModels_scenes_Id",
+                name: "FK_positionedModels_scenes_SceneId",
+                table: "positionedModels");
+
+            migrationBuilder.DropIndex(
+                name: "IX_positionedModels_SceneId",
                 table: "positionedModels");
 
             migrationBuilder.DropColumn(
-                name: "sceneId",
+                name: "SceneId",
                 table: "positionedModels");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "positionedModels",
-                type: "int",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "int")
-                .Annotation("SqlServer:Identity", "1, 1");
         }
     }
 }

@@ -11,11 +11,11 @@ namespace Domain
         public int Id { get; set; }
         public Model model { get; set; }
         public Coordinate position { get; set; }
+        public int SceneId { get; set; }
+        public Scene Scene { get; set; }
 
-		public int sceneId { get; set; }
-		public Scene scene { get; set; }
 
-		public PositionedModel()
+        public PositionedModel()
         {
             model = new Model();
             position = new Coordinate(0,0,0);

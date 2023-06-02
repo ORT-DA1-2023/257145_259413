@@ -148,22 +148,22 @@ namespace Interface.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("SceneId")
+                        .HasColumnType("int");
+
                     b.Property<int>("modelId")
                         .HasColumnType("int");
 
                     b.Property<int>("positionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("sceneId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("SceneId");
 
                     b.HasIndex("modelId");
 
                     b.HasIndex("positionId");
-
-                    b.HasIndex("sceneId");
 
                     b.ToTable("positionedModels");
                 });
@@ -218,6 +218,12 @@ namespace Interface.Migrations
 
             modelBuilder.Entity("Domain.PositionedModel", b =>
                 {
+                    b.HasOne("Domain.Scene", "Scene")
+                        .WithMany()
+                        .HasForeignKey("SceneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Model", "model")
                         .WithMany()
                         .HasForeignKey("modelId")
@@ -230,22 +236,11 @@ namespace Interface.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Scene", "scene")
-                        .WithMany("_positionedModels")
-                        .HasForeignKey("sceneId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Scene");
 
                     b.Navigation("model");
 
                     b.Navigation("position");
-
-                    b.Navigation("scene");
-                });
-
-            modelBuilder.Entity("Domain.Scene", b =>
-                {
-                    b.Navigation("_positionedModels");
                 });
 #pragma warning restore 612, 618
         }

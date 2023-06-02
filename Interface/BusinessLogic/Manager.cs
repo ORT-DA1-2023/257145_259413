@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain;
 using static System.Exception;
-using Exceptions; 
+using Exceptions;
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace Interface.BusinessLogic
 {
@@ -16,7 +18,9 @@ namespace Interface.BusinessLogic
 
         public Manager() 
         {
-            this.clients = new List<Client>();
+
+			//ApplicationContext a = new ApplicationContext(ApplicationContext);
+			this.clients = new List<Client>();
         }
 
         public Figure MatchingFigure(string name)
@@ -40,7 +44,7 @@ namespace Interface.BusinessLogic
                     return material;
                 }
             }
-            return new LambertianoMaterial();   //OJO
+            return new LambertianoMaterial();   
         }
 
 

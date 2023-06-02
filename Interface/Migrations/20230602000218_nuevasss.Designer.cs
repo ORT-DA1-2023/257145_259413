@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Interface.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230601225716_nuevass")]
-    partial class nuevass
+    [Migration("20230602000218_nuevasss")]
+    partial class nuevasss
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,15 +146,15 @@ namespace Interface.Migrations
             modelBuilder.Entity("Domain.PositionedModel", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("modelId")
                         .HasColumnType("int");
 
                     b.Property<int>("positionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("sceneId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -216,12 +216,6 @@ namespace Interface.Migrations
 
             modelBuilder.Entity("Domain.PositionedModel", b =>
                 {
-                    b.HasOne("Domain.Scene", "scene")
-                        .WithMany("_positionedModels")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Model", "model")
                         .WithMany()
                         .HasForeignKey("modelId")
@@ -237,13 +231,6 @@ namespace Interface.Migrations
                     b.Navigation("model");
 
                     b.Navigation("position");
-
-                    b.Navigation("scene");
-                });
-
-            modelBuilder.Entity("Domain.Scene", b =>
-                {
-                    b.Navigation("_positionedModels");
                 });
 #pragma warning restore 612, 618
         }
