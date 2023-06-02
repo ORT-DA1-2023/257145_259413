@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Domain;
 using static System.Exception;
 using Exceptions;
-using DataAccess;
+using Interface.DataAccess; 
 using Microsoft.EntityFrameworkCore;
 
 namespace Interface.BusinessLogic
@@ -18,22 +18,10 @@ namespace Interface.BusinessLogic
 
         public Manager() 
         {
-
-			//ApplicationContext a = new ApplicationContext(ApplicationContext);
 			this.clients = new List<Client>();
         }
 
-        public Figure MatchingFigure(string name)
-        {
-            foreach(var figure in this.logged.getFigures())
-            {
-                if(figure.name == name)
-                {
-                    return figure;
-                }
-            }
-            return new Figure();
-        }
+      
 
         public Material MatchingMaterial(string name)
         {
@@ -48,77 +36,10 @@ namespace Interface.BusinessLogic
         }
 
 
-        public void add(Client client1)
-        {
-            foreach (Client client in clients)
-            {
-                if (client.name == client1.name)
-                {
-                    return;
-                }
-            }
-            this.clients.Add(client1);
-        }
+        
+     
 
-        public Client logIn(string name, string password)
-        {
-            foreach (Client client in clients)
-            {
-                if (client.MatchingUsername(name) && client.MatchingPassword(password))
-                {
-                    this.logged = client;
-                    return client;
-                }
-            }
-            return null;
-        }
-
-        public Client SignUp(string name, string password)
-        {
-            Client client= new Client();
-            if (!client.VerifyName(name) || !client.VerifyPassword(password) || Exists(name))
-            {
-                return client;
-            }
-            client.name = name;
-            client.password = password;
-            return client;
-        }
-
-        public bool Exists(string name)
-        {
-            foreach(Client client in clients)
-            {
-                if (client.MatchingUsername(name))
-                {
-                    throw new DuplicateUserException();
-                }
-            }
-            return false;
-        }
-
-
-        public void addFigure(Figure figure)
-        {
-            logged.AddFigure(figure);
-        }
-
-        public List<Figure> GetFigures()
-        {
-            return logged.getFigures();
-        }
-
-        public void DeleteFigure(Figure figure)
-        {
-            if (logged.FigureIsLinked(figure))
-            {
-                throw new InvalidOperationException("La figura seleccionada está siendo usada por un modelo existente");
-            }
-            else
-            {
-                GetFigures().Remove(figure);
-            }
-        }
+      
 
         public void addMaterial(Material material)
         {
