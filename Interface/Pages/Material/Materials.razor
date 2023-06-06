@@ -3,8 +3,10 @@
 @using Interface.BusinessLogic;
 @using System.Globalization;
 @using System.Drawing;
+@using Interface.DataAccess;
 @inject NavigationManager NavigationManager
-@inject Manager manager;
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 
 <h1>Crea tu material</h1>
 
@@ -105,6 +107,8 @@
     private string successMessage;
     private double valueMetalic;
     private bool useBlurred=false;
+    private MaterialRepository materialRepository;  
+
 
     bool showDropdown = false;
     string selectedMaterial = "";
@@ -135,6 +139,8 @@
         nameError = string.Empty;
     }
 
+
+
     void CreateMaterial()
     {
 
@@ -151,10 +157,8 @@
 
             color = Color.FromArgb(red, green, blue);
 
-            Material newMateiral = Material.createMaterial(selectedMaterial,name, color, valueMetalic);
-            manager.addMaterial(newMateiral);
-            
-      
+            materialRepository.CreateMaterial(selectedMaterial, name, color, valueMetalic);
+
             reset();
         }
         else
@@ -164,6 +168,10 @@
 
 
     }
+
+
+
+
 
     void SeeMaterial()
     {
@@ -180,6 +188,13 @@
         valueMetalic = 0;
         errorMessage = "";
         NavigationManager.NavigateTo("/material", forceLoad: true);
+    }
+
+
+    protected override void OnInitialized()
+    {
+        materialRepository = new MaterialRepository(sessionManager, applicationContext);
+
     }
 
 

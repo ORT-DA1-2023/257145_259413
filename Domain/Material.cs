@@ -14,15 +14,14 @@ namespace Domain
         public int Id { get; set; }
         public string name { get; set; }
 
-
         public Color color { get; set; }
-
-
 
         public double blurred { get; set; }
         public string type { get; set; }
+        public Client client { get; set; }
+        public int clientId { get; set; }
 
-        
+
 
         public static Material createMaterial( string selectedMaterial, string name, Color color, double valueMetalic)
         {

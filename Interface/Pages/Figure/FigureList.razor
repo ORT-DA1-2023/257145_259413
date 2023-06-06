@@ -3,7 +3,7 @@
 @using Domain;
 @using Interface.DataAccess;
 @inject SessionManager sessionManager;
-@inject ApplicationContext applicationContex;
+@inject ApplicationContext applicationContext;
 
 <h3>FigureList</h3>
 
@@ -63,7 +63,7 @@
 
     protected override void OnInitialized()
     {
-        figureRepository = new FigureRepository(sessionManager, applicationContex);
+        figureRepository = new FigureRepository(sessionManager, applicationContext);
 
        
 

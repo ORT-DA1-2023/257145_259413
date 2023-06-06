@@ -17,6 +17,14 @@ namespace Domain
         private List<Scene> scenes;
 
 
+        /*
+        private ICollection<Figure> figures { get; set; }
+        private ICollection<Material> materials { get; set; }
+        private ICollection<Model> models{ get; set; }
+        private ICollection<Scene> scenes { get; set; }
+         */
+
+
         public Client()
         {
             this.name = "";

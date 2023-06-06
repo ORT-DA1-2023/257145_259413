@@ -23,45 +23,7 @@ namespace Interface.BusinessLogic
 
       
 
-        public Material MatchingMaterial(string name)
-        {
-            foreach(var material in this.logged.getMaterials())
-            {
-                if(material.name == name) 
-                {
-                    return material;
-                }
-            }
-            return new LambertianoMaterial();   
-        }
-
-
-        
-     
-
       
-
-        public void addMaterial(Material material)
-        {
-            logged.AddMaterial(material);
-        }
-
-        public List<Material> GetMaterials()
-        {
-            return logged.getMaterials();
-        }
-
-        public void DeleteMaterial(Material material)
-        {
-            if (logged.MaterialIsLinked(material))
-            {
-                throw new InvalidOperationException("El material seleccionado está siendo usado por un modelo existente");
-            }
-            else
-            {
-                GetMaterials().Remove(material);
-            }
-        }
 
         public void addModel(Model model)
         {

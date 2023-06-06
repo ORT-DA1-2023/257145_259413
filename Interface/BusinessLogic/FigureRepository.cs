@@ -76,10 +76,6 @@ namespace Interface.BusinessLogic
 		{
 			return sessionManager.CurrentUser.getFigures();
 
-
-
-
-
 		}
 
 
@@ -91,14 +87,16 @@ namespace Interface.BusinessLogic
 			}
 			else
 			{
-				_dbContext.figures.Remove(figure);
+
+				List<Figure> list = GetFigures();
+				list.Remove(figure);
                 _dbContext.SaveChanges();
             }
 		}
 
-		public Figure Find (string name)
+		public Figure Find (int id)
 		{
-			Figure result = _dbContext.figures.FirstOrDefault(f => f.name == name);
+			Figure result = _dbContext.figures.FirstOrDefault(f => f.Id == id);
             _dbContext.SaveChanges();
             return result;
 		}

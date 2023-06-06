@@ -37,7 +37,7 @@ namespace Interface.BusinessLogic
             clientRepository.add(client1);
         }
 
-        public Client logIn(string name, string password)
+        public Client LogIn(string name, string password)
         {
 
             List<Client> clients = clientRepository.GetClients();

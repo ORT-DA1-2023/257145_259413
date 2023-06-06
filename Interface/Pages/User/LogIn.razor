@@ -3,8 +3,10 @@
 @using Domain;
 @using Interface.BusinessLogic;
 @using Exceptions;
+@using Interface.DataAccess;
 @inject NavigationManager NavigationManager
-@inject Manager manager
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 
 <h3>Iniciar sesión</h3>
 
@@ -43,7 +45,7 @@
 
     private string exceptionMessage = "";
     private bool emptyUserError = false;
-
+    private AuthLogic authLogic;
     Client verifier = new Client();
     Client toLogIn = null;
 
@@ -53,7 +55,10 @@
         {
             if (verifier.VerifyName(name) && verifier.VerifyPassword(password))
             {
-               // toLogIn = manager.logIn(name, password);
+               
+                toLogIn = authLogic.LogIn(name, password);
+
+
             }
 
             if (toLogIn != null)
@@ -74,4 +79,13 @@
                 exceptionMessage = ex.Message;
         }
     }
+
+
+    protected override void OnInitialized()
+    {
+        authLogic = new AuthLogic(sessionManager, applicationContext);
+
+    }
+
+
 }

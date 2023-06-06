@@ -1,7 +1,9 @@
 ﻿@using Interface.BusinessLogic;
 @using Domain;
 @using Engine;
-@inject Manager manager;
+@using Interface.DataAccess;
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 @inject NavigationManager NavigationManager; 
 @page "/model";
 
@@ -29,7 +31,7 @@
 <label for="Material">Materiales</label>
 <select class="form-control" id="Material" @onchange="materialSelection">
     <option  disabled selected value="">Selecciona el material</option>
-    @foreach(var material in manager.GetMaterials())
+    @foreach (var material in materialRepository.GetMaterials())
     {
         <option value="@material.name">@material.name</option>
     }
@@ -73,7 +75,7 @@
     private bool isChecked = false;
     private string successMessage; 
     private FigureRepository figureRepository;
-
+    private MaterialRepository materialRepository;
 
 
     Model model = new Model();
@@ -87,7 +89,7 @@
     void materialSelection(ChangeEventArgs e)
     {
         selectedMaterial = e.Value.ToString();
-        material = manager.MatchingMaterial(selectedMaterial);
+        material = materialRepository.MatchingMaterial(selectedMaterial);
     }
 
     void CreateModel()
@@ -97,7 +99,7 @@
             if (model.VerifyName(name) && !String.IsNullOrEmpty(selectedMaterial) && !String.IsNullOrEmpty(selectedFigure))
             {
                 model = new Model(name, figure, material);
-                manager.addModel(model);
+              //  manager.addModel(model);
                 successMessage = "Creación Exitosa";
 
 
@@ -136,12 +138,18 @@
         scene.addPositionedModel(new PositionedModel(temp, position));
 
         Render render = new Render(scene, 150, 100, 30, 20);
-        render.RenderScene(manager.logged.name);
+        render.RenderScene(sessionManager.CurrentUser.name);
     }
 
     private void SeeModel()
     {
         NavigationManager.NavigateTo("/model/list");
+    }
+
+    protected override void OnInitialized()
+    {
+       // modelRepository = new modelRepository(sessionManager, applicationContext);
+        materialRepository= new MaterialRepository(sessionManager, applicationContext);
     }
 
 
