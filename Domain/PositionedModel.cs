@@ -11,7 +11,6 @@ namespace Domain
         public int Id { get; set; }
         public Model model { get; set; }
         public Coordinate position { get; set; }
-        public int SceneId { get; set; }
         public Scene Scene { get; set; }
 
 

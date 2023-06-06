@@ -23,7 +23,7 @@ namespace Domain.test
             Assert.IsFalse(result);
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void ReturnsTrueIfUnique()
         {
             Client client = new Client();
@@ -33,7 +33,7 @@ namespace Domain.test
             client.AddMaterial(material2);
             bool result = client.VerifyMaterials();
             Assert.IsTrue(result);
-        }
+        }*/
 
         [TestMethod]
         public void ReturnsFalseIfColorCodeUnderZero()

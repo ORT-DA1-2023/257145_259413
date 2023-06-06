@@ -26,6 +26,8 @@ namespace Domain
 
 		public int FieldOfVision { get; set; }
 
+		public Client client { get; set; }
+
 		public Scene()
 		{
 			this._positionedModels = new List<PositionedModel>();

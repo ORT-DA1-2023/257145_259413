@@ -14,7 +14,7 @@ namespace Domain
         public string name { get; set; }
         public double radius { get; set; }
         public Client client { get; set; }
-        public int clientId { get; set; }
+
 
         public Figure()
         {

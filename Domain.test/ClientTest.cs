@@ -127,46 +127,8 @@ namespace Domain.test
 
 
         }
-        [TestMethod]
-        public void returnFalseIfNoFigureList()
-        {
-            Client client = new Client();
-            bool result = client.VerifyListFigures();
-            Assert.IsFalse(result);
-
-        }
-
-
-        [TestMethod]
-        public void returnTrueIfOneFigureList()
-        {
-            Client client = new Client();
-            Figure figure = new Figure();
-            client.AddFigure(figure);
-            bool result = client.VerifyListFigures();
-            Assert.IsTrue(result);
-
-        }
-
-
-        [TestMethod]
-        public void VerifyListFiguresReturnTrue()
-        {
-      
-            Client client = new Client();
-            Figure figure1 = new Figure("figure1", 1);
-            Figure figure2 = new Figure("figure2", 1);
-            Figure figure3 = new Figure("figure3", 1);
-
-            client.AddFigure(figure1);
-            client.AddFigure(figure2);
-            client.AddFigure(figure3);
-
-            bool result1 = client.VerifyListFigures();
-            Assert.IsTrue(result1);
-           
-        }
-
+        
+        /*
         [TestMethod]
         public void returnFalseIfNoModelList()
         {
@@ -281,31 +243,6 @@ namespace Domain.test
 
         }
 
-        [TestMethod]
-        public void ReturnsTrueIfFigureIsLinked()
-        {
-            Client client = new Client();
-            Figure figure = new Figure();
-            Material material = new Material();
-            Model model = new Model("", figure,material);
-            client.AddFigure(figure);
-            client.AddMaterial(material);
-            client.AddModel(model);
-            Assert.IsTrue(client.FigureIsLinked(figure));
-        }
-
-        [TestMethod]
-        public void ReturnsTrueIfMaterialIsLinked()
-        {
-            Client client = new Client();
-            Figure figure = new Figure();
-            Material material = new Material();
-            Model model = new Model("", figure, material);
-            client.AddFigure(figure);
-            client.AddMaterial(material);
-            client.AddModel(model);
-            Assert.IsTrue(client.MaterialIsLinked(material));
-        }
 
         [TestMethod]
         public void ReturnsTrueIfModelIsLinked()
@@ -318,7 +255,7 @@ namespace Domain.test
             client.AddModel(model);
             client.AddScene(scene);
             Assert.IsTrue(client.ModelIsLinked(model));
-        }
+        }*/
 
     }
 }

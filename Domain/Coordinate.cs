@@ -33,33 +33,10 @@ namespace Domain
             return VerifyCoordinateValues(x) && VerifyCoordinateValues(y) && VerifyCoordinateValues(z);
         }
 
-        // HACER REFACTORING
 		public bool VerifyCoordinateValues(Object coordinate)
 		{
 			return coordinate.GetType() == typeof(double);
 		}
-
-
-
-		/*public bool VerifyCoordinateValues (float coordinate)
-        {
-            if (coordinate.ToString().Contains("."))
-            {
-                String radiusLetter = coordinate.ToString();
-                for (int i = 0; i < radiusLetter.Length - 1; i++)
-                {
-                    if (radiusLetter[i].Equals("."))
-                    {
-                        if (char.IsDigit(radiusLetter[i + 1]))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-        */
 
 		public override string ToString()
 		{

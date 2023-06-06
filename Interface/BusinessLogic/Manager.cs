@@ -26,10 +26,6 @@ namespace Interface.BusinessLogic
             logged.AddModel(model);
         }
 
-        public List<Model> GetModels()
-        {
-            return logged.getModels();
-        }
 
         public void DeleteModel(Model model)
         {
@@ -39,7 +35,7 @@ namespace Interface.BusinessLogic
             }
             else
             {
-                GetModels().Remove(model);
+                //GetModels().Remove(model);
             }
         }
 
@@ -48,27 +44,22 @@ namespace Interface.BusinessLogic
             logged.AddScene(scene);
         }
 
-        public List<Scene> GetScenes() 
-        { 
-            return logged.getScenes();
-        }
-
        public Scene GetScenebyName(string name)
         {
 
-            foreach (Scene scene in GetScenes()){
+            /*foreach (Scene scene in GetScenes()){
                 if (scene.name == name)
                 {
 					return scene;
 				}
-            }
+            }*/
 
             return null;
         }
 
 		public void DeleteScene(Scene scene)
 		{
-			GetScenes().Remove(scene);
+			//GetScenes().Remove(scene);
 
 		}
 

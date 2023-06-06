@@ -31,7 +31,8 @@ namespace Interface.BusinessLogic
 
         public Figure MatchingFigure(string name)
 		{
-			foreach (var figure in this.logged.getFigures())
+			List<Figure> figures = GetFigures();
+			foreach (var figure in figures)
 			{
 				if (figure.name == name)
 				{
@@ -43,7 +44,15 @@ namespace Interface.BusinessLogic
 
 		public void addFigure(Figure figure)
 		{
-            sessionManager.CurrentUser.AddFigure(figure);
+			List<Figure> figures = GetFigures();
+			foreach(Figure fig in figures)
+			{
+				if(fig.name == figure.name)
+				{
+					return;
+				}
+			}
+            _dbContext.figures.Add(figure);
 			_dbContext.SaveChanges();	
 		}
 
@@ -74,22 +83,32 @@ namespace Interface.BusinessLogic
 
 		public List<Figure> GetFigures()
 		{
-			return sessionManager.CurrentUser.getFigures();
+			return _dbContext.figures.Where(f => f.client.Id == logged.Id).ToList();
 
 		}
 
+		public bool FigureIsLinked(Figure figure)
+		{
+			List<Model> models = _dbContext.models.Where(m => m.client.Id == logged.Id).ToList();
+			foreach(Model model in models)
+			{
+				if(model.figure == figure)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 
 		public void Delete(Figure figure)
 		{
-			if (sessionManager.CurrentUser.FigureIsLinked(figure))
+			if (FigureIsLinked(figure))
 			{
 				throw new InvalidOperationException("La figura seleccionada está siendo usada por un modelo existente");
 			}
 			else
 			{
-
-				List<Figure> list = GetFigures();
-				list.Remove(figure);
+				_dbContext.figures.Remove(figure);
                 _dbContext.SaveChanges();
             }
 		}

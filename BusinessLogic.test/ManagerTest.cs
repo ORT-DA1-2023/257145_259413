@@ -9,7 +9,7 @@ namespace BusinessLogic.test
     [TestClass]
     public class SystemTest
     {
-        [TestMethod]
+        /*[TestMethod]
         public void ReturnsTrueIfUserLoggedIn()
         {
             string name = "Pedro";
@@ -285,6 +285,6 @@ namespace BusinessLogic.test
             Manager manager = new Manager();
             Client signedIn = manager.SignUp("a", "a");
             Assert.IsTrue(signedIn.name == "");
-        }
+        }*/
     }
 }

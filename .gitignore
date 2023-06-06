@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /GraphicsEngine
 /Interface/wwwroot/Images
+/Interface/Pages/Model/ModelList.razor

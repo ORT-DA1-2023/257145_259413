@@ -40,7 +40,8 @@ namespace Interface.BusinessLogic
 
         public Material MatchingMaterial(string name)
         {
-            foreach (var material in this.logged.getMaterials())
+            List<Material> materials = new List<Material>();
+            foreach (var material in materials)
             {
                 if (material.name == name)
                 {
@@ -59,7 +60,7 @@ namespace Interface.BusinessLogic
 
         public List<Material> GetMaterials()
         {
-            return logged.getMaterials();
+            return _dbContext.materials.Where(m => m.client.Id == logged.Id).ToList();
         }
 
         public void DeleteMaterial(Material material)

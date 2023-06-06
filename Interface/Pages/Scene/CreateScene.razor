@@ -1,10 +1,12 @@
 ﻿@page "/scene/{name}"
 @using Interface.BusinessLogic;
+@using Interface.DataAccess;
 @using Domain;
 @using Engine;
 @using Exceptions;
 @using Microsoft.JSInterop
-@inject Manager manager;
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JSRuntime;
 
@@ -16,7 +18,7 @@
 	<label for="name">Modelos Disponibles:</label>
 
 	<ul>
-		@foreach (var model in manager.GetModels())
+		@foreach (var model in modelRepository.GetModels())
 		{
 			<button type="button" class="btn btn-success btn-sm" @onclick="(() => SelectedModel(model))">@model.name</button>
 		}
@@ -125,7 +127,7 @@
 
 <div class="form-group">
 	<label for="name">Preview:</label>
-	<img src="@String.Concat("images/",manager.logged.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
+	<img src="@String.Concat("images/",sessionManager.CurrentUser.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
 
 	<p class="text-start">Último renderizado: @scene.lastRendered</p>
 	@if (scene.lastRendered < scene.lastModified)
@@ -160,6 +162,9 @@
 
 @code {
 
+	private ModelRepository modelRepository;
+	private SceneRepository sceneRepository;
+
 	private bool isDifuminated = false;
 
 	private double aperture = 0;
@@ -193,13 +198,19 @@
 
 	private string formatoSeleccionado;
 
+	protected override void OnInitialized()
+	{
+		sceneRepository = new SceneRepository(sessionManager, applicationContext);
+		modelRepository = new ModelRepository(sessionManager, applicationContext);
+		scene = sceneRepository.GetSceneByName(name);
+	}
 
 	public async Task<Stream> DownloadFile()
 	{
 		// Generate or retrieve the file as a Stream
 		Stream fileStream = render.ConvertImageToStream();
 
-		string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", manager.logged.name, scene.name,".png");
+		string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", sessionManager.CurrentUser.name, scene.name,".png");
 
        // Call the DownloadFile method in JavaScript and pass the file download URL
        await JSRuntime.InvokeVoidAsync("downloadFile", path);
@@ -266,7 +277,7 @@
 			{
 				render = new Render(scene, lookFrom, lookAt, fov);
 			}
-			render.RenderScene(manager.logged.name);
+			render.RenderScene(sessionManager.CurrentUser.name);
 			scene.Render();
 			NavigationManager.NavigateTo("/scene/" + name, true);
 
@@ -295,8 +306,5 @@
 	[Parameter]
 	public string name { get; set; }
 	private Scene scene;
-	protected override void OnInitialized()
-	{
-		scene = manager.GetScenebyName(name);
-	}
+	
 }

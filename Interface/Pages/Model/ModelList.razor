@@ -1,7 +1,9 @@
 ﻿@using Interface.BusinessLogic;
+@using Interface.DataAccess;
 @using Domain;
-@inject Manager manager;
+@inject ApplicationContext applicationContext;
 @inject NavigationManager NavigationManager;
+@inject SessionManager sessionManager;
 
 
 
@@ -24,11 +26,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var model in manager.GetModels())
+        @foreach (var model in modelRepository.GetModels())
         {
             <tr>
                 <td>
-                    <img class="img-thumbnail" src="@String.Concat("images/" , manager.logged.name, "/model_", model.name, ".png")" style="width: 150px; height: 100px;" />
+                    <img class="img-thumbnail" src="@String.Concat("images/" , sessionManager.CurrentUser, "/model_", model.name, ".png")" style="width: 150px; height: 100px;" />
                 </td>
                 <td>@model.name</td>
                 <td>@model.material.name </td>
@@ -58,13 +60,19 @@
 @code {
     private bool linkedModel = false;
     private string exceptionMessage = "";
+    private ModelRepository modelRepository;
+
+    protected override void OnInitialized()
+    {
+        modelRepository = new ModelRepository(sessionManager, applicationContext);
+    }
 
 private void DeleteModel(Model model)
     {
         try
         {
             linkedModel = false;
-            manager.DeleteModel(model);
+            modelRepository.Delete(model);
         }
         catch (InvalidOperationException ex)
         {

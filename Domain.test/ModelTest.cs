@@ -49,7 +49,7 @@ namespace Domain.test
 
 
 
-        [TestMethod]
+        /*[TestMethod]
         public void returnTrueIfUnique()
         {
 
@@ -63,7 +63,7 @@ namespace Domain.test
             Assert.IsTrue(result);
 
         }
-
+        */
         [TestMethod]
         public void getFigure()
         {

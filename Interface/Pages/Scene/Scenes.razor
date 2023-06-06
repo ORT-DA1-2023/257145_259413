@@ -1,6 +1,8 @@
 ﻿@using Interface.BusinessLogic;
+@using Interface.DataAccess;
 @using Domain;
-@inject Manager manager;
+@inject ApplicationContext applicationContext;
+@inject SessionManager sessionManager;
 @inject NavigationManager NavigationManager;
 @page "/scene"
 
@@ -45,10 +47,10 @@
 		@foreach (var scene in listScene)
 		{
 			<tr>
-				<td><img class="img-thumbnail" src="@($"images/{manager.logged.name}/{scene.name}.png")" width="150" height="100" /></td>
+				<td><img class="img-thumbnail" src="@($"images/{sessionManager.CurrentUser.name}/{scene.name}.png")" width="150" height="100" /></td>
 				<td><a href="@($"/scene/{scene.name}")">@scene.name</a></td>
 				<td> @scene.lastModified</td>
-				<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => manager.DeleteScene(scene))">Eliminar</button></td>
+				<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => sceneRepository.Delete(scene))">Eliminar</button></td>
 			</tr>
 		}
 	</tbody>
@@ -57,7 +59,7 @@
 
 
 @code {
-
+	private SceneRepository sceneRepository;
 
 	private int id { get; set; }
 	private string name = "";
@@ -66,9 +68,9 @@
 	private List<Scene> listScene = new List<Scene>();
 
 	protected override void OnInitialized()
-    {
-        listScene = manager.GetScenes();
-    }
+	{
+		sceneRepository = new SceneRepository(sessionManager, applicationContext);
+	}
 
 	void ShowSceneCreation()
 	{
@@ -84,10 +86,10 @@
 		{
 			showBox = false;
 			scene = new Scene(name);
-			manager.addScene(scene);
+			sceneRepository.Add(scene);
 			name = "";
 
-			listScene = manager.GetScenes();
+			listScene = sceneRepository.GetScenes();
 			listScene.Sort();
 		}
 		else

@@ -14,6 +14,8 @@ namespace Domain
         public Figure figure { get; set; }
         public Material material { get; set; }
 
+        public Client client;
+
 
         public Model()
         {
