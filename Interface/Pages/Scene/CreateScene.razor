@@ -3,8 +3,10 @@
 @using Domain;
 @using Engine;
 @using Exceptions;
+@using Microsoft.JSInterop
 @inject Manager manager;
 @inject NavigationManager NavigationManager;
+@inject IJSRuntime JSRuntime;
 
 
 <h3>Scene:  @name</h3>
@@ -138,7 +140,19 @@
 
 
 
-	<button @onclick="savePicture">Guarda tu Escena</button>
+	<button @onclick="DownloadFile">Guarda tu Escena</button>
+
+	<Select @bind="formatoSeleccionado" >
+
+		<option values= ".png">PNG</option>
+		<option values=".jpg">JPG</option>	
+		<option values=".ppm">PPM</option>
+
+	</select>
+
+
+	
+
 
 
 </div>
@@ -173,8 +187,33 @@
 	private string invalidFov = "";
 	private bool showButton = false;
 
-
 	private Model selectedModel;
+	private Render render;
+
+
+	private string formatoSeleccionado;
+
+
+	public async Task<Stream> DownloadFile()
+	{
+		// Generate or retrieve the file as a Stream
+		Stream fileStream = render.ConvertImageToStream();
+
+		string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", manager.logged.name, scene.name,".png");
+
+       // Call the DownloadFile method in JavaScript and pass the file download URL
+       await JSRuntime.InvokeVoidAsync("downloadFile", path);
+
+       return fileStream;
+   }
+
+  
+
+
+
+
+
+
 
 	private void SelectedModel(Model modelo)
 	{
@@ -217,7 +256,7 @@
 		try
 		{
 			scene.VerifyFoV(fov);
-			Render render;
+			
 			if (isDifuminated)
 			{
 				scene.VerifyAperture(aperture);
@@ -249,10 +288,7 @@
 
 	}
 
-	private void savePicture()
-	{
 
-	}
 
 
 

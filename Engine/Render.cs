@@ -7,6 +7,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
 
 namespace Engine
 {
@@ -19,6 +22,7 @@ namespace Engine
 		private Camera _camera;
 		public int samplesPerPixel;
 		public int maxDepth;
+		private Image<Rgba32> image1;
 
 		public Render(Scene scene)
 		{
@@ -104,7 +108,7 @@ namespace Engine
 			{
 				index = writePNG(data, width, img, index, y);
 			}
-
+			this.image1=img;
 			string imgUrl = saveImage(client, filename, img);
 
 			return imgUrl;
@@ -112,6 +116,7 @@ namespace Engine
 
 		private string saveImage(string client, string filename, Image<Rgba32> img)
 		{
+			
 			var imagePath = Path.Combine("wwwroot", "images", client);
 			if (!Directory.Exists(imagePath))
 			{
@@ -123,7 +128,22 @@ namespace Engine
 			return imgUrl;
 		}
 
-		private int writePNG(string[] data, int width, Image<Rgba32> img, int index, int y)
+
+	public Stream ConvertImageToStream()
+	{
+		Image<Rgba32> img = this.image1;
+		MemoryStream stream = new MemoryStream();
+		img.Save(stream, new SixLabors.ImageSharp.Formats.Png.PngEncoder()); 
+		stream.Position = 0;
+
+		return stream;
+	}
+
+
+
+
+
+	private int writePNG(string[] data, int width, Image<Rgba32> img, int index, int y)
 		{
 			for (int x = 0; x < width; x++)
 			{

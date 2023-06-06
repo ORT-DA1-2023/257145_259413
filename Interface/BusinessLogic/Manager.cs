@@ -21,10 +21,6 @@ namespace Interface.BusinessLogic
 			this.clients = new List<Client>();
         }
 
-      
-
-      
-
         public void addModel(Model model)
         {
             logged.AddModel(model);
