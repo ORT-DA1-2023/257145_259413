@@ -9,14 +9,22 @@ namespace Interface.BusinessLogic
     {
 
         private ApplicationContext _dbContext;
+        private SessionManager sessionManager;
 
 
-        public ClientRepository(ApplicationContext _dbContext)
+        public ClientRepository(ApplicationContext _dbContext, SessionManager sessionManager)
         {
             this._dbContext = _dbContext;
+            this.sessionManager = sessionManager;
         }
 
-        public List<Client> GetClients()
+		public List<Figure> GetFigures()
+		{
+            var client = sessionManager.CurrentUser;
+			return client?.figures?.ToList();
+		}
+
+		public List<Client> GetClients()
         {
             return _dbContext.clients.ToList();
         }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Interface.Migrations
 {
     /// <inheritdoc />
-    public partial class nuevasss : Migration
+    public partial class primera : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,32 +26,24 @@ namespace Interface.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Coordinate",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    x = table.Column<double>(type: "float", nullable: false),
-                    y = table.Column<double>(type: "float", nullable: false),
-                    z = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Coordinate", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "figures",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    radius = table.Column<double>(type: "float", nullable: false)
+                    radius = table.Column<double>(type: "float", nullable: false),
+                    clientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_figures", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_figures_clients_clientId",
+                        column: x => x.clientId,
+                        principalTable: "clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,11 +55,18 @@ namespace Interface.Migrations
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Color = table.Column<int>(type: "int", nullable: false),
                     blurred = table.Column<double>(type: "float", nullable: false),
-                    type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    clientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_materials", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_materials_clients_clientId",
+                        column: x => x.clientId,
+                        principalTable: "clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,11 +79,18 @@ namespace Interface.Migrations
                     lastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     lastRendered = table.Column<DateTime>(type: "datetime2", nullable: false),
                     created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FieldOfVision = table.Column<int>(type: "int", nullable: false)
+                    FieldOfVision = table.Column<int>(type: "int", nullable: false),
+                    clientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_scenes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_scenes_clients_clientId",
+                        column: x => x.clientId,
+                        principalTable: "clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,50 +101,44 @@ namespace Interface.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     figureId = table.Column<int>(type: "int", nullable: false),
-                    materialId = table.Column<int>(type: "int", nullable: false)
+                    materialId = table.Column<int>(type: "int", nullable: false),
+                    clientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_models", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_models_clients_clientId",
+                        column: x => x.clientId,
+                        principalTable: "clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_models_figures_figureId",
                         column: x => x.figureId,
                         principalTable: "figures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_models_materials_materialId",
                         column: x => x.materialId,
                         principalTable: "materials",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "positionedModels",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    modelId = table.Column<int>(type: "int", nullable: false),
-                    positionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_positionedModels", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_positionedModels_Coordinate_positionId",
-                        column: x => x.positionId,
-                        principalTable: "Coordinate",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_positionedModels_models_modelId",
-                        column: x => x.modelId,
-                        principalTable: "models",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_figures_clientId",
+                table: "figures",
+                column: "clientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_materials_clientId",
+                table: "materials",
+                column: "clientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_models_clientId",
+                table: "models",
+                column: "clientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_models_figureId",
@@ -151,39 +151,28 @@ namespace Interface.Migrations
                 column: "materialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_positionedModels_modelId",
-                table: "positionedModels",
-                column: "modelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_positionedModels_positionId",
-                table: "positionedModels",
-                column: "positionId");
+                name: "IX_scenes_clientId",
+                table: "scenes",
+                column: "clientId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "clients");
-
-            migrationBuilder.DropTable(
-                name: "positionedModels");
+                name: "models");
 
             migrationBuilder.DropTable(
                 name: "scenes");
-
-            migrationBuilder.DropTable(
-                name: "Coordinate");
-
-            migrationBuilder.DropTable(
-                name: "models");
 
             migrationBuilder.DropTable(
                 name: "figures");
 
             migrationBuilder.DropTable(
                 name: "materials");
+
+            migrationBuilder.DropTable(
+                name: "clients");
         }
     }
 }

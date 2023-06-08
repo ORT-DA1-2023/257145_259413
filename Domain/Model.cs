@@ -14,19 +14,11 @@ namespace Domain
         public Figure figure { get; set; }
         public Material material { get; set; }
 
-        public Client client;
-
-
-        public Model()
-        {
-
-        }
+        public Client client { get; set; }
 
         public Model(string name)
         {
             this.name = name;
-          
-
         }
 
         public Model(string name, Figure figure, Material material)

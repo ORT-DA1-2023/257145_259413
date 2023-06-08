@@ -43,28 +43,6 @@ namespace Interface.Migrations
                     b.ToTable("clients");
                 });
 
-            modelBuilder.Entity("Domain.Coordinate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("x")
-                        .HasColumnType("float");
-
-                    b.Property<double>("y")
-                        .HasColumnType("float");
-
-                    b.Property<double>("z")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Coordinate");
-                });
-
             modelBuilder.Entity("Domain.Figure", b =>
                 {
                     b.Property<int>("Id")
@@ -131,7 +109,7 @@ namespace Interface.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ClientId")
+                    b.Property<int>("clientId")
                         .HasColumnType("int");
 
                     b.Property<int>("figureId")
@@ -146,41 +124,13 @@ namespace Interface.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("clientId");
 
                     b.HasIndex("figureId");
 
                     b.HasIndex("materialId");
 
                     b.ToTable("models");
-                });
-
-            modelBuilder.Entity("Domain.PositionedModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("SceneId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("modelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("positionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SceneId");
-
-                    b.HasIndex("modelId");
-
-                    b.HasIndex("positionId");
-
-                    b.ToTable("positionedModels");
                 });
 
             modelBuilder.Entity("Domain.Scene", b =>
@@ -241,52 +191,29 @@ namespace Interface.Migrations
 
             modelBuilder.Entity("Domain.Model", b =>
                 {
-                    b.HasOne("Domain.Client", null)
+                    b.HasOne("Domain.Client", "client")
                         .WithMany("models")
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("clientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Figure", "figure")
                         .WithMany()
                         .HasForeignKey("figureId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Domain.Material", "material")
                         .WithMany()
                         .HasForeignKey("materialId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("client");
 
                     b.Navigation("figure");
 
                     b.Navigation("material");
-                });
-
-            modelBuilder.Entity("Domain.PositionedModel", b =>
-                {
-                    b.HasOne("Domain.Scene", "Scene")
-                        .WithMany()
-                        .HasForeignKey("SceneId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Model", "model")
-                        .WithMany()
-                        .HasForeignKey("modelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Coordinate", "position")
-                        .WithMany()
-                        .HasForeignKey("positionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Scene");
-
-                    b.Navigation("model");
-
-                    b.Navigation("position");
                 });
 
             modelBuilder.Entity("Domain.Scene", b =>

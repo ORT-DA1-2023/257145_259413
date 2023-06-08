@@ -129,21 +129,21 @@ namespace Engine
 		}
 
 
-	public Stream ConvertImageToStream()
-	{
-		Image<Rgba32> img = this.image1;
-		MemoryStream stream = new MemoryStream();
-		img.Save(stream, new SixLabors.ImageSharp.Formats.Png.PngEncoder()); 
-		stream.Position = 0;
+		public Stream ConvertImageToStream()
+		{
+			Image<Rgba32> img = this.image1;
+			MemoryStream stream = new MemoryStream();
+			img.Save(stream, new SixLabors.ImageSharp.Formats.Png.PngEncoder()); 
+			stream.Position = 0;
 
-		return stream;
-	}
-
-
+			return stream;
+		}
 
 
 
-	private int writePNG(string[] data, int width, Image<Rgba32> img, int index, int y)
+
+
+		private int writePNG(string[] data, int width, Image<Rgba32> img, int index, int y)
 		{
 			for (int x = 0; x < width; x++)
 			{

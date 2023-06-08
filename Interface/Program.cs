@@ -19,8 +19,8 @@ string connectionStringPablo = "Data Source=DESKTOP-G58UOLC;Initial Catalog=Base
 string connectingStringPabloLaptop = "Data Source=DESKTOP-LGG3KAV;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
 
 //string connectionString = connectionStringIgnacio;
-//string connectionString = connectionStringPablo;
-string connectionString = connectingStringPabloLaptop;
+string connectionString = connectionStringPablo;
+//string connectionString = connectingStringPabloLaptop;
 
 builder.Services.AddDbContextFactory<ApplicationContext>(
 	   options => options.UseSqlServer(

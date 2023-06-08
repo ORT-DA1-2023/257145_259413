@@ -19,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var figura in figureRepository.GetFigures())
+        @foreach (var figura in clientRepository.GetFigures())
         {
             <tr>
                 <td>@figura.name</td>
@@ -44,6 +44,7 @@
     private bool linkedFigure = false;
     private string exceptionMessage = "";
     private FigureRepository figureRepository;
+    private ClientRepository clientRepository;
 
 
 
@@ -64,6 +65,7 @@
     protected override void OnInitialized()
     {
         figureRepository = new FigureRepository(sessionManager, applicationContext);
+        clientRepository = new ClientRepository(applicationContext, sessionManager);
 
        
 

@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Exceptions;
@@ -7,7 +9,7 @@ namespace Domain
 {
     public class Client
     {
-        public int Id { get; set; }
+		public int Id { get; set; }
         public string name { get; set; }
 
         public string password { get; set; }
