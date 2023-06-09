@@ -19,6 +19,7 @@ namespace Domain
         public double blurred { get; set; }
         public string type { get; set; }
         public Client client { get; set; }
+       
 
 
 
