@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
-
-
 namespace Interface.BusinessLogic
 {
 	public class FigureRepository
@@ -52,6 +50,7 @@ namespace Interface.BusinessLogic
 				}
 			}
             _dbContext.figures.Add(figure);
+
 			_dbContext.SaveChanges();	
 		}
 

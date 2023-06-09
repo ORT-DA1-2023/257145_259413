@@ -21,8 +21,7 @@ public class ApplicationContext: DbContext
 
 
 	public ApplicationContext(DbContextOptions<ApplicationContext> options): base(options) {	}
-	// para migraciones el -v te da los logs
-	//dotnet ef migrations add CreateUsers -v
+	
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -33,5 +32,22 @@ public class ApplicationContext: DbContext
 			c => Color.FromArgb(c)
 		)
 		.HasColumnName("Color");
+
+		modelBuilder.Entity<Model>()
+		.HasOne(m => m.material)
+		.WithMany()
+		.IsRequired()
+		.OnDelete(DeleteBehavior.NoAction);
+
+		modelBuilder.Entity<Model>()
+		.HasOne(m => m.figure)
+		.WithMany()
+		.IsRequired()
+		.OnDelete(DeleteBehavior.NoAction);
+
+		
+
+
+
 	}
 }

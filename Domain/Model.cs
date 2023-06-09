@@ -14,10 +14,10 @@ namespace Domain
         public Figure figure { get; set; }
         public Material material { get; set; }
 
-        public Client client;
+        public Client client { get; set; }
+        
 
-
-        public Model()
+	public Model()
         {
 
         }
@@ -25,8 +25,6 @@ namespace Domain
         public Model(string name)
         {
             this.name = name;
-          
-
         }
 
         public Model(string name, Figure figure, Material material)
@@ -35,8 +33,6 @@ namespace Domain
             this.figure = figure;
             this.material = material;
         }
-
-        
 
         public bool VerifyName(string name)
         {

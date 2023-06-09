@@ -4,6 +4,7 @@ using Interface.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Interface.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230608154436_Creatdsds")]
+    partial class Creatdsds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,7 +134,7 @@ namespace Interface.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("clientId")
+                    b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<int>("figureId")
@@ -146,7 +149,7 @@ namespace Interface.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("clientId");
+                    b.HasIndex("ClientId");
 
                     b.HasIndex("figureId");
 
@@ -241,25 +244,21 @@ namespace Interface.Migrations
 
             modelBuilder.Entity("Domain.Model", b =>
                 {
-                    b.HasOne("Domain.Client", "client")
+                    b.HasOne("Domain.Client", null)
                         .WithMany("models")
-                        .HasForeignKey("clientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
 
                     b.HasOne("Domain.Figure", "figure")
                         .WithMany()
                         .HasForeignKey("figureId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Material", "material")
                         .WithMany()
                         .HasForeignKey("materialId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("client");
 
                     b.Navigation("figure");
 
