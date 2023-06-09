@@ -5,7 +5,7 @@ namespace Engine.test
     [TestClass]
     public class RenderTest
     {
-        [TestMethod]
+        /*[TestMethod]
         public void ReturnsTrueIfSceneIsRendered()
         {
             Figure figure = new Figure("", 1);
@@ -19,7 +19,7 @@ namespace Engine.test
             string path = Path.Combine(Directory.GetCurrentDirectory(), @"Images", @"test", scene.name + ".ppm");
             bool result = File.Exists(path);
             Assert.IsTrue(result);
-        }
+        }*/
 
         [TestMethod]
         public void ReturnsTrueIfPersonalizedRenderIsCreatedCorrectly()

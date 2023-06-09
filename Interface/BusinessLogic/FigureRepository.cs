@@ -15,6 +15,7 @@ namespace Interface.BusinessLogic
 		public Client logged { get; set; }
 		private ApplicationContext _dbContext;
 		private SessionManager sessionManager;
+		private ClientRepository clientRepository;
 
 
 
@@ -23,12 +24,13 @@ namespace Interface.BusinessLogic
             this.sessionManager = sessionManager;
 			this._dbContext = _dbContext;
 			this.logged = sessionManager.CurrentUser;
+			this.clientRepository = new ClientRepository(_dbContext, sessionManager);
         }
 
 
         public Figure MatchingFigure(string name)
 		{
-			List<Figure> figures = GetFigures();
+			List<Figure> figures = clientRepository.GetFigures();
 			foreach (var figure in figures)
 			{
 				if (figure.name == name)
@@ -41,48 +43,34 @@ namespace Interface.BusinessLogic
 
 		public void addFigure(Figure figure)
 		{
-			List<Figure> figures = GetFigures();
-			foreach(Figure fig in figures)
+			List<Figure> figures = clientRepository.GetFigures();
+			if (figures != null)
 			{
-				if(fig.name == figure.name)
+				foreach (Figure fig in figures)
 				{
-					return;
+					if (fig.name == figure.name)
+					{
+						return;
+					}
 				}
 			}
-            _dbContext.figures.Add(figure);
-
-			_dbContext.SaveChanges();	
-		}
+			_dbContext.figures.Add(figure);
+			_dbContext.SaveChanges();
+			}
 
 		public void CreateFigure(string name, double radiusNumber)
 		{
-            Figure fig = new Figure();
+			Figure fig = new Figure();
 
-            if (fig.VerifyNameFigure(name) && fig.VerifyRadiusFigure(radiusNumber))
-            {
-
-
-                Figure newFig = new Figure(name, radiusNumber);
-				newFig.client= sessionManager.CurrentUser;
+			if (fig.VerifyNameFigure(name) && fig.VerifyRadiusFigure(radiusNumber))
+			{
+				Figure newFig = new Figure(name, radiusNumber);
 				addFigure(newFig);
-
-
-            }
-            else
-            {
+			}
+			else
+			{
 				throw new InvalidOperationException("Radio o Nombre Incorrecto");
-            }
-
-
-        }
-
-
-
-
-		public List<Figure> GetFigures()
-		{
-			return _dbContext.figures.Where(f => f.client.Id == logged.Id).ToList();
-
+			}
 		}
 
 		public bool FigureIsLinked(Figure figure)

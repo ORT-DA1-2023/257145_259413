@@ -22,7 +22,7 @@
 
 <select class="form-control" id="Figures" @onchange="figureSelection">
     <option disabled selected value= "">Selecciona la figura</option>
-        @foreach (var figure in figureRepository.GetFigures())
+        @foreach (var figure in clientRepository.GetFigures())
     {
         <option value="@figure.name">@figure.name</option>
     }
@@ -76,9 +76,9 @@
     private string successMessage; 
     private FigureRepository figureRepository;
     private MaterialRepository materialRepository;
+    private ClientRepository clientRepository;
 
-
-    Model model = new Model();
+    Model model;
 
     void figureSelection(ChangeEventArgs e)
     {
@@ -124,7 +124,7 @@
 
     private void CreatePreview()
     {
-        Scene scene = new Scene("model_" + name);
+        /*Scene scene = new Scene("model_" + name);
 
         Material floorColor = new LambertianoMaterial("floor", System.Drawing.Color.White);
         Figure floor = new Figure("floor", 1000);
@@ -138,7 +138,7 @@
         scene.addPositionedModel(new PositionedModel(temp, position));
 
         Render render = new Render(scene, 150, 100, 30, 20);
-        render.RenderScene(sessionManager.CurrentUser.name);
+        render.RenderScene(sessionManager.CurrentUser.name);*/
     }
 
     private void SeeModel()
@@ -150,6 +150,7 @@
     {
        // modelRepository = new modelRepository(sessionManager, applicationContext);
         materialRepository= new MaterialRepository(sessionManager, applicationContext);
+        clientRepository = new ClientRepository(applicationContext, sessionManager);
     }
 
 

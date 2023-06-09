@@ -5,7 +5,7 @@
 namespace Interface.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateUsers : Migration
+    public partial class primera1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

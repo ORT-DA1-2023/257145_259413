@@ -15,12 +15,6 @@ namespace Domain
         public Material material { get; set; }
 
         public Client client { get; set; }
-        
-
-	public Model()
-        {
-
-        }
 
         public Model(string name)
         {

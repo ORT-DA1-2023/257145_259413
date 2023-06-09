@@ -17,7 +17,7 @@ namespace Interface.BusinessLogic
         public AuthLogic(SessionManager sessionManager, ApplicationContext applicationContext)
         {
             this.sessionManager = sessionManager;
-            this.clientRepository = new ClientRepository(applicationContext);
+            this.clientRepository = new ClientRepository(applicationContext, sessionManager);
         }
 
         public void add(Client client1)

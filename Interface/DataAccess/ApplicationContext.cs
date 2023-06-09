@@ -15,8 +15,6 @@ public class ApplicationContext: DbContext
 
 	public DbSet<Model> models { get; set; }
 
-	public DbSet<PositionedModel> positionedModels { get; set; }
-
 	public DbSet<Scene> scenes { get; set; }
 
 
@@ -40,14 +38,10 @@ public class ApplicationContext: DbContext
 		.OnDelete(DeleteBehavior.NoAction);
 
 		modelBuilder.Entity<Model>()
-		.HasOne(m => m.figure)
-		.WithMany()
-		.IsRequired()
-		.OnDelete(DeleteBehavior.NoAction);
-
-		
-
-
-
+			.HasOne(m => m.figure)
+			.WithMany()
+			.IsRequired()
+			.OnDelete(DeleteBehavior.NoAction);
 	}
+
 }

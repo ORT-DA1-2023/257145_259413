@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Interface.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230602000218_nuevasss")]
-    partial class nuevasss
+    [Migration("20230608194704_primera")]
+    partial class primera
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,28 +46,6 @@ namespace Interface.Migrations
                     b.ToTable("clients");
                 });
 
-            modelBuilder.Entity("Domain.Coordinate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("x")
-                        .HasColumnType("float");
-
-                    b.Property<double>("y")
-                        .HasColumnType("float");
-
-                    b.Property<double>("z")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Coordinate");
-                });
-
             modelBuilder.Entity("Domain.Figure", b =>
                 {
                     b.Property<int>("Id")
@@ -75,6 +53,9 @@ namespace Interface.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("clientId")
+                        .HasColumnType("int");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -84,6 +65,8 @@ namespace Interface.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("clientId");
 
                     b.ToTable("figures");
                 });
@@ -99,6 +82,9 @@ namespace Interface.Migrations
                     b.Property<double>("blurred")
                         .HasColumnType("float");
 
+                    b.Property<int>("clientId")
+                        .HasColumnType("int");
+
                     b.Property<int>("color")
                         .HasColumnType("int")
                         .HasColumnName("Color");
@@ -113,6 +99,8 @@ namespace Interface.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("clientId");
+
                     b.ToTable("materials");
                 });
 
@@ -123,6 +111,9 @@ namespace Interface.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("clientId")
+                        .HasColumnType("int");
 
                     b.Property<int>("figureId")
                         .HasColumnType("int");
@@ -136,34 +127,13 @@ namespace Interface.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("clientId");
+
                     b.HasIndex("figureId");
 
                     b.HasIndex("materialId");
 
                     b.ToTable("models");
-                });
-
-            modelBuilder.Entity("Domain.PositionedModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("modelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("positionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("modelId");
-
-                    b.HasIndex("positionId");
-
-                    b.ToTable("positionedModels");
                 });
 
             modelBuilder.Entity("Domain.Scene", b =>
@@ -175,6 +145,9 @@ namespace Interface.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("FieldOfVision")
+                        .HasColumnType("int");
+
+                    b.Property<int>("clientId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("created")
@@ -192,45 +165,80 @@ namespace Interface.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("clientId");
+
                     b.ToTable("scenes");
+                });
+
+            modelBuilder.Entity("Domain.Figure", b =>
+                {
+                    b.HasOne("Domain.Client", "client")
+                        .WithMany("figures")
+                        .HasForeignKey("clientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("client");
+                });
+
+            modelBuilder.Entity("Domain.Material", b =>
+                {
+                    b.HasOne("Domain.Client", "client")
+                        .WithMany("materials")
+                        .HasForeignKey("clientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("client");
                 });
 
             modelBuilder.Entity("Domain.Model", b =>
                 {
+                    b.HasOne("Domain.Client", "client")
+                        .WithMany("models")
+                        .HasForeignKey("clientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Figure", "figure")
                         .WithMany()
                         .HasForeignKey("figureId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Domain.Material", "material")
                         .WithMany()
                         .HasForeignKey("materialId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("client");
 
                     b.Navigation("figure");
 
                     b.Navigation("material");
                 });
 
-            modelBuilder.Entity("Domain.PositionedModel", b =>
+            modelBuilder.Entity("Domain.Scene", b =>
                 {
-                    b.HasOne("Domain.Model", "model")
-                        .WithMany()
-                        .HasForeignKey("modelId")
+                    b.HasOne("Domain.Client", "client")
+                        .WithMany("scenes")
+                        .HasForeignKey("clientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Coordinate", "position")
-                        .WithMany()
-                        .HasForeignKey("positionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("client");
+                });
 
-                    b.Navigation("model");
+            modelBuilder.Entity("Domain.Client", b =>
+                {
+                    b.Navigation("figures");
 
-                    b.Navigation("position");
+                    b.Navigation("materials");
+
+                    b.Navigation("models");
+
+                    b.Navigation("scenes");
                 });
 #pragma warning restore 612, 618
         }
