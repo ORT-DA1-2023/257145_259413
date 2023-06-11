@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class PositionedModel
-    {
-        public int Id { get; set; }
-        public Model model { get; set; }
-        public Coordinate position { get; set; }
+	public class PositionedModel
+	{
+		public int Id { get; set; }
+		public Model model { get; set; }
+		public Coordinate position { get; set; }
 
-        public override string ToString()
-        {
-            return "Model: " + this.model.name + "  " +
-                  "Position: " + this.position.ToString();
-        }
-    }
+		public override string ToString()
+		{
+			return "Model: " + this.model.name + "  " +
+				  "Position: " + this.position.ToString();
+		}
+
+	}
 }

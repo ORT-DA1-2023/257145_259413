@@ -6,56 +6,38 @@ using System.Threading.Tasks;
 using Domain;
 using static System.Exception;
 using Exceptions;
-using Interface.DataAccess; 
+using Interface.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 namespace Interface.BusinessLogic
 {
-    public class Manager
-    {
-        public Client logged { get; set; }
-        public List<Client> clients;
+	public class Manager
+	{
+		public Client logged { get; set; }
+		public List<Client> clients;
 
-        public Manager() 
-        {
+		public Manager()
+		{
 			this.clients = new List<Client>();
-        }
+		}
 
-        public void addModel(Model model)
-        {
-            logged.AddModel(model);
-        }
+		public void addScene(Scene scene)
+		{
+			logged.AddScene(scene);
+		}
 
+		public Scene GetScenebyName(string name)
+		{
 
-        public void DeleteModel(Model model)
-        {
-            if (logged.ModelIsLinked(model))
-            {
-                throw new InvalidOperationException("El modelo seleccionado está siendo usado por una escena existente");
-            }
-            else
-            {
-                //GetModels().Remove(model);
-            }
-        }
-
-        public void addScene(Scene scene)
-        {
-            logged.AddScene(scene);
-        }
-
-       public Scene GetScenebyName(string name)
-        {
-
-            /*foreach (Scene scene in GetScenes()){
+			/*foreach (Scene scene in GetScenes()){
                 if (scene.name == name)
                 {
 					return scene;
 				}
             }*/
 
-            return null;
-        }
+			return null;
+		}
 
 		public void DeleteScene(Scene scene)
 		{

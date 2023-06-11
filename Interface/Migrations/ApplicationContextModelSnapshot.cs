@@ -76,8 +76,9 @@ namespace Interface.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("blurred")
-                        .HasColumnType("float");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("clientId")
                         .HasColumnType("int");
@@ -90,15 +91,15 @@ namespace Interface.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("clientId");
 
                     b.ToTable("materials");
+
+                    b.HasDiscriminator<string>("Type").HasValue("Material");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Domain.Model", b =>
@@ -133,7 +134,7 @@ namespace Interface.Migrations
                     b.ToTable("models");
                 });
 
-            modelBuilder.Entity("Domain.Scene", b =>
+            modelBuilder.Entity("Domain.PositionedModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -141,8 +142,28 @@ namespace Interface.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FieldOfVision")
+                    b.Property<int?>("SceneId")
                         .HasColumnType("int");
+
+                    b.Property<int>("modelId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SceneId");
+
+                    b.HasIndex("modelId");
+
+                    b.ToTable("PositionedModel");
+                });
+
+            modelBuilder.Entity("Domain.Scene", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("clientId")
                         .HasColumnType("int");
@@ -165,6 +186,23 @@ namespace Interface.Migrations
                     b.HasIndex("clientId");
 
                     b.ToTable("scenes");
+                });
+
+            modelBuilder.Entity("Domain.LambertianoMaterial", b =>
+                {
+                    b.HasBaseType("Domain.Material");
+
+                    b.HasDiscriminator().HasValue("Lambertian");
+                });
+
+            modelBuilder.Entity("Domain.MetalicMaterial", b =>
+                {
+                    b.HasBaseType("Domain.Material");
+
+                    b.Property<double>("blurred")
+                        .HasColumnType("float");
+
+                    b.HasDiscriminator().HasValue("Metalic");
                 });
 
             modelBuilder.Entity("Domain.Figure", b =>
@@ -216,6 +254,21 @@ namespace Interface.Migrations
                     b.Navigation("material");
                 });
 
+            modelBuilder.Entity("Domain.PositionedModel", b =>
+                {
+                    b.HasOne("Domain.Scene", null)
+                        .WithMany("positionedModels")
+                        .HasForeignKey("SceneId");
+
+                    b.HasOne("Domain.Model", "model")
+                        .WithMany()
+                        .HasForeignKey("modelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("model");
+                });
+
             modelBuilder.Entity("Domain.Scene", b =>
                 {
                     b.HasOne("Domain.Client", "client")
@@ -236,6 +289,11 @@ namespace Interface.Migrations
                     b.Navigation("models");
 
                     b.Navigation("scenes");
+                });
+
+            modelBuilder.Entity("Domain.Scene", b =>
+                {
+                    b.Navigation("positionedModels");
                 });
 #pragma warning restore 612, 618
         }

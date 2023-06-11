@@ -1,6 +1,7 @@
 ﻿@using Interface.BusinessLogic;
 @using Interface.DataAccess;
 @using Domain;
+@using Exceptions;
 @inject ApplicationContext applicationContext;
 @inject SessionManager sessionManager;
 @inject NavigationManager NavigationManager;
@@ -65,7 +66,7 @@
 	private string name = "";
 	private string errorMessage;
 	private bool showBox=false;
-	private List<Scene> listScene = new List<Scene>();
+	private List<Scene> listScene;
 
 	protected override void OnInitialized()
 	{
@@ -80,22 +81,21 @@
 
 	void CreateScene()
 	{
-		Scene scene = new Scene();
+		errorMessage = "";
 
-		if (scene.VerifyName(name))
+		try
 		{
+			sceneRepository.Create(name);
 			showBox = false;
-			scene = new Scene(name);
-			sceneRepository.Add(scene);
-			name = "";
 
 			listScene = sceneRepository.GetScenes();
 			listScene.Sort();
 		}
-		else
+		catch(SceneNameException ex)
 		{
-			errorMessage = "nombre no debe tener espacios (Principio, ni final)";
+			errorMessage = ex.Message;
 		}
+			name = "";
 
 
 	}

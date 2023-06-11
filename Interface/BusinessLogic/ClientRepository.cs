@@ -18,11 +18,6 @@ namespace Interface.BusinessLogic
             this.sessionManager = sessionManager;
         }
 
-		public List<Figure> GetFigures()
-		{
-            var client = sessionManager.CurrentUser;
-			return client?.figures?.ToList();
-		}
 
 		public List<Client> GetClients()
         {
@@ -54,12 +49,9 @@ namespace Interface.BusinessLogic
         
         }
 
-
-
-
-
-
-
-
+        public Client Find(int id)
+        {
+            return _dbContext.clients.Find(id);
+        }
     }
 }

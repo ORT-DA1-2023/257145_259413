@@ -12,7 +12,7 @@ namespace Interface.BusinessLogic
 	public class FigureRepository
 	{
 
-		public Client logged { get; set; }
+		private Client logged;
 		private ApplicationContext _dbContext;
 		private SessionManager sessionManager;
 		private ClientRepository clientRepository;
@@ -23,14 +23,18 @@ namespace Interface.BusinessLogic
         {
             this.sessionManager = sessionManager;
 			this._dbContext = _dbContext;
-			this.logged = sessionManager.CurrentUser;
 			this.clientRepository = new ClientRepository(_dbContext, sessionManager);
+			this.logged = clientRepository.Find(sessionManager.CurrentUser.Id);
         }
 
+		public List<Figure> GetFigures()
+		{
+			  return _dbContext.figures.Where(f => f.client.Id == logged.Id).ToList();
+		}
 
         public Figure MatchingFigure(string name)
 		{
-			List<Figure> figures = clientRepository.GetFigures();
+			List<Figure> figures = GetFigures();
 			foreach (var figure in figures)
 			{
 				if (figure.name == name)
@@ -43,7 +47,7 @@ namespace Interface.BusinessLogic
 
 		public void addFigure(Figure figure)
 		{
-			List<Figure> figures = clientRepository.GetFigures();
+			List<Figure> figures = GetFigures();
 			if (figures != null)
 			{
 				foreach (Figure fig in figures)
@@ -65,6 +69,7 @@ namespace Interface.BusinessLogic
 			if (fig.VerifyNameFigure(name) && fig.VerifyRadiusFigure(radiusNumber))
 			{
 				Figure newFig = new Figure(name, radiusNumber);
+				newFig.client = this.logged;
 				addFigure(newFig);
 			}
 			else

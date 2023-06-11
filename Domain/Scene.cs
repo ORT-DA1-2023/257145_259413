@@ -15,44 +15,50 @@ namespace Domain
 
 		public string name { get; set; }
 
-		//Se deberia crear una tabla con Scena y PositionModel (relacion) 
-
-
-		private ICollection<PositionedModel> _positionedModels { get; set; }
+		public virtual ICollection<PositionedModel> positionedModels { get; set; }
 
 		public DateTime lastModified { get; set; }
 		public DateTime lastRendered { get; set; }
 		public DateTime created { get; set; }
-
-		public int FieldOfVision { get; set; }
-
 		public Client client { get; set; }
 
 		public Scene()
 		{
-			this._positionedModels = new List<PositionedModel>();
-			this.FieldOfVision = 30;
+			this.positionedModels = new List<PositionedModel>();
 			this.created = DateTime.Now;
 			this.lastModified = this.created;
-
-
 		}
 
 		public Scene(string name)
 		{
 			this.name = name;
-			this._positionedModels = new List<PositionedModel>();
-			this.FieldOfVision = 30;
+			this.positionedModels = new List<PositionedModel>();
 			this.created = DateTime.Now;
 			this.lastModified = this.created;
 		}
 
 		public ICollection<PositionedModel> GetPositionedModels()
 		{
-			return this._positionedModels;
+			return this.positionedModels;
 		}
 
+		public bool MatchingName(string name)
+		{
 
+
+			if (name.Length != this.name.Length)
+			{
+				return false;
+			}
+			for (int i = 0; i < name.Length; i++)
+			{
+				if (name[i] != this.name[i])
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 
 		public bool VerifyName(string name)
 		{
@@ -85,18 +91,18 @@ namespace Domain
 
 		public bool VerifyPositionedModels()
 		{
-			return _positionedModels.Count >= 0;
+			return positionedModels.Count >= 0;
 		}
 
 		public void addPositionedModel(PositionedModel positionedModel)
 		{
-			_positionedModels.Add(positionedModel);
+			positionedModels.Add(positionedModel);
 			lastModified = DateTime.Now;
 		}
 
 		public void deletePositionedModel(PositionedModel positionedModel)
 		{
-			_positionedModels.Remove(positionedModel);
+			positionedModels.Remove(positionedModel);
 			lastModified = DateTime.Now;
 		}
 
@@ -117,7 +123,7 @@ namespace Domain
 
 		public bool ModelIsPositioned(Model model)
 		{
-			foreach (PositionedModel positionedModel in _positionedModels)
+			foreach (PositionedModel positionedModel in positionedModels)
 			{
 				if (positionedModel.model == model)
 				{
@@ -126,7 +132,7 @@ namespace Domain
 			}
 			return false;
 		}
-		//REFACTORING
+
 		public bool VerifyCoordinateValuesLens(Object coordinate)
 		{
 			return coordinate.GetType() == typeof(float);

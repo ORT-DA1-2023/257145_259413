@@ -13,6 +13,7 @@ namespace Domain
         public int Id { get; set; }
         public string name { get; set; }
         public double radius { get; set; }
+        public Client client { get; set; }
 
 
         public Figure()

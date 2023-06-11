@@ -20,7 +20,6 @@ namespace Domain
 
 		public LambertianoMaterial(string name, Color color) : base(name, color)
 		{
-			this.type = "Lambertian";
 		}
 
 
