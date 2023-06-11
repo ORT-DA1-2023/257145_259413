@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,19 +16,16 @@ namespace Domain
         public string name { get; set; }
 
         public Color color { get; set; }
-
-        public double blurred { get; set; }
-        public string type { get; set; }
         public Client client { get; set; }
 
 
 
-        public static Material createMaterial( string selectedMaterial, string name, Color color, double valueMetalic)
+        public static Material createMaterial( string selectedMaterial, string name, Color color, double blurred)
         {
             switch (selectedMaterial)
             {
                 case "Metálico":
-                    return new MetalicMaterial(name, color, valueMetalic);
+                    return new MetalicMaterial(name, color, blurred);
                   
                     break;
                 default:
@@ -48,14 +46,6 @@ namespace Domain
             this.name = name;
             this.color = color;
         }
-    
-     
-        public Material(string name, Color color, double blurred)
-        {
-            this.name = name;
-            this.color = color;
-            this.blurred = blurred;
-        }
    
         public bool VerifyColor(int red, int green, int blue)
         {
@@ -75,7 +65,7 @@ namespace Domain
             return true;
         }
          
-        public bool VeryfyBlurred(double value)
+        public bool VerifyBlurred(double value)
         {
             if (value >= 0.0)
             {

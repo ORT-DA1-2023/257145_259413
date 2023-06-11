@@ -9,7 +9,7 @@ namespace Domain
 {
     public class Client
     {
-		public int Id { get; set; }
+        public int Id { get; set; }
         public string name { get; set; }
 
         public string password { get; set; }
@@ -35,14 +35,14 @@ namespace Domain
 
         public bool VerifyName(string name)
         {
-            if(name == "")
+            if (name == "")
             {
-				
-				throw new EmptyUserNameException();
-				
-			}
-            if (name.Length<3 || name.Length>20 || !Regex.IsMatch(name, @"^\S+$"))
-            { 
+
+                throw new EmptyUserNameException();
+
+            }
+            if (name.Length < 3 || name.Length > 20 || !Regex.IsMatch(name, @"^\S+$"))
+            {
                 return false;
             }
             bool hasNumber = false;
@@ -63,11 +63,11 @@ namespace Domain
 
         public bool VerifyPassword(string password)
         {
-            if(password == "")
+            if (password == "")
             {
-						throw new EmptyUserNameException();	
-			}
-            if(password.Length < 5 || password.Length > 25)
+                throw new EmptyUserNameException();
+            }
+            if (password.Length < 5 || password.Length > 25)
             {
                 return false;
             }
@@ -122,75 +122,17 @@ namespace Domain
             return true;
         }
 
-        public  bool VerifyDate(DateTime date)
+        public bool VerifyDate(DateTime date)
         {
 
-            DateTime dateNow= DateTime.Now;
+            DateTime dateNow = DateTime.Now;
 
-            if (DateTime.Compare(dateNow, date) >0 )
-            { 
+            if (DateTime.Compare(dateNow, date) > 0)
+            {
 
                 return true;
             }
 
-            return false;
-        }
-
-
-
-        public void AddMaterial(Material material1)
-        {
-            foreach(Material material in materials)
-            {
-                if (material.name == material1.name)
-                {
-                    return;
-                }
-            }
-            materials.Add(material1);
-        }
-
-        public bool MaterialIsLinked(Material material)
-        {
-            foreach(Model model in this.models)
-            {
-                if (model.material == material)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void AddModel(Model model1)
-        {
-            foreach (Model model in models)
-            {
-
-                if (model.name == model1.name)
-                {
-                    return;
-                }
-            }
-
-
-
-            this.models.Add(model1);
-
-
-
-        }
-
-
-        public bool ModelIsLinked(Model model)
-        {
-            foreach(Scene scene in this.scenes)
-            {
-                if(scene.ModelIsPositioned(model))
-                {
-                    return true;
-                }
-            }
             return false;
         }
 

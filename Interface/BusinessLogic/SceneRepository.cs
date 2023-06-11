@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Interface.DataAccess;
+using Exceptions;
 using System.Security.Cryptography;
 
 namespace Interface.BusinessLogic
@@ -9,15 +10,15 @@ namespace Interface.BusinessLogic
 
 		private Client _logged;
 		private ApplicationContext _dbContext;
-		private SessionManager _sessionManager;
+		private ClientRepository clientRepository;
 
 
 
 		public SceneRepository(SessionManager sessionManager, ApplicationContext applicationContext)
 		{
-			_logged = sessionManager.CurrentUser;
+			clientRepository = new ClientRepository(applicationContext, sessionManager);
 			_dbContext = applicationContext;
-			_sessionManager = sessionManager;
+			_logged = clientRepository.Find(sessionManager.CurrentUser.Id);
 		}
 
 		public List<Scene> GetScenes()
@@ -27,12 +28,32 @@ namespace Interface.BusinessLogic
 
 		public Scene GetSceneByName(string name)
 		{
-			List<Scene> scenes = GetScenes();
-		    return _dbContext.scenes.Where(s => s.client.Id == _logged.Id).FirstOrDefault(s => s.name == name);
+			return _dbContext.scenes.Where(s => s.client.Id == _logged.Id).FirstOrDefault(s => s.name == name);
 		}
 
-		public void Add(Scene scene) 
+		public void Create(string name)
 		{
+			Scene scene = new Scene(name);
+			if (scene.VerifyName(name))
+			{
+				scene.client = _logged;
+				Add(scene);
+			}
+			else
+			{
+				throw new SceneNameException();
+			}
+		}
+
+		public void Add(Scene scene)
+		{
+			foreach (Scene auxScene in GetScenes())
+			{
+				if (auxScene.MatchingName(scene.name))
+				{
+					return;
+				}
+			}
 			_dbContext.scenes.Add(scene);
 			_dbContext.SaveChanges();
 		}

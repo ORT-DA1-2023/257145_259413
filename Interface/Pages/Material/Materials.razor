@@ -65,10 +65,9 @@
     <select @onchange="HandleSelection">
         <option value="">Selecciona el tipo de material</option>
         <option value="lambertiano">Lambertiano</option>
-        <option value="Metálico">Metálico</option> <!-- AGREGUE ESTO-->
+        <option value="Metálico">Metálico</option>
     </select>
 }
-<!-- AGREGUE ESTO-->
 @if (selectedMaterial == "Metálico")
 {
 
@@ -146,13 +145,13 @@
 
         successMessage = "";
 
-        bool isMetalicBlurred = selectedMaterial == "Metálico" && material.VeryfyBlurred(valueMetalic);
         bool isMaterialSelected = !string.IsNullOrEmpty(selectedMaterial);
         bool isColorValid = material.VerifyColor(red, green, blue);
         bool isNameValid = material.VerifyName(name);
+        bool isMetalicBlurred = material.VerifyBlurred(valueMetalic);
 
 
-        if ((isNameValid && isColorValid && isMaterialSelected) || isMetalicBlurred)
+        if (isNameValid && isColorValid && isMaterialSelected && isMetalicBlurred)
         {
 
             color = Color.FromArgb(red, green, blue);

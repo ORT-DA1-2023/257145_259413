@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Domain;
 using System.Drawing;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Interface.DataAccess;
 
-public class ApplicationContext: DbContext
+public class ApplicationContext : DbContext
 {
 	public DbSet<Client> clients { get; set; }
 
@@ -15,12 +16,11 @@ public class ApplicationContext: DbContext
 
 	public DbSet<Model> models { get; set; }
 
+
 	public DbSet<Scene> scenes { get; set; }
 
 
-	public ApplicationContext(DbContextOptions<ApplicationContext> options): base(options) {	}
-	// para migraciones el -v te da los logs
-	//dotnet ef migrations add CreateUsers -v
+	public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -43,6 +43,14 @@ public class ApplicationContext: DbContext
 			.WithMany()
 			.IsRequired()
 			.OnDelete(DeleteBehavior.NoAction);
+
+
+		modelBuilder.Entity<PositionedModel>().Ignore(p => p.position);
+
+		modelBuilder.Entity<Material>()
+			.HasDiscriminator<string>("Type")
+			.HasValue<LambertianoMaterial>("Lambertian")
+			.HasValue<MetalicMaterial>("Metalic");
 	}
 
 }

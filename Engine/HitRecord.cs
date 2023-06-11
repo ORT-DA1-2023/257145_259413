@@ -7,19 +7,14 @@ using System.Threading.Tasks;
 
 namespace Engine
 {
-	public class MetalMaterial : Material
-	{
-
-	}
-
 	public class HitRecord
 	{
 		private double t;
 		private Vector intersection;
 		private Vector normal;
 		private Vector attenuation;
-		private string material;
 		private double roughness;
+		private Material material;
 
 		public HitRecord(double t, Vector intersection, Vector normal, Vector attenuation, Material material)
 		{
@@ -28,10 +23,10 @@ namespace Engine
 			this.normal = normal;
 			this.attenuation = attenuation;
 			this.roughness = 0;
-			this.material = material.type;
-			if (material is MetalMaterial)
+			this.material = material;
+			if (material is MetalicMaterial)
 			{
-				this.roughness = material.blurred;
+				this.roughness = ((MetalicMaterial)material).blurred;
 			}
 		}
 
@@ -59,11 +54,11 @@ namespace Engine
 			set { attenuation = value; }
 		}
 
-		public string Material
+		public Material Material
 		{
-			get { return material; }
-			set { material = value; }
-		}
+            get { return material; }
+            set { material = value; }
+        }
 
 		public double Roughness
 		{

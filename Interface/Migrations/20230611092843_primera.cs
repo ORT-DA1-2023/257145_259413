@@ -54,9 +54,9 @@ namespace Interface.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Color = table.Column<int>(type: "int", nullable: false),
-                    blurred = table.Column<double>(type: "float", nullable: false),
-                    type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    clientId = table.Column<int>(type: "int", nullable: false)
+                    clientId = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    blurred = table.Column<double>(type: "float", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,7 +79,6 @@ namespace Interface.Migrations
                     lastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     lastRendered = table.Column<DateTime>(type: "datetime2", nullable: false),
                     created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FieldOfVision = table.Column<int>(type: "int", nullable: false),
                     clientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -125,6 +124,31 @@ namespace Interface.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PositionedModel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    modelId = table.Column<int>(type: "int", nullable: false),
+                    SceneId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PositionedModel", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PositionedModel_models_modelId",
+                        column: x => x.modelId,
+                        principalTable: "models",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PositionedModel_scenes_SceneId",
+                        column: x => x.SceneId,
+                        principalTable: "scenes",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_figures_clientId",
                 table: "figures",
@@ -151,6 +175,16 @@ namespace Interface.Migrations
                 column: "materialId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PositionedModel_modelId",
+                table: "PositionedModel",
+                column: "modelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PositionedModel_SceneId",
+                table: "PositionedModel",
+                column: "SceneId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_scenes_clientId",
                 table: "scenes",
                 column: "clientId");
@@ -159,6 +193,9 @@ namespace Interface.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "PositionedModel");
+
             migrationBuilder.DropTable(
                 name: "models");
 
