@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Interface.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230611092843_primera")]
+    [Migration("20230611222933_primera")]
     partial class primera
     {
         /// <inheritdoc />
@@ -145,19 +145,19 @@ namespace Interface.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("SceneId")
+                    b.Property<int>("modelId")
                         .HasColumnType("int");
 
-                    b.Property<int>("modelId")
+                    b.Property<int>("sceneId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SceneId");
-
                     b.HasIndex("modelId");
 
-                    b.ToTable("PositionedModel");
+                    b.HasIndex("sceneId");
+
+                    b.ToTable("positionedModels");
                 });
 
             modelBuilder.Entity("Domain.Scene", b =>
@@ -259,17 +259,21 @@ namespace Interface.Migrations
 
             modelBuilder.Entity("Domain.PositionedModel", b =>
                 {
-                    b.HasOne("Domain.Scene", null)
-                        .WithMany("positionedModels")
-                        .HasForeignKey("SceneId");
-
                     b.HasOne("Domain.Model", "model")
                         .WithMany()
                         .HasForeignKey("modelId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Scene", "scene")
+                        .WithMany("positionedModels")
+                        .HasForeignKey("sceneId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("model");
+
+                    b.Navigation("scene");
                 });
 
             modelBuilder.Entity("Domain.Scene", b =>

@@ -11,6 +11,7 @@ namespace Domain
 		public int Id { get; set; }
 		public Model model { get; set; }
 		public Coordinate position { get; set; }
+		public Scene scene { get; set; }
 
 		public override string ToString()
 		{

@@ -71,6 +71,8 @@
 	protected override void OnInitialized()
 	{
 		sceneRepository = new SceneRepository(sessionManager, applicationContext);
+		listScene = sceneRepository.GetScenes();
+		listScene.Sort();
 	}
 
 	void ShowSceneCreation()

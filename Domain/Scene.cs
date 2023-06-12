@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Exceptions;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Domain
 {
@@ -106,11 +107,6 @@ namespace Domain
 			lastModified = DateTime.Now;
 		}
 
-		public void Render()
-		{
-			lastRendered = DateTime.Now;
-
-		}
 
 		public bool VerifyCoordinate(float x, float y, float z)
 		{
