@@ -22,8 +22,6 @@ namespace Interface.BusinessLogic
 
 		public void CreateMaterial(string selectedMaterial, string name, Color color, double valueMetalic)
 		{
-
-
 			Material newMaterial = Material.createMaterial(selectedMaterial, name, color, valueMetalic);
 			newMaterial.client = logged;
 			addMaterial(newMaterial);
