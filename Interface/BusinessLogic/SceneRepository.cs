@@ -31,7 +31,7 @@ namespace Interface.BusinessLogic
 
 		public List<PositionedModel> GetPositionedModels(Scene scene)
 		{
-			return _dbContext.positionedModels.Where(pm => pm.scene.Id == scene.Id).Include(pm => pm.position).ToList();
+			return _dbContext.positionedModels.Where(pm => pm.scene.Id == scene.Id).ToList();
 		}
 
 		public Scene GetSceneByName(string name)

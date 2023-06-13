@@ -52,7 +52,12 @@ public class ApplicationContext : DbContext
 			.OnDelete(DeleteBehavior.NoAction);
 
 
-		modelBuilder.Entity<PositionedModel>().Ignore(p => p.position);
+		modelBuilder.Entity<PositionedModel>()
+			.Property(pm => pm.position)
+			.HasConversion(
+			p => $"{p.x},{p.y},{p.z}",
+			p => new Coordinate(p)
+			);
 
 		modelBuilder.Entity<Material>()
 			.HasDiscriminator<string>("Type")

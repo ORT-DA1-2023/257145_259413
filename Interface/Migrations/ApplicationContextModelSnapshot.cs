@@ -145,6 +145,10 @@ namespace Interface.Migrations
                     b.Property<int>("modelId")
                         .HasColumnType("int");
 
+                    b.Property<string>("position")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("sceneId")
                         .HasColumnType("int");
 

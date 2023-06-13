@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Interface.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230611222933_primera")]
+    [Migration("20230613004000_primera")]
     partial class primera
     {
         /// <inheritdoc />
@@ -147,6 +147,10 @@ namespace Interface.Migrations
 
                     b.Property<int>("modelId")
                         .HasColumnType("int");
+
+                    b.Property<string>("position")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("sceneId")
                         .HasColumnType("int");
