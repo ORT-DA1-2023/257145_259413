@@ -2,6 +2,7 @@
 using Exceptions;
 using Interface.DataAccess;
 using Interface.Pages.Model;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Interface.BusinessLogic
@@ -32,7 +33,7 @@ namespace Interface.BusinessLogic
 
         public List<Model> GetModels()
         {
-            return _dbContext.models.Where(m => m.client.Id == _logged.Id).ToList();
+            return _dbContext.models.Where(m => m.client.Id == _logged.Id).Include(m => m.figure).Include(m => m.material).ToList();
         }
 
         public void Delete(Model model)

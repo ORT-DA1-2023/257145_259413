@@ -50,11 +50,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (PositionedModel positionedModel in scene.GetPositionedModels())
+			@foreach (PositionedModel positionedModel in positionedModels)
 			{
 				<tr>
 					<td>@positionedModel.ToString()</td>
-					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => scene.deletePositionedModel(positionedModel))">Eliminar</button></td>
+					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => positionedModelRepository.Delete(positionedModel))">Eliminar</button></td>
 
 				</tr>
 			}
@@ -144,7 +144,7 @@
 
 	<button @onclick="DownloadFile">Guarda tu Escena</button>
 
-	<Select @bind="formatoSeleccionado" >
+	<select @bind="formatoSeleccionado" >
 
 		<option values= ".png">PNG</option>
 		<option values=".jpg">JPG</option>	
@@ -164,6 +164,7 @@
 
 	private ModelRepository modelRepository;
 	private SceneRepository sceneRepository;
+	private PositionedModelRepository positionedModelRepository;
 
 	private bool isDifuminated = false;
 
@@ -195,6 +196,7 @@
 	private Model selectedModel;
 	private Render render;
 
+	private List<PositionedModel> positionedModels;
 
 	private string formatoSeleccionado;
 
@@ -202,23 +204,22 @@
 	{
 		sceneRepository = new SceneRepository(sessionManager, applicationContext);
 		modelRepository = new ModelRepository(sessionManager, applicationContext);
+		positionedModelRepository = new PositionedModelRepository(sessionManager, applicationContext);
 		scene = sceneRepository.GetSceneByName(name);
+		positionedModels = sceneRepository.GetPositionedModels(scene);
 	}
 
 	public async Task<Stream> DownloadFile()
 	{
-		// Generate or retrieve the file as a Stream
 		Stream fileStream = render.ConvertImageToStream();
 
 		string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", sessionManager.CurrentUser.name, scene.name,".png");
+		await JSRuntime.InvokeVoidAsync("downloadFile", path);
 
-       // Call the DownloadFile method in JavaScript and pass the file download URL
-       await JSRuntime.InvokeVoidAsync("downloadFile", path);
+		return fileStream;
+	}
 
-       return fileStream;
-   }
 
-  
 
 
 
@@ -242,11 +243,11 @@
 
 		if (coordinates.VerifyCoordinate(coordinateX, coordinateY, coordinateZ))
 		{
-			Coordinate coordinateCreate = new Coordinate(coordinateX, coordinateY, coordinateZ);
+			coordinates.x = coordinateX;
+			coordinates.y = coordinateY;
+			coordinates.z = coordinateZ;
+			positionedModelRepository.Create(scene, selectedModel, coordinates);
 
-			//PositionedModel PositionedModel = new PositionedModel(selectedModel, coordinateCreate);
-
-			//scene.addPositionedModel(PositionedModel);
 
 		}
 		coordinateX = 0;
@@ -266,23 +267,8 @@
 		Coordinate lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
 		try
 		{
-			scene.VerifyFoV(fov);
-			
-			if (isDifuminated)
-			{
-				scene.VerifyAperture(aperture);
-				render = new Render(scene, lookFrom, lookAt, fov, aperture);
-			}
-			else
-			{
-				render = new Render(scene, lookFrom, lookAt, fov);
-			}
-			render.RenderScene(sessionManager.CurrentUser.name);
-			scene.Render();
+			sceneRepository.Render(scene, fov, isDifuminated, lookFrom, lookAt, aperture);
 			NavigationManager.NavigateTo("/scene/" + name, true);
-
-
-
 		}
 		catch (FovOutOfBoundException e)
 		{

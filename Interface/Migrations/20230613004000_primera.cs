@@ -125,28 +125,29 @@ namespace Interface.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PositionedModel",
+                name: "positionedModels",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     modelId = table.Column<int>(type: "int", nullable: false),
-                    SceneId = table.Column<int>(type: "int", nullable: true)
+                    position = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    sceneId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PositionedModel", x => x.Id);
+                    table.PrimaryKey("PK_positionedModels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PositionedModel_models_modelId",
+                        name: "FK_positionedModels_models_modelId",
                         column: x => x.modelId,
                         principalTable: "models",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_positionedModels_scenes_sceneId",
+                        column: x => x.sceneId,
+                        principalTable: "scenes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PositionedModel_scenes_SceneId",
-                        column: x => x.SceneId,
-                        principalTable: "scenes",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -175,14 +176,14 @@ namespace Interface.Migrations
                 column: "materialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PositionedModel_modelId",
-                table: "PositionedModel",
+                name: "IX_positionedModels_modelId",
+                table: "positionedModels",
                 column: "modelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PositionedModel_SceneId",
-                table: "PositionedModel",
-                column: "SceneId");
+                name: "IX_positionedModels_sceneId",
+                table: "positionedModels",
+                column: "sceneId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_scenes_clientId",
@@ -194,7 +195,7 @@ namespace Interface.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PositionedModel");
+                name: "positionedModels");
 
             migrationBuilder.DropTable(
                 name: "models");

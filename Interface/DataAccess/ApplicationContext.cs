@@ -16,6 +16,7 @@ public class ApplicationContext : DbContext
 
 	public DbSet<Model> models { get; set; }
 
+	public DbSet<PositionedModel> positionedModels { get; set; }
 
 	public DbSet<Scene> scenes { get; set; }
 
@@ -44,8 +45,19 @@ public class ApplicationContext : DbContext
 			.IsRequired()
 			.OnDelete(DeleteBehavior.NoAction);
 
+		modelBuilder.Entity<PositionedModel>()
+			.HasOne(pm => pm.model)
+			.WithMany()
+			.IsRequired()
+			.OnDelete(DeleteBehavior.NoAction);
 
-		modelBuilder.Entity<PositionedModel>().Ignore(p => p.position);
+
+		modelBuilder.Entity<PositionedModel>()
+			.Property(pm => pm.position)
+			.HasConversion(
+			p => $"{p.x},{p.y},{p.z}",
+			p => new Coordinate(p)
+			);
 
 		modelBuilder.Entity<Material>()
 			.HasDiscriminator<string>("Type")

@@ -1,7 +1,10 @@
 ﻿using Domain;
 using Interface.DataAccess;
 using Exceptions;
+using Engine;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Interface.BusinessLogic
 {
@@ -24,6 +27,11 @@ namespace Interface.BusinessLogic
 		public List<Scene> GetScenes()
 		{
 			return _dbContext.scenes.Where(s => s.client.Id == _logged.Id).ToList();
+		}
+
+		public List<PositionedModel> GetPositionedModels(Scene scene)
+		{
+			return _dbContext.positionedModels.Where(pm => pm.scene.Id == scene.Id).ToList();
 		}
 
 		public Scene GetSceneByName(string name)
@@ -56,6 +64,25 @@ namespace Interface.BusinessLogic
 			}
 			_dbContext.scenes.Add(scene);
 			_dbContext.SaveChanges();
+		}
+
+		public void Render(Scene scene, int fov, bool isDifuminated, Coordinate lookFrom, Coordinate lookAt, double aperture)
+		{
+			Render render;
+			if (scene.VerifyFoV(fov))
+			{
+				if (isDifuminated)
+				{
+					scene.VerifyAperture(aperture);
+					render = new Render(scene, lookFrom, lookAt, fov, aperture);
+				}
+				else
+				{
+					render = new Render(scene, lookFrom, lookAt, fov);
+				}
+				scene.lastRendered = DateTime.Now;
+				render.RenderScene(_logged.name);
+			}
 		}
 
 		public void Delete(Scene scene)
