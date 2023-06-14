@@ -10,26 +10,19 @@ namespace Domain
 	public class MetalicMaterial : Material
 	{
 
-		public MetalicMaterial()
+
+        public double blurred { get; set; }
+
+
+		public MetalicMaterial(string name, Color color, double blurred) : base(name, color)
 		{
+			this.blurred = blurred;
 		}
-
-
-
-		public MetalicMaterial(string name, Color color, double blurred) : base(name, color, blurred)
-		{
-			this.type = "Metallic";
-		}
-
-
 
 		public override string ToString()
 		{
 			return "R: " + color.R + " G: " + color.G + " B: " + color.B;
 		}
-
-
-
 
 	}
 }

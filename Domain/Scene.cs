@@ -6,45 +6,70 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Exceptions;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Domain
 {
 	public class Scene : IComparable<Scene>
 	{
-		private List<PositionedModel> _positionedModels;
-
-		public DateTime lastModified;
-		public DateTime lastRendered;
-		public DateTime created;
+		public int Id { get; set; }
 
 		public string name { get; set; }
-		public int FieldOfVision { get; set; }
+
+		public virtual ICollection<PositionedModel> positionedModels { get; set; }
+
+		public DateTime lastModified { get; set; }
+		public DateTime lastRendered { get; set; }
+		public DateTime created { get; set; }
+
+		public Coordinate lookFrom { get; set; }
+
+		public Coordinate lookAt { get; set; }
+
+		public int fieldOfView { get; set; }
+
+		public double aperture { get; set; }
+
+		public Client client { get; set; }
 
 		public Scene()
 		{
-			this._positionedModels = new List<PositionedModel>();
-			this.FieldOfVision = 30;
+			this.positionedModels = new List<PositionedModel>();
 			this.created = DateTime.Now;
 			this.lastModified = this.created;
-
-
 		}
 
-		public Scene(string name)
+		public Scene(string name) : this()
 		{
 			this.name = name;
-			this._positionedModels = new List<PositionedModel>();
-			this.FieldOfVision = 30;
-			this.created = DateTime.Now;
-			this.lastModified = this.created;
+			this.fieldOfView = 30;
+			this.aperture = 0;
+			this.lookFrom = new Coordinate(0, 0, 0);
+			this.lookAt = new Coordinate(0, 0, 0);
 		}
 
-		public List<PositionedModel> GetPositionedModels()
+		public ICollection<PositionedModel> GetPositionedModels()
 		{
-			return this._positionedModels;
+			return this.positionedModels;
 		}
 
+		public bool MatchingName(string name)
+		{
 
+
+			if (name.Length != this.name.Length)
+			{
+				return false;
+			}
+			for (int i = 0; i < name.Length; i++)
+			{
+				if (name[i] != this.name[i])
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 
 		public bool VerifyName(string name)
 		{
@@ -77,25 +102,13 @@ namespace Domain
 
 		public bool VerifyPositionedModels()
 		{
-			return _positionedModels.Count >= 0;
+			return positionedModels.Count >= 0;
 		}
 
 		public void addPositionedModel(PositionedModel positionedModel)
 		{
-			_positionedModels.Add(positionedModel);
+			positionedModels.Add(positionedModel);
 			lastModified = DateTime.Now;
-		}
-
-		public void deletePositionedModel(PositionedModel positionedModel)
-		{
-			_positionedModels.Remove(positionedModel);
-			lastModified = DateTime.Now;
-		}
-
-		public void Render()
-		{
-			lastRendered = DateTime.Now;
-
 		}
 
 		public bool VerifyCoordinate(float x, float y, float z)
@@ -109,7 +122,7 @@ namespace Domain
 
 		public bool ModelIsPositioned(Model model)
 		{
-			foreach (PositionedModel positionedModel in _positionedModels)
+			foreach (PositionedModel positionedModel in positionedModels)
 			{
 				if (positionedModel.model == model)
 				{
@@ -118,7 +131,7 @@ namespace Domain
 			}
 			return false;
 		}
-		//REFACTORING
+
 		public bool VerifyCoordinateValuesLens(Object coordinate)
 		{
 			return coordinate.GetType() == typeof(float);

@@ -1,10 +1,14 @@
 ﻿@page "/scene/{name}"
-@using BusinessLogic;
+@using Interface.BusinessLogic;
+@using Interface.DataAccess;
 @using Domain;
 @using Engine;
 @using Exceptions;
-@inject Manager manager;
+@using Microsoft.JSInterop
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 @inject NavigationManager NavigationManager;
+@inject IJSRuntime JSRuntime;
 
 
 <h3>Scene:  @name</h3>
@@ -14,7 +18,7 @@
 	<label for="name">Modelos Disponibles:</label>
 
 	<ul>
-		@foreach (var model in manager.GetModels())
+		@foreach (var model in modelRepository.GetModels())
 		{
 			<button type="button" class="btn btn-success btn-sm" @onclick="(() => SelectedModel(model))">@model.name</button>
 		}
@@ -46,11 +50,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (PositionedModel positionedModel in scene.GetPositionedModels())
+			@foreach (PositionedModel positionedModel in positionedModels)
 			{
 				<tr>
 					<td>@positionedModel.ToString()</td>
-					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => scene.deletePositionedModel(positionedModel))">Eliminar</button></td>
+					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => positionedModelRepository.Delete(positionedModel))">Eliminar</button></td>
 
 				</tr>
 			}
@@ -123,10 +127,14 @@
 
 <div class="form-group">
 	<label for="name">Preview:</label>
-	<img src="@String.Concat("images/",manager.logged.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
+	<img src="@String.Concat("images/",sessionManager.CurrentUser.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
 
 	<p class="text-start">Último renderizado: @scene.lastRendered</p>
-	@if (scene.lastRendered < scene.lastModified)
+	@if (scene.lastRendered < scene.lastModified ||
+		 !lookFrom.Equals(new Coordinate(LookFromX, LookFromY, LookFromZ)) ||
+		 !lookAt.Equals(new Coordinate(LookAtX, LookAtY, LookAtZ)) ||
+		 fov != scene.fieldOfView ||
+		 aperture != scene.aperture)
 	{
 		<div class="alert alert-warning" role="alert">
 			<i class="fa-solid fa-triangle-exclamation">Imagen desactualizada</i>
@@ -138,13 +146,29 @@
 
 
 
-	<button @onclick="savePicture">Guarda tu Escena</button>
+	<button @onclick="DownloadFile">Guarda tu Escena</button>
+
+	<select @bind="formatoSeleccionado" >
+
+		<option values= ".png">PNG</option>
+		<option values=".jpg">JPG</option>	
+		<option values=".ppm">PPM</option>
+
+	</select>
+
+
+	
+
 
 
 </div>
 
 
 @code {
+
+	private ModelRepository modelRepository;
+	private SceneRepository sceneRepository;
+	private PositionedModelRepository positionedModelRepository;
 
 	private bool isDifuminated = false;
 
@@ -164,6 +188,9 @@
 	private double LookAtY = 2;
 	private double LookAtZ = 5;
 
+	private Coordinate lookFrom;
+	private Coordinate lookAt;
+
 
 	private int fov = 30;
 
@@ -173,8 +200,53 @@
 	private string invalidFov = "";
 	private bool showButton = false;
 
-
 	private Model selectedModel;
+	private Render render;
+
+	private List<PositionedModel> positionedModels;
+
+	private string formatoSeleccionado;
+
+	protected override void OnInitialized()
+	{
+		sceneRepository = new SceneRepository(sessionManager, applicationContext);
+		modelRepository = new ModelRepository(sessionManager, applicationContext);
+		positionedModelRepository = new PositionedModelRepository(sessionManager, applicationContext);
+		scene = sceneRepository.GetSceneByName(name);
+		positionedModels = sceneRepository.GetPositionedModels(scene);
+
+		if (scene.lastModified != scene.created)
+		{
+			LookFromX = scene.lookFrom.x;
+            LookFromY = scene.lookFrom.y;
+            LookFromZ = scene.lookFrom.z;
+			LookAtX = scene.lookAt.x;
+            LookAtY = scene.lookAt.y;
+            LookAtZ = scene.lookAt.z;
+			fov = scene.fieldOfView;
+			aperture = scene.aperture;
+			lookFrom = new Coordinate(LookFromX, LookFromY, LookFromZ);
+			lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
+		}
+	}
+
+	public async Task<Stream> DownloadFile()
+	{
+		Stream fileStream = render.ConvertImageToStream();
+
+		string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", sessionManager.CurrentUser.name, scene.name,".png");
+		await JSRuntime.InvokeVoidAsync("downloadFile", path);
+
+		return fileStream;
+	}
+
+
+
+
+
+
+
+
 
 	private void SelectedModel(Model modelo)
 	{
@@ -192,11 +264,11 @@
 
 		if (coordinates.VerifyCoordinate(coordinateX, coordinateY, coordinateZ))
 		{
-			Coordinate coordinateCreate = new Coordinate(coordinateX, coordinateY, coordinateZ);
+			coordinates.x = coordinateX;
+			coordinates.y = coordinateY;
+			coordinates.z = coordinateZ;
+			positionedModelRepository.Create(scene, selectedModel, coordinates);
 
-			PositionedModel PositionedModel = new PositionedModel(selectedModel, coordinateCreate);
-
-			scene.addPositionedModel(PositionedModel);
 
 		}
 		coordinateX = 0;
@@ -216,23 +288,8 @@
 		Coordinate lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
 		try
 		{
-			scene.VerifyFoV(fov);
-			Render render;
-			if (isDifuminated)
-			{
-				scene.VerifyAperture(aperture);
-				render = new Render(scene, lookFrom, lookAt, fov, aperture);
-			}
-			else
-			{
-				render = new Render(scene, lookFrom, lookAt, fov);
-			}
-			render.RenderScene(manager.logged.name);
-			scene.Render();
+			sceneRepository.Render(scene, fov, isDifuminated, lookFrom, lookAt, aperture);
 			NavigationManager.NavigateTo("/scene/" + name, true);
-
-
-
 		}
 		catch (FovOutOfBoundException e)
 		{
@@ -249,18 +306,12 @@
 
 	}
 
-	private void savePicture()
-	{
 
-	}
 
 
 
 	[Parameter]
 	public string name { get; set; }
 	private Scene scene;
-	protected override void OnInitialized()
-	{
-		scene = manager.GetScenebyName(name);
-	}
+	
 }

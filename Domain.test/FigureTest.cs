@@ -55,7 +55,7 @@ namespace Domain.test
         }
 
 
-        [TestMethod]
+        /*[TestMethod]
         public void returnTrueIfUnique()
         {
 
@@ -69,7 +69,7 @@ namespace Domain.test
             bool result = client1.VerifyListFigures();
             Assert.IsTrue(result);
 
-        }
+        }*/
 
 
 

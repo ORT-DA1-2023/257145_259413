@@ -1,6 +1,9 @@
-﻿@using BusinessLogic;
+﻿@using Interface.BusinessLogic;
 @using Domain;
-@inject Manager manager;
+@using Interface.DataAccess;
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
+
 @page "/material/list";
 
 <h3>MaterialList</h3>
@@ -19,7 +22,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var material in manager.GetMaterials())
+        @foreach (var material in materialRepository.GetMaterials())
         {
             <tr style="width: 100px; height: 100px; ">
                
@@ -78,13 +81,15 @@
 
     private bool linkedMaterial = false;
     private string exceptionMessage = "";
+    private MaterialRepository materialRepository;
 
-private void DeleteMaterial(Material material)
+
+    private void DeleteMaterial(Material material)
     {
         try
         {
             linkedMaterial = false;
-            manager.DeleteMaterial(material);
+            materialRepository.DeleteMaterial(material);
         }
         catch (InvalidOperationException ex)
         {
@@ -92,5 +97,17 @@ private void DeleteMaterial(Material material)
             exceptionMessage = ex.Message;
         }
     }
+
+
+    protected override void OnInitialized()
+    {
+        materialRepository = new MaterialRepository(sessionManager, applicationContext);
+
+
+
+    }
+
+
+
 
 }

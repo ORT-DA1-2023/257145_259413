@@ -1,7 +1,9 @@
-﻿@using BusinessLogic;
+﻿@using Interface.BusinessLogic;
 @using Domain;
 @using Engine;
-@inject Manager manager;
+@using Interface.DataAccess;
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 @inject NavigationManager NavigationManager; 
 @page "/model";
 
@@ -20,7 +22,7 @@
 
 <select class="form-control" id="Figures" @onchange="figureSelection">
     <option disabled selected value= "">Selecciona la figura</option>
-    @foreach (var figure in manager.GetFigures())
+        @foreach (var figure in figureRepository.GetFigures())
     {
         <option value="@figure.name">@figure.name</option>
     }
@@ -29,7 +31,7 @@
 <label for="Material">Materiales</label>
 <select class="form-control" id="Material" @onchange="materialSelection">
     <option  disabled selected value="">Selecciona el material</option>
-    @foreach(var material in manager.GetMaterials())
+    @foreach (var material in materialRepository.GetMaterials())
     {
         <option value="@material.name">@material.name</option>
     }
@@ -71,36 +73,41 @@
     private string selectedFigure;
     private Figure figure;
     private bool isChecked = false;
-    private string successMessage;
+    private string successMessage; 
+    private FigureRepository figureRepository;
+    private MaterialRepository materialRepository;
+    private ClientRepository clientRepository;
+    private ModelRepository modelRepository;
 
-    Model model = new Model();
+    Model model = new Model("");
 
     void figureSelection(ChangeEventArgs e)
     {
         selectedFigure = e.Value.ToString();
-        figure = manager.MatchingFigure(selectedFigure);
+        figure = figureRepository.MatchingFigure(selectedFigure);
     }
 
     void materialSelection(ChangeEventArgs e)
     {
         selectedMaterial = e.Value.ToString();
-        material = manager.MatchingMaterial(selectedMaterial);
+        material = materialRepository.MatchingMaterial(selectedMaterial);
     }
 
     void CreateModel()
     {
+        errorMessage = "";
         try
         {
             if (model.VerifyName(name) && !String.IsNullOrEmpty(selectedMaterial) && !String.IsNullOrEmpty(selectedFigure))
             {
-                model = new Model(name, figure, material);
-                manager.addModel(model);
+                modelRepository.CreateModel(name, figure, material);
                 successMessage = "Creación Exitosa";
 
 
                 if (isChecked)
                 {
-                    CreatePreview();
+                    Model toPreview = modelRepository.Find(name);
+                    Render.CreatePreview(toPreview, sessionManager.CurrentUser.name);
                 }
                 name = "";
                 NavigationManager.NavigateTo("/model", true);
@@ -117,28 +124,17 @@
         }
     }
 
-    private void CreatePreview()
-    {
-        Scene scene = new Scene("model_" + name);
-
-        Material floorColor = new LambertianoMaterial("floor", System.Drawing.Color.White);
-        Figure floor = new Figure("floor", 1000);
-        Model earth = new Model("earth", floor, floorColor);
-        Coordinate position = new Coordinate(0, -999, 5);
-        scene.addPositionedModel(new PositionedModel(earth, position));
-
-        Figure test = new Figure("test", 1);
-        Model temp = new Model("object", test, material);
-        position = new Coordinate(0, 2, 5);
-        scene.addPositionedModel(new PositionedModel(temp, position));
-
-        Render render = new Render(scene, 150, 100, 30, 20);
-        render.RenderScene(manager.logged.name);
-    }
-
     private void SeeModel()
     {
         NavigationManager.NavigateTo("/model/list");
+    }
+
+    protected override void OnInitialized()
+    {
+        figureRepository = new FigureRepository(sessionManager, applicationContext);
+        modelRepository = new ModelRepository(sessionManager, applicationContext);
+        materialRepository= new MaterialRepository(sessionManager, applicationContext);
+        clientRepository = new ClientRepository(applicationContext, sessionManager);
     }
 
 

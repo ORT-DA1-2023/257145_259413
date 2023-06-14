@@ -1,10 +1,12 @@
 ﻿@page "/material"
 @using Domain;
-@using BusinessLogic;
+@using Interface.BusinessLogic;
 @using System.Globalization;
 @using System.Drawing;
+@using Interface.DataAccess;
 @inject NavigationManager NavigationManager
-@inject Manager manager;
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 
 <h1>Crea tu material</h1>
 
@@ -63,15 +65,14 @@
     <select @onchange="HandleSelection">
         <option value="">Selecciona el tipo de material</option>
         <option value="lambertiano">Lambertiano</option>
-        <option value="Metálico">Metálico</option> <!-- AGREGUE ESTO-->
+        <option value="Metálico">Metálico</option>
     </select>
 }
-<!-- AGREGUE ESTO-->
 @if (selectedMaterial == "Metálico")
 {
 
     <input type="number" class="form-control" @bind="@valueMetalic" placeholder="Difuminado">
-    <p>Difuminado entre 0-255</p>
+    <p>Difuminado mayor a 0.0</p>
 }
 
     @if (!string.IsNullOrEmpty(successMessage))
@@ -104,7 +105,8 @@
     private string nameError ="";
     private string successMessage;
     private double valueMetalic;
-    private bool useBlurred=false;
+    private MaterialRepository materialRepository;  
+
 
     bool showDropdown = false;
     string selectedMaterial = "";
@@ -121,7 +123,34 @@
     }
 
 
-    Material material= new LambertianoMaterial();  
+    
+
+    void CreateMaterial()
+    {
+        Material material2 = new Material();
+        successMessage = "";
+
+        bool isMaterialSelected = !string.IsNullOrEmpty(selectedMaterial);
+        bool isColorValid = material2.VerifyColor(red, green, blue);
+        bool isNameValid = material2.VerifyName(name);
+        bool isMetalicBlurred = material2.VerifyBlurred(valueMetalic);
+
+        if (isNameValid && isColorValid && isMaterialSelected && isMetalicBlurred)
+        {
+
+            color = Color.FromArgb(red, green, blue);
+            materialRepository.CreateMaterial(selectedMaterial, name, color, valueMetalic);
+            reset();
+        }
+        else
+        {
+            errorMessage = " Nombre  o  color incorrecto o material no seleccionado";
+        }
+    }
+
+
+    Material material = new LambertianoMaterial();
+
     private void ValidateName(ChangeEventArgs e)
     {
         name = (string)e.Value;
@@ -135,35 +164,6 @@
         nameError = string.Empty;
     }
 
-    void CreateMaterial()
-    {
-
-        successMessage = "";
-
-        bool isMetalicBlurred = selectedMaterial == "Metálico" && material.VeryfyBlurred(valueMetalic);
-        bool isMaterialSelected = !string.IsNullOrEmpty(selectedMaterial);
-        bool isColorValid = material.VerifyColor(red, green, blue);
-        bool isNameValid = material.VerifyName(name);
-
-
-        if ((isNameValid && isColorValid && isMaterialSelected) || isMetalicBlurred)
-        {
-
-            color = Color.FromArgb(red, green, blue);
-
-            Material newMateiral = Material.createMaterial(selectedMaterial,name, color, valueMetalic);
-            manager.addMaterial(newMateiral);
-            
-      
-            reset();
-        }
-        else
-        {
-            errorMessage = " Nombre  o  color incorrecto o material no seleccionado";
-        }
-
-
-    }
 
     void SeeMaterial()
     {
@@ -180,6 +180,13 @@
         valueMetalic = 0;
         errorMessage = "";
         NavigationManager.NavigateTo("/material", forceLoad: true);
+    }
+
+
+    protected override void OnInitialized()
+    {
+        materialRepository = new MaterialRepository(sessionManager, applicationContext);
+
     }
 
 

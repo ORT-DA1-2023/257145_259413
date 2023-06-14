@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -10,13 +10,16 @@ namespace Domain
     public class Figure
     {
 
+        public int Id { get; set; }
+        public string name { get; set; }
+        public double radius { get; set; }
+        public Client client { get; set; }
 
-        public string name;
-        public double radius;
 
         public Figure()
         {
-
+            this.name = "";
+            this.radius = 0;
         }
 
         public Figure( string name, double radius)
