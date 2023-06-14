@@ -8,7 +8,7 @@ using Interface.DataAccess;
 namespace BusinessLogic.test
 {
 	[TestClass]
-	public class ClientTest
+	public class ClientsTest
 	{
 		private ClientRepository clientRepository;
 		private SessionManager sessionManager;
