@@ -58,7 +58,7 @@
 			{
 				<tr>
 					<td>@positionedModel.ToString()</td>
-					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => positionedModelRepository.Delete(positionedModel))">Eliminar</button></td>
+					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => Delete(positionedModel))">Eliminar</button></td>
 
 				</tr>
 			}
@@ -236,7 +236,12 @@
 		}
 	}
 
-	
+	private void Delete(PositionedModel positionedModel)
+	{
+		positionedModelRepository.Delete(positionedModel);
+		positionedModels = sceneRepository.GetPositionedModels(scene);
+	}
+
 	public async Task DownloadFile()
 	{
 		string path = Render.GetPath(formatoSeleccionado, sessionManager.CurrentUser.name,scene.name);
@@ -275,6 +280,7 @@
 		coordinateZ = 0;
 
 		showForm = false;
+		positionedModels = sceneRepository.GetPositionedModels(scene);
 
 	}
 

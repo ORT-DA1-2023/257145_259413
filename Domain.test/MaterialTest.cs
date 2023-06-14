@@ -23,18 +23,6 @@ namespace Domain.test
 			Assert.IsFalse(result);
 		}
 
-		/*[TestMethod]
-        public void ReturnsTrueIfUnique()
-        {
-            Client client = new Client();
-            Material material1 = new Material("mat1", Color.FromArgb(1,2,3));
-            Material material2 = new Material("mat1", Color.FromArgb(1, 2, 3));
-            client.AddMaterial(material1);
-            client.AddMaterial(material2);
-            bool result = client.VerifyMaterials();
-            Assert.IsTrue(result);
-        }*/
-
 		[TestMethod]
 		public void ReturnsFalseIfColorCodeUnderZero()
 		{

@@ -18,8 +18,8 @@ string connectionStringIgnacio = "Data Source=LAPTOP-3R9PVFHT;Initial Catalog=Ba
 string connectionStringPablo = "Data Source=DESKTOP-G58UOLC;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
 string connectingStringPabloLaptop = "Data Source=DESKTOP-LGG3KAV;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
 
-string connectionString = connectionStringIgnacio;
-//string connectionString = connectionStringPablo;
+//string connectionString = connectionStringIgnacio;
+string connectionString = connectionStringPablo;
 //string connectionString = connectingStringPabloLaptop;
 
 builder.Services.AddDbContextFactory<ApplicationContext>(
@@ -36,9 +36,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+	app.UseExceptionHandler("/Error");
+	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();

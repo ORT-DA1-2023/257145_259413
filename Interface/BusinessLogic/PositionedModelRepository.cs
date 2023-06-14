@@ -33,7 +33,8 @@ namespace Interface.BusinessLogic
 
 		public void Delete(PositionedModel positionedModel)
 		{
-			_dbContext.PositionedModels.Remove(positionedModel);
+			PositionedModel toRemove = Find(positionedModel.Id);
+			_dbContext.PositionedModels.Remove(toRemove);
 			_dbContext.SaveChanges();
 		}
 
