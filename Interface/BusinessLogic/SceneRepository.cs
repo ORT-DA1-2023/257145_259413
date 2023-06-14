@@ -5,6 +5,8 @@ using Engine;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Interface.BusinessLogic
 {
@@ -66,28 +68,32 @@ namespace Interface.BusinessLogic
 			_dbContext.SaveChanges();
 		}
 
-		public void Render(Scene scene, int fov, bool isDifuminated, Coordinate lookFrom, Coordinate lookAt, double aperture)
+		public Image<Rgba32> Render(Scene scene, int fov, bool isDifuminated, Coordinate lookFrom, Coordinate lookAt, double aperture)
+
 		{
+
 			Render render;
-			if (scene.VerifyFoV(fov))
+			scene.VerifyFoV(fov);
+			scene.lookAt = lookAt;
+			scene.lookFrom = lookFrom;
+			scene.fieldOfView = fov;
+			scene.aperture = aperture;
+			if (isDifuminated)
 			{
-				scene.lookAt = lookAt;
-				scene.lookFrom = lookFrom;
-				scene.fieldOfView = fov;
-				scene.aperture = aperture;
-				if (isDifuminated)
-				{
-					scene.VerifyAperture(aperture);
-					render = new Render(scene, lookFrom, lookAt, fov, aperture);
-				}
-				else
-				{
-					render = new Render(scene, lookFrom, lookAt, fov);
-				}
-				scene.lastRendered = DateTime.Now;
-				render.RenderScene(_logged.name);
-				_dbContext.SaveChanges();
+				scene.VerifyAperture(aperture);
+				render = new Render(scene, lookFrom, lookAt, fov, aperture);
 			}
+			else
+			{
+				render = new Render(scene, lookFrom, lookAt, fov);
+			}
+			scene.lastRendered = DateTime.Now;
+			render.RenderScene(_logged.name);
+
+
+			_dbContext.SaveChanges();
+			return render.GetImage();
+		
 		}
 
 		public void Delete(Scene scene)

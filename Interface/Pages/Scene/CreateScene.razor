@@ -5,6 +5,10 @@
 @using Engine;
 @using Exceptions;
 @using Microsoft.JSInterop
+@using SixLabors.ImageSharp;
+@using SixLabors.ImageSharp.PixelFormats;
+
+
 @inject SessionManager sessionManager;
 @inject ApplicationContext applicationContext;
 @inject NavigationManager NavigationManager;
@@ -202,10 +206,12 @@
 
 	private Model selectedModel;
 	private Render render;
+	private Image<Rgba32> image;
+
 
 	private List<PositionedModel> positionedModels;
 
-	private string formatoSeleccionado;
+	private string formatoSeleccionado= "PNG";
 
 	protected override void OnInitialized()
 	{
@@ -218,11 +224,11 @@
 		if (scene.lastModified != scene.created)
 		{
 			LookFromX = scene.lookFrom.x;
-            LookFromY = scene.lookFrom.y;
-            LookFromZ = scene.lookFrom.z;
+			LookFromY = scene.lookFrom.y;
+			LookFromZ = scene.lookFrom.z;
 			LookAtX = scene.lookAt.x;
-            LookAtY = scene.lookAt.y;
-            LookAtZ = scene.lookAt.z;
+			LookAtY = scene.lookAt.y;
+			LookAtZ = scene.lookAt.z;
 			fov = scene.fieldOfView;
 			aperture = scene.aperture;
 			lookFrom = new Coordinate(LookFromX, LookFromY, LookFromZ);
@@ -230,22 +236,15 @@
 		}
 	}
 
-	public async Task<Stream> DownloadFile()
+	
+	public async Task DownloadFile()
 	{
-		Stream fileStream = render.ConvertImageToStream();
+		string path = Render.GetPath(formatoSeleccionado, sessionManager.CurrentUser.name,scene.name);
+		
+		await JSRuntime.InvokeVoidAsync("window.downloadFile", path);
 
-		string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", sessionManager.CurrentUser.name, scene.name,".png");
-		await JSRuntime.InvokeVoidAsync("downloadFile", path);
-
-		return fileStream;
+		
 	}
-
-
-
-
-
-
-
 
 
 	private void SelectedModel(Model modelo)
@@ -288,7 +287,7 @@
 		Coordinate lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
 		try
 		{
-			sceneRepository.Render(scene, fov, isDifuminated, lookFrom, lookAt, aperture);
+			image= sceneRepository.Render(scene, fov, isDifuminated, lookFrom, lookAt, aperture);
 			NavigationManager.NavigateTo("/scene/" + name, true);
 		}
 		catch (FovOutOfBoundException e)

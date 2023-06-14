@@ -11,6 +11,8 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 
+
+
 namespace Engine
 {
 	public class Render
@@ -125,25 +127,57 @@ namespace Engine
 		{
 
 			var imagePath = Path.Combine("wwwroot", "images", client);
+			var jpgPath = imagePath;
+
 			if (!Directory.Exists(imagePath))
 			{
 				Directory.CreateDirectory(imagePath);
 			}
 			imagePath = Path.Combine(imagePath, this.scene.name + ".png");
 			img.Save(imagePath, new SixLabors.ImageSharp.Formats.Png.PngEncoder());
+			jpgPath = Path.Combine(jpgPath, this.scene.name + ".jpg");
+
+			img.Save(jpgPath, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder());
+			
+		
 			string imgUrl = "/images/" + filename + ".png";
 			return imgUrl;
 		}
 
-		public Stream ConvertImageToStream()
+		public static string GetPath(string selected, string name,string scene )
 		{
-			Image<Rgba32> img = this.image;
-			MemoryStream stream = new MemoryStream();
-			img.Save(stream, new SixLabors.ImageSharp.Formats.Png.PngEncoder());
-			stream.Position = 0;
 
-			return stream;
+			string path = Path.Combine( "images", name, scene);
+			
+			switch (selected)
+			{
+
+				case "PNG": 
+					path=Path.Combine(path+ ".png");
+					break;
+				case "JPG":
+				   path= Path.Combine(path+ ".jpg");
+					break;
+				case "PPM":
+					path= Path.Combine(path+ ".ppm");
+				
+					break;
+
+			}
+
+			return path;
 		}
+
+		public Image<Rgba32> GetImage()
+		{
+
+			return this.image;
+
+
+
+		}
+
+
 
 		private int writePNG(string[] data, int width, Image<Rgba32> img, int index, int y)
 		{
@@ -174,12 +208,12 @@ namespace Engine
 				imageString = toRGB(imageString, j);
 			}
 
-			string path = Path.Combine(Directory.GetCurrentDirectory(), @"Images\\" + client);
+			string path = Path.Combine("wwwroot","images", client);
 			if (!Directory.Exists(path))
 			{
 				Directory.CreateDirectory(path);
 			}
-			path = Path.Combine(path, @"" + this.scene.name + ".ppm");
+			path = Path.Combine(path,this.scene.name + ".ppm");
 
 			File.WriteAllText(path, imageString);
 			RenderPPMImage(path, client);
