@@ -1,8 +1,9 @@
 ﻿@page "/Logged"
 @using Domain;
-@using BusinessLogic;
+@using Interface.BusinessLogic;
+@using Interface.DataAccess;
 @inject NavigationManager NavigationManager
-@inject Manager manager;
+@inject SessionManager sessionManager;
 
 <h3>Loged</h3>
 
@@ -16,7 +17,10 @@
 
 	private void SignOut()
 	{
-		manager.logged = null;
+
+
+		sessionManager.ClearCurrentUser();
+
 		NavigationManager.NavigateTo("/", true);
 
 	}

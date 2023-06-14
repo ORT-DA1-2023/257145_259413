@@ -49,7 +49,7 @@
 			return new Vector(this._x + v._x, this._y + v._y, this._z + v._z);
 		}
 
-		public Vector Substract(Vector v)
+		public Vector Subtract(Vector v)
 		{
 			return new Vector(this._x - v._x, this._y - v._y, this._z - v._z);
 		}
@@ -97,6 +97,19 @@
 			double y = this._z * v._x - this._x * v._z;
 			double z = this._x * v._y - this._y * v._x;
 			return new Vector(x, y, z);
+		}
+
+		public static Vector GetRandomInUnitModel()
+		{
+			Random random = new Random();
+			Vector vector;
+			do
+			{
+				Vector temp = new Vector(random.NextDouble(), random.NextDouble(), random.NextDouble());
+				vector = temp.Multiply(2).Subtract(new Vector(1, 1, 1));
+			}
+			while (vector.SquaredLength() >= 1);
+			return vector;
 		}
 	}
 }

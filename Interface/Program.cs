@@ -1,25 +1,44 @@
-using Interface.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Domain;
-using BusinessLogic;
+using Interface.BusinessLogic;
+using Interface.DataAccess;
+using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddSingleton<Manager>();
+
+builder.Services.AddSingleton<SessionManager>();
+
+string connectionStringIgnacio = "Data Source=LAPTOP-3R9PVFHT;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
+string connectionStringPablo = "Data Source=DESKTOP-G58UOLC;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
+string connectingStringPabloLaptop = "Data Source=DESKTOP-LGG3KAV;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
+
+//string connectionString = connectionStringIgnacio;
+string connectionString = connectionStringPablo;
+//string connectionString = connectingStringPabloLaptop;
+
+builder.Services.AddDbContextFactory<ApplicationContext>(
+	   options => options.UseSqlServer(
+		   connectionString,
+		   providerOptions => providerOptions.EnableRetryOnFailure()
+		   ));
+
+
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+	app.UseExceptionHandler("/Error");
+	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();

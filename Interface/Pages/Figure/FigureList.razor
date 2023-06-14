@@ -1,7 +1,9 @@
 ﻿@page "/figures/list"
-@using BusinessLogic;
+@using Interface.BusinessLogic;
 @using Domain;
-@inject Manager manager;
+@using Interface.DataAccess;
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 
 <h3>FigureList</h3>
 
@@ -17,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var figura in manager.GetFigures())
+        @foreach (var figura in figureRepository.GetFigures())
         {
             <tr>
                 <td>@figura.name</td>
@@ -37,15 +39,21 @@
 
 @code {
 
+
+
     private bool linkedFigure = false;
     private string exceptionMessage = "";
+    private FigureRepository figureRepository;
+    private ClientRepository clientRepository;
+
+
 
     private void DeleteFigure(Figure figure)
     {
         try
         {
-            linkedFigure = false;
-            manager.DeleteFigure(figure);
+            linkedFigure = false; 
+            figureRepository.Delete(figure);
         }
         catch (InvalidOperationException ex)
         {
@@ -53,5 +61,17 @@
             exceptionMessage = ex.Message;
         }
     }
+
+    protected override void OnInitialized()
+    {
+        figureRepository = new FigureRepository(sessionManager, applicationContext);
+        clientRepository = new ClientRepository(applicationContext, sessionManager);
+
+       
+
+    }
+
+
+
 
 }

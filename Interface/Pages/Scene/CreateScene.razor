@@ -1,10 +1,18 @@
 ﻿@page "/scene/{name}"
-@using BusinessLogic;
+@using Interface.BusinessLogic;
+@using Interface.DataAccess;
 @using Domain;
 @using Engine;
 @using Exceptions;
-@inject Manager manager;
+@using Microsoft.JSInterop
+@using SixLabors.ImageSharp;
+@using SixLabors.ImageSharp.PixelFormats;
+
+
+@inject SessionManager sessionManager;
+@inject ApplicationContext applicationContext;
 @inject NavigationManager NavigationManager;
+@inject IJSRuntime JSRuntime;
 
 
 <h3>Scene:  @name</h3>
@@ -12,12 +20,12 @@
 
 <div class="form-group">
 	<label for="name">Modelos Disponibles:</label>
-	
+
 	<ul>
-	@foreach (var model in manager.GetModels())
-	{			
-		<button type="button" class="btn btn-success btn-sm" @onclick="(() => SelectedModel(model))">@model.name</button>
-	}
+		@foreach (var model in modelRepository.GetModels())
+		{
+			<button type="button" class="btn btn-success btn-sm" @onclick="(() => SelectedModel(model))">@model.name</button>
+		}
 	</ul>
 </div>
 
@@ -46,11 +54,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (PositionedModel positionedModel in scene.GetPositionedModels())
+			@foreach (PositionedModel positionedModel in positionedModels)
 			{
 				<tr>
 					<td>@positionedModel.ToString()</td>
-					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => scene.deletePositionedModel(positionedModel))">Eliminar</button></td>
+					<td><button type="button" class="btn btn-danger btn-sm" @onclick="(() => Delete(positionedModel))">Eliminar</button></td>
 
 				</tr>
 			}
@@ -87,40 +95,88 @@
 
 <div class="form-group">
 	<label for="FoV">FoV:</label>
-	
+
 	<form id="Fov">
 		<input type="number" class="form-control" @bind-value="fov" />
 	</form>
 </div>
-
-<button class="btn btn-primary" @onclick="ToRender">Renderizar</button>
 
 @if (showFovError)
 {
 	<div class="alert alert-danger"> @invalidFov </div>
 }
 
+<div>
+	<p>Desenfoque:</p>
+	<InputCheckbox @bind-Value="@isDifuminated" />
+</div>
+
+@if (isDifuminated)
+{
+	<div>
+		<label>Apertura del lente:</label>
+		<input type="number" class="form-control" @bind-value="aperture" />
+	</div>
+
+	@if (showApertureError)
+	{
+		<div class="alert alert-danger"> @apertureError </div>
+	}
+
+}
+
+<button class="btn btn-primary" @onclick="ToRender">Renderizar</button>
+
+
 
 <div class="form-group">
 	<label for="name">Preview:</label>
-	<img src="@String.Concat("images/",manager.logged.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
+	<img src="@String.Concat("images/",sessionManager.CurrentUser.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
 
 	<p class="text-start">Último renderizado: @scene.lastRendered</p>
-	@if(scene.lastRendered<scene.lastModified)
-    {
+	@if (scene.lastRendered < scene.lastModified ||
+		 !lookFrom.Equals(new Coordinate(LookFromX, LookFromY, LookFromZ)) ||
+		 !lookAt.Equals(new Coordinate(LookAtX, LookAtY, LookAtZ)) ||
+		 fov != scene.fieldOfView ||
+		 aperture != scene.aperture)
+	{
 		<div class="alert alert-warning" role="alert">
 			<i class="fa-solid fa-triangle-exclamation">Imagen desactualizada</i>
 		</div>
-    }
+	}
 </div>
 
+<div>
 
+
+
+	<button @onclick="DownloadFile">Guarda tu Escena</button>
+
+	<select @bind="formatoSeleccionado" >
+
+		<option values= ".png">PNG</option>
+		<option values=".jpg">JPG</option>	
+		<option values=".ppm">PPM</option>
+
+	</select>
+
+
+	
+
+
+
+</div>
 
 
 @code {
 
+	private ModelRepository modelRepository;
+	private SceneRepository sceneRepository;
+	private PositionedModelRepository positionedModelRepository;
 
+	private bool isDifuminated = false;
 
+	private double aperture = 0;
 
 	private bool showForm = false;
 	private double coordinateX = 0;
@@ -132,18 +188,69 @@
 	private double LookFromZ = 0;
 
 
-	private double LookAtX=0;
+	private double LookAtX = 0;
 	private double LookAtY = 2;
 	private double LookAtZ = 5;
+
+	private Coordinate lookFrom;
+	private Coordinate lookAt;
 
 
 	private int fov = 30;
 
+	private string apertureError = "";
+	private bool showApertureError = false;
 	private bool showFovError = false;
 	private string invalidFov = "";
-
+	private bool showButton = false;
 
 	private Model selectedModel;
+	private Render render;
+	private Image<Rgba32> image;
+
+
+	private List<PositionedModel> positionedModels;
+
+	private string formatoSeleccionado= "PNG";
+
+	protected override void OnInitialized()
+	{
+		sceneRepository = new SceneRepository(sessionManager, applicationContext);
+		modelRepository = new ModelRepository(sessionManager, applicationContext);
+		positionedModelRepository = new PositionedModelRepository(sessionManager, applicationContext);
+		scene = sceneRepository.GetSceneByName(name);
+		positionedModels = sceneRepository.GetPositionedModels(scene);
+
+		if (scene.lastModified != scene.created)
+		{
+			LookFromX = scene.lookFrom.x;
+			LookFromY = scene.lookFrom.y;
+			LookFromZ = scene.lookFrom.z;
+			LookAtX = scene.lookAt.x;
+			LookAtY = scene.lookAt.y;
+			LookAtZ = scene.lookAt.z;
+			fov = scene.fieldOfView;
+			aperture = scene.aperture;
+			lookFrom = new Coordinate(LookFromX, LookFromY, LookFromZ);
+			lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
+		}
+	}
+
+	private void Delete(PositionedModel positionedModel)
+	{
+		positionedModelRepository.Delete(positionedModel);
+		positionedModels = sceneRepository.GetPositionedModels(scene);
+	}
+
+	public async Task DownloadFile()
+	{
+		string path = Render.GetPath(formatoSeleccionado, sessionManager.CurrentUser.name,scene.name);
+		
+		await JSRuntime.InvokeVoidAsync("window.downloadFile", path);
+
+		
+	}
+
 
 	private void SelectedModel(Model modelo)
 	{
@@ -159,13 +266,13 @@
 
 		Coordinate coordinates = new Coordinate();
 
-		if (coordinates.VerifyCoordinate(coordinateX,coordinateY,coordinateZ))
+		if (coordinates.VerifyCoordinate(coordinateX, coordinateY, coordinateZ))
 		{
-			Coordinate coordinateCreate = new Coordinate(coordinateX, coordinateY, coordinateZ);
+			coordinates.x = coordinateX;
+			coordinates.y = coordinateY;
+			coordinates.z = coordinateZ;
+			positionedModelRepository.Create(scene, selectedModel, coordinates);
 
-			PositionedModel PositionedModel = new PositionedModel(selectedModel, coordinateCreate);
-
-			scene.addPositionedModel(PositionedModel);
 
 		}
 		coordinateX = 0;
@@ -173,28 +280,32 @@
 		coordinateZ = 0;
 
 		showForm = false;
+		positionedModels = sceneRepository.GetPositionedModels(scene);
 
 	}
 
 
 	void ToRender()
 	{
+		showApertureError = false;
 		showFovError = false;
 		Coordinate lookFrom = new Coordinate(LookFromX, LookFromY, LookFromZ);
 		Coordinate lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
 		try
 		{
-			scene.VerifyFoV(fov);
-			Render render = new Render(scene, lookFrom, lookAt, fov);
-			render.RenderScene(manager.logged.name);
-			scene.Render();
-			NavigationManager.NavigateTo("/scene/"+name,true);
+			image= sceneRepository.Render(scene, fov, isDifuminated, lookFrom, lookAt, aperture);
+			NavigationManager.NavigateTo("/scene/" + name, true);
 		}
 		catch (FovOutOfBoundException e)
-        {
+		{
 			showFovError = true;
-            invalidFov = e.Message;
-        }
+			invalidFov = e.Message;
+		}
+		catch (InvalidDataException e)
+		{
+			showApertureError = true;
+			apertureError = e.Message;
+		}
 
 
 
@@ -207,8 +318,5 @@
 	[Parameter]
 	public string name { get; set; }
 	private Scene scene;
-	protected override void OnInitialized()
-	{
-		scene = manager.GetScenebyName(name);
-	}
+	
 }

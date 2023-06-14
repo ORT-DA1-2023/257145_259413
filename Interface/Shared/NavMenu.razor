@@ -1,6 +1,7 @@
 ﻿@using BusinessLogic;
 @using Domain;
-@inject Manager manager
+@using Interface.DataAccess;
+@inject SessionManager sessionManager;
 
     <div class="top-row ps-3 navbar navbar-dark">
         <div class="container-fluid">
@@ -11,7 +12,7 @@
         </div>
     </div>
 
-@if (manager.logged != null)
+@if (sessionManager.CurrentUser != null)
 {
     <div class="@NavMenuCssClass nav-scrollable"  @onclick="ToggleNavMenu">
         <nav class="flex-column">
