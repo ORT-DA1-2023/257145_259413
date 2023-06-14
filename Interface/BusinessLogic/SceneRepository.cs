@@ -26,17 +26,17 @@ namespace Interface.BusinessLogic
 
 		public List<Scene> GetScenes()
 		{
-			return _dbContext.scenes.Where(s => s.client.Id == _logged.Id).ToList();
+			return _dbContext.Scenes.Where(s => s.client.Id == _logged.Id).ToList();
 		}
 
 		public List<PositionedModel> GetPositionedModels(Scene scene)
 		{
-			return _dbContext.positionedModels.Where(pm => pm.scene.Id == scene.Id).ToList();
+			return _dbContext.PositionedModels.Where(pm => pm.scene.Id == scene.Id).ToList();
 		}
 
 		public Scene GetSceneByName(string name)
 		{
-			return _dbContext.scenes.Where(s => s.client.Id == _logged.Id).FirstOrDefault(s => s.name == name);
+			return _dbContext.Scenes.Where(s => s.client.Id == _logged.Id).FirstOrDefault(s => s.name == name);
 		}
 
 		public void Create(string name)
@@ -62,7 +62,7 @@ namespace Interface.BusinessLogic
 					return;
 				}
 			}
-			_dbContext.scenes.Add(scene);
+			_dbContext.Scenes.Add(scene);
 			_dbContext.SaveChanges();
 		}
 

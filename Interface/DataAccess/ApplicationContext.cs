@@ -1,24 +1,22 @@
-﻿using System;
+﻿using Domain;
 using Microsoft.EntityFrameworkCore;
-using Domain;
 using System.Drawing;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Interface.DataAccess;
 
 public class ApplicationContext : DbContext
 {
-	public DbSet<Client> clients { get; set; }
+	public DbSet<Client> Clients { get; set; }
 
-	public DbSet<Figure> figures { get; set; }
+	public DbSet<Figure> Figures { get; set; }
 
-	public DbSet<Material> materials { get; set; }
+	public DbSet<Material> Materials { get; set; }
 
-	public DbSet<Model> models { get; set; }
+	public DbSet<Model> Models { get; set; }
 
-	public DbSet<PositionedModel> positionedModels { get; set; }
+	public DbSet<PositionedModel> PositionedModels { get; set; }
 
-	public DbSet<Scene> scenes { get; set; }
+	public DbSet<Scene> Scenes { get; set; }
 
 
 	public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }

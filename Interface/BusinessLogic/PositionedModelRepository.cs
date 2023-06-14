@@ -26,19 +26,19 @@ namespace Interface.BusinessLogic
 
 		public void Add(PositionedModel positionedModel)
 		{
-			_dbContext.positionedModels.Add(positionedModel);
+			_dbContext.PositionedModels.Add(positionedModel);
 			_dbContext.SaveChanges();
 		}
 
 		public void Delete(PositionedModel positionedModel)
 		{
-			_dbContext.positionedModels.Remove(positionedModel);
+			_dbContext.PositionedModels.Remove(positionedModel);
 			_dbContext.SaveChanges();
 		}
 
 		public PositionedModel Find(int id)
 		{
-			return _dbContext.positionedModels.Find(id);
+			return _dbContext.PositionedModels.Find(id);
 		}
 	}
 }

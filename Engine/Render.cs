@@ -78,43 +78,50 @@ namespace Engine
 		}
 
 		private string RenderPPMImage(string filePath, string client)
-		{
-			if (!System.IO.File.Exists(filePath))
-			{
-				throw new Exception("File does not exist");
-			}
-			string fileContents = System.IO.File.ReadAllText(filePath);
-			string filename = Path.GetFileName(filePath);
-			var data = fileContents.Trim().Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-			Console.WriteLine(data);
-			if (data[0] != "P3")
-			{
-				throw new ArgumentException("File is not a PPM");
-			}
-			int.TryParse(data[1], out int width);
-			int.TryParse(data[2], out int height);
-			int.TryParse(data[3], out int maxColors);
-			if (maxColors != 255)
-			{
-				throw new ArgumentException("MaxColors is not 255");
-			}
-			if (data.Length != 3 * width * height + 4)
-			{
-				throw new ArgumentException($"Not enough pixel data. Found: {data.Length - 4}, Expecting: {3 * width * height}, Based on width = {width} and height = {height}");
-			}
-			using var img = new Image<Rgba32>(width, height);
-			int index = 4;
-			for (int y = 0; y < height; y++)
-			{
-				index = writePNG(data, width, img, index, y);
-			}
-			this.image = img;
-			string imgUrl = saveImage(client, filename, img);
+        {
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new Exception("File does not exist");
+            }
+            string fileContents = System.IO.File.ReadAllText(filePath);
+            string filename = Path.GetFileName(filePath);
+            var data = fileContents.Trim().Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+            Console.WriteLine(data);
 
-			return imgUrl;
-		}
+            int width, height;
+            formatPPM(data, out width, out height);
+            using var img = new Image<Rgba32>(width, height);
+            int index = 4;
+            for (int y = 0; y < height; y++)
+            {
+                index = writePNG(data, width, img, index, y);
+            }
+            this.image = img;
+            string imgUrl = saveImage(client, filename, img);
 
-		private string saveImage(string client, string filename, Image<Rgba32> img)
+            return imgUrl;
+        }
+
+        private static void formatPPM(string[] data, out int width, out int height)
+        {
+            if (data[0] != "P3")
+            {
+                throw new ArgumentException("File is not a PPM");
+            }
+            int.TryParse(data[1], out width);
+            int.TryParse(data[2], out height);
+            int.TryParse(data[3], out int maxColors);
+            if (maxColors != 255)
+            {
+                throw new ArgumentException("MaxColors is not 255");
+            }
+            if (data.Length != 3 * width * height + 4)
+            {
+                throw new ArgumentException($"Not enough pixel data. Found: {data.Length - 4}, Expecting: {3 * width * height}, Based on width = {width} and height = {height}");
+            }
+        }
+
+        private string saveImage(string client, string filename, Image<Rgba32> img)
 		{
 
 			var imagePath = Path.Combine("wwwroot", "images", client);
@@ -260,32 +267,11 @@ namespace Engine
 			if (hitRecord != null)
 			{
 				if (depth > 0)
-				{
-					Ray newRay;
-					if (hitRecord.Material is MetalicMaterial)
-					{
-						newRay = MetalicScatter(ray, hitRecord);
-						if (newRay == null)
-						{
-							return new Vector(0, 0, 0);
-						}
-					}
-					else if (hitRecord.Material is LambertianoMaterial)
-					{
-						newRay = LambertianScatter(ray, hitRecord);
-					}
-					else
-					{
-						return new Vector(0, 0, 0);
-					}
-					Vector color = ShootRay(newRay, depth - 1);
-					Vector attenuation = hitRecord.Attenuation;
-					return new Vector(color.X * attenuation.X,
-						color.Y * attenuation.Y,
-						color.Z * attenuation.Z);
-				}
+                {
+                    return CalculateReflectionColor(ray, depth, hitRecord);
+                }
 
-				return new Vector(0, 0, 0);
+                return new Vector(0, 0, 0);
 
 			}
 
@@ -297,11 +283,37 @@ namespace Engine
 
 		}
 
-		private Ray LambertianScatter(Ray ray, HitRecord hitRecord)
+        private Vector CalculateReflectionColor(Ray ray, int depth, HitRecord hitRecord)
+        {
+            Ray newRay;
+            if (hitRecord.Material is MetalicMaterial)
+            {
+                newRay = MetalicScatter(ray, hitRecord);
+                if (newRay == null)
+                {
+                    return new Vector(0, 0, 0);
+                }
+            }
+            else if (hitRecord.Material is LambertianoMaterial)
+            {
+                newRay = LambertianScatter(ray, hitRecord);
+            }
+            else
+            {
+                return new Vector(0, 0, 0);
+            }
+            Vector color = ShootRay(newRay, depth - 1);
+            Vector attenuation = hitRecord.Attenuation;
+            return new Vector(color.X * attenuation.X,
+                color.Y * attenuation.Y,
+                color.Z * attenuation.Z);
+        }
+
+        private Ray LambertianScatter(Ray ray, HitRecord hitRecord)
 		{
 			Vector newPoint = hitRecord.Intersection
 				.Add(hitRecord.Normal)
-				.Add(Vector.getRandomInUnitModel());
+				.Add(Vector.GetRandomInUnitModel());
 			Vector result = newPoint.Subtract(hitRecord.Intersection);
 			return new Ray(hitRecord.Intersection, result);
 		}
@@ -312,7 +324,7 @@ namespace Engine
 			Vector reflected = Reflect(rayIn.Direction.getUnit(), hitRecord.Normal);
 			scatteredRay.Origin = hitRecord.Intersection;
 			scatteredRay.Direction = reflected.Add(
-				Vector.getRandomInUnitModel()
+				Vector.GetRandomInUnitModel()
 				.Multiply(hitRecord.Roughness));
 			if (scatteredRay.Direction.Dot(hitRecord.Normal) > 0)
 			{
@@ -328,27 +340,34 @@ namespace Engine
 		}
 
 		public static void CreatePreview(Model model, string name)
-		{
-			Scene scene = new Scene("model_" + model.name);
-			Material floorColor = new LambertianoMaterial("floor", System.Drawing.Color.White);
-			Figure floor = new Figure("floor", 1000);
-			Model earth = new Model("earth", floor, floorColor);
-			Coordinate position = new Coordinate(0, -999, 5);
-			PositionedModel positionedEarth = new PositionedModel();
-			positionedEarth.model = earth;
-			positionedEarth.position = position;
-			scene.addPositionedModel(positionedEarth);
+        {
+            Scene scene = new Scene("model_" + model.name);
+            Material floorColor = new LambertianoMaterial("floor", System.Drawing.Color.White);
+            Figure floor = new Figure("floor", 1000);
+            Model earth = new Model("earth", floor, floorColor);
+            Coordinate position = new Coordinate(0, -999, 5);
+            PositionedModel positionedEarth = new PositionedModel();
+            positionedEarth.model = earth;
+            positionedEarth.position = position;
+            scene.addPositionedModel(positionedEarth);
 
-			Figure test = new Figure("test", 1);
-			Model temp = new Model("object", test, model.material);
-			position = new Coordinate(0, 2, 5);
-			PositionedModel positionedTemp = new PositionedModel();
-			positionedTemp.model = temp;
-			positionedTemp.position = position;
-			scene.addPositionedModel(positionedTemp);
+            position = AddTempModelToScene(model, scene);
 
-			Render render = new Render(scene, 150, 100, 30, 20);
-			render.RenderScene(name);
-		}
-	}
+            Render render = new Render(scene, 150, 100, 30, 20);
+            render.RenderScene(name);
+        }
+
+        private static Coordinate AddTempModelToScene(Model model, Scene scene)
+        {
+            Coordinate position;
+            Figure test = new Figure("test", 1);
+            Model temp = new Model("object", test, model.material);
+            position = new Coordinate(0, 2, 5);
+            PositionedModel positionedTemp = new PositionedModel();
+            positionedTemp.model = temp;
+            positionedTemp.position = position;
+            scene.addPositionedModel(positionedTemp);
+            return position;
+        }
+    }
 }

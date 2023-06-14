@@ -9,19 +9,19 @@ namespace Interface.BusinessLogic
     {
 
         private ApplicationContext _dbContext;
-        private SessionManager sessionManager;
+        private SessionManager _sessionManager;
 
 
         public ClientRepository(ApplicationContext _dbContext, SessionManager sessionManager)
         {
             this._dbContext = _dbContext;
-            this.sessionManager = sessionManager;
+            this._sessionManager = sessionManager;
         }
 
 
 		public List<Client> GetClients()
         {
-            return _dbContext.clients.ToList();
+            return _dbContext.Clients.ToList();
         }
 
         public bool Exists(string name)
@@ -43,7 +43,7 @@ namespace Interface.BusinessLogic
         
        
          
-            _dbContext.clients.Add(client);
+            _dbContext.Clients.Add(client);
             _dbContext.SaveChanges();
         
         
@@ -51,7 +51,7 @@ namespace Interface.BusinessLogic
 
         public Client Find(int id)
         {
-            return _dbContext.clients.Find(id);
+            return _dbContext.Clients.Find(id);
         }
     }
 }
