@@ -4,34 +4,31 @@ using Exceptions;
 using Interface.Pages.User;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using System.Linq.Expressions;
-
-
-
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Interface.BusinessLogic
 {
 	public class FigureRepository
 	{
 
-		private Client logged;
+		private Client _logged;
 		private ApplicationContext _dbContext;
-		private SessionManager sessionManager;
-		private ClientRepository clientRepository;
+		private SessionManager _sessionManager;
+		private ClientRepository _clientRepository;
 
 
 
-		public FigureRepository(SessionManager sessionManager, ApplicationContext _dbContext)
-		{
-			this.sessionManager = sessionManager;
+        public FigureRepository(SessionManager sessionManager, ApplicationContext _dbContext)
+        {
+            this._sessionManager = sessionManager;
 			this._dbContext = _dbContext;
-			this.clientRepository = new ClientRepository(_dbContext, sessionManager);
-			this.logged = clientRepository.Find(sessionManager.CurrentUser.Id);
-		}
+			this._clientRepository = new ClientRepository(_dbContext, sessionManager);
+			this._logged = _clientRepository.Find(sessionManager.CurrentUser.Id);
+        }
 
 		public List<Figure> GetFigures()
 		{
-			return _dbContext.figures.Where(f => f.client.Id == logged.Id).ToList();
+			  return _dbContext.Figures.Where(f => f.client.Id == _logged.Id).ToList();
 		}
 
 		public Figure MatchingFigure(string name)
@@ -60,7 +57,7 @@ namespace Interface.BusinessLogic
 					}
 				}
 			}
-			_dbContext.figures.Add(figure);
+			_dbContext.Figures.Add(figure);
 			_dbContext.SaveChanges();
 		}
 
@@ -71,7 +68,7 @@ namespace Interface.BusinessLogic
 			if (fig.VerifyNameFigure(name) && fig.VerifyRadiusFigure(radiusNumber))
 			{
 				Figure newFig = new Figure(name, radiusNumber);
-				newFig.client = this.logged;
+				newFig.client = this._logged;
 				addFigure(newFig);
 			}
 			else
@@ -82,8 +79,8 @@ namespace Interface.BusinessLogic
 
 		public bool FigureIsLinked(Figure figure)
 		{
-			List<Model> models = _dbContext.models.Where(m => m.client.Id == logged.Id).ToList();
-			foreach (Model model in models)
+			List<Model> models = _dbContext.Models.Where(m => m.client.Id == _logged.Id).ToList();
+			foreach(Model model in models)
 			{
 				if (model.figure == figure)
 				{
@@ -101,16 +98,16 @@ namespace Interface.BusinessLogic
 			}
 			else
 			{
-				_dbContext.figures.Remove(figure);
-				_dbContext.SaveChanges();
-			}
+				_dbContext.Figures.Remove(figure);
+                _dbContext.SaveChanges();
+            }
 		}
 
 		public Figure Find(int id)
 		{
-			Figure result = _dbContext.figures.FirstOrDefault(f => f.Id == id);
-			_dbContext.SaveChanges();
-			return result;
+			Figure result = _dbContext.Figures.FirstOrDefault(f => f.Id == id);
+            _dbContext.SaveChanges();
+            return result;
 		}
 
 

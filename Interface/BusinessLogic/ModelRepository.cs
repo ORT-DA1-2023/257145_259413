@@ -33,7 +33,7 @@ namespace Interface.BusinessLogic
 
         public List<Model> GetModels()
         {
-            return _dbContext.models.Where(m => m.client.Id == _logged.Id).Include(m => m.figure).Include(m => m.material).ToList();
+            return _dbContext.Models.Where(m => m.client.Id == _logged.Id).Include(m => m.figure).Include(m => m.material).ToList();
         }
 
         public void Delete(Model model)
@@ -57,18 +57,18 @@ namespace Interface.BusinessLogic
                     return;
                 }
             }
-            _dbContext.models.Add(model1);
+            _dbContext.Models.Add(model1);
             _dbContext.SaveChanges();
         }
 
         public Model Find(string name)
         {
-            return _dbContext.models.FirstOrDefault(m => m.name == name);
+            return _dbContext.Models.FirstOrDefault(m => m.name == name);
         }
 
         public bool ModelIsLinked(Model model)
         {
-            List<Scene> scenes = _dbContext.scenes.Where(m => m.client.Id == _logged.Id).ToList();
+            List<Scene> scenes = _dbContext.Scenes.Where(m => m.client.Id == _logged.Id).ToList();
             foreach (Scene scene in scenes)
             {
                 if (scene.ModelIsPositioned(model))

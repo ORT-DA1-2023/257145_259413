@@ -43,7 +43,7 @@ namespace Engine
 		{
 			Vector horizontalPosition = this._horizontal.Multiply(u);
 			Vector verticalPosition = this._vertical.Multiply(v);
-			Vector random = Vector.getRandomInUnitModel().Multiply(this._lensRadius);
+			Vector random = Vector.GetRandomInUnitModel().Multiply(this._lensRadius);
 			Vector offset = this.vectorU
 				.Multiply(random.X)
 				.Add(this.vectorV.Multiply(random.Y));

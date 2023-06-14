@@ -28,8 +28,6 @@ namespace Domain
             this.material = material;
         }
 
-        
-
         public bool VerifyName(string name)
         {
             if (name.Length == 0 || !Regex.IsMatch(name, @"^[^\s].*[^\s]$"))

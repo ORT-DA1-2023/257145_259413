@@ -123,7 +123,34 @@
     }
 
 
-    Material material= new LambertianoMaterial();  
+    
+
+    void CreateMaterial()
+    {
+        Material material2 = new Material();
+        successMessage = "";
+
+        bool isMaterialSelected = !string.IsNullOrEmpty(selectedMaterial);
+        bool isColorValid = material2.VerifyColor(red, green, blue);
+        bool isNameValid = material2.VerifyName(name);
+        bool isMetalicBlurred = material2.VerifyBlurred(valueMetalic);
+
+        if (isNameValid && isColorValid && isMaterialSelected && isMetalicBlurred)
+        {
+
+            color = Color.FromArgb(red, green, blue);
+            materialRepository.CreateMaterial(selectedMaterial, name, color, valueMetalic);
+            reset();
+        }
+        else
+        {
+            errorMessage = " Nombre  o  color incorrecto o material no seleccionado";
+        }
+    }
+
+
+    Material material = new LambertianoMaterial();
+
     private void ValidateName(ChangeEventArgs e)
     {
         name = (string)e.Value;
@@ -136,39 +163,6 @@
 
         nameError = string.Empty;
     }
-
-
-
-    void CreateMaterial()
-    {
-
-        successMessage = "";
-
-        bool isMaterialSelected = !string.IsNullOrEmpty(selectedMaterial);
-        bool isColorValid = material.VerifyColor(red, green, blue);
-        bool isNameValid = material.VerifyName(name);
-        bool isMetalicBlurred = material.VerifyBlurred(valueMetalic);
-
-
-        if (isNameValid && isColorValid && isMaterialSelected && isMetalicBlurred)
-        {
-
-            color = Color.FromArgb(red, green, blue);
-
-            materialRepository.CreateMaterial(selectedMaterial, name, color, valueMetalic);
-
-            reset();
-        }
-        else
-        {
-            errorMessage = " Nombre  o  color incorrecto o material no seleccionado";
-        }
-
-
-    }
-
-
-
 
 
     void SeeMaterial()

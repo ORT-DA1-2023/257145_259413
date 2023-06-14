@@ -99,7 +99,7 @@
 			return new Vector(x, y, z);
 		}
 
-		public static Vector getRandomInUnitModel()
+		public static Vector GetRandomInUnitModel()
 		{
 			Random random = new Random();
 			Vector vector;
