@@ -11,15 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<Manager>();
+
 builder.Services.AddSingleton<SessionManager>();
 
 string connectionStringIgnacio = "Data Source=LAPTOP-3R9PVFHT;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
 string connectionStringPablo = "Data Source=DESKTOP-G58UOLC;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
 string connectingStringPabloLaptop = "Data Source=DESKTOP-LGG3KAV;Initial Catalog=BaseDatosObligatorio;Integrated Security=True;TrustServerCertificate=true;";
 
-//string connectionString = connectionStringIgnacio;
-string connectionString = connectionStringPablo;
+string connectionString = connectionStringIgnacio;
+//string connectionString = connectionStringPablo;
 //string connectionString = connectingStringPabloLaptop;
 
 builder.Services.AddDbContextFactory<ApplicationContext>(

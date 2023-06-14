@@ -40,7 +40,7 @@ namespace Interface.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("clients");
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("Domain.Figure", b =>
@@ -65,7 +65,7 @@ namespace Interface.Migrations
 
                     b.HasIndex("clientId");
 
-                    b.ToTable("figures");
+                    b.ToTable("Figures");
                 });
 
             modelBuilder.Entity("Domain.Material", b =>
@@ -95,7 +95,7 @@ namespace Interface.Migrations
 
                     b.HasIndex("clientId");
 
-                    b.ToTable("materials");
+                    b.ToTable("Materials");
 
                     b.HasDiscriminator<string>("Type").HasValue("Material");
 
@@ -131,7 +131,7 @@ namespace Interface.Migrations
 
                     b.HasIndex("materialId");
 
-                    b.ToTable("models");
+                    b.ToTable("Models");
                 });
 
             modelBuilder.Entity("Domain.PositionedModel", b =>
@@ -158,7 +158,7 @@ namespace Interface.Migrations
 
                     b.HasIndex("sceneId");
 
-                    b.ToTable("positionedModels");
+                    b.ToTable("PositionedModels");
                 });
 
             modelBuilder.Entity("Domain.Scene", b =>
@@ -203,7 +203,7 @@ namespace Interface.Migrations
 
                     b.HasIndex("clientId");
 
-                    b.ToTable("scenes");
+                    b.ToTable("Scenes");
                 });
 
             modelBuilder.Entity("Domain.LambertianoMaterial", b =>
