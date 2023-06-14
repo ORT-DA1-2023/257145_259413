@@ -3,13 +3,76 @@ using Domain;
 using Exceptions;
 using NuGet.Frameworks;
 using System.Drawing;
+using Interface.DataAccess;
 
 namespace BusinessLogic.test
 {
-    [TestClass]
-    public class SystemTest
-    {
-        /*[TestMethod]
+	[TestClass]
+	public class ClientTest
+	{
+		private ClientRepository clientRepository;
+		private SessionManager sessionManager;
+
+		[TestInitialize]
+		public void Initialize()
+		{
+			clientRepository = new ClientRepository(TestContextFactory.CreateContext(), sessionManager);
+		}
+
+		[TestMethod]
+		public void ReturnsTrueIfClientIsCreated()
+		{
+			Client client = new Client()
+			{
+				name = "Pedro",
+				password = "MejorObl1gatorio"
+			};
+			clientRepository.add(client);
+			bool result;
+			try
+			{
+				result = clientRepository.Exists(client.name);
+			}
+			catch (DuplicateUserException)
+			{
+				result = true;
+			}
+			Assert.IsTrue(result);
+		}
+
+		public void ReturnsFalseIfClientDoesntExist()
+		{
+			bool result = clientRepository.Exists("NoExisteUsuario");
+			Assert.IsFalse(result);
+		}
+
+		[TestMethod]
+		public void ReturnsTrueIfClientIsFound()
+		{
+			Client client = new Client()
+			{
+				name = "Error404",
+				password = "MejorObl1gatorio"
+			};
+			clientRepository.add(client);
+			Client result = clientRepository.Find(client.Id);
+			Assert.AreEqual(client, result);
+		}
+
+		[TestMethod]
+		public void ReturnsTrueIfClientsAreAddedCorrectly()
+		{
+			Client client = new Client()
+			{
+				name = "Pedro",
+				password = "Pascal1"
+			};
+			clientRepository.add(client);
+			List<Client> clients = clientRepository.GetClients();
+			Assert.IsTrue(clients.Count > 0);
+		}
+
+		/*[TestMethod]
         public void ReturnsTrueIfUserLoggedIn()
         {
             string name = "Pedro";
@@ -286,5 +349,5 @@ namespace BusinessLogic.test
             Client signedIn = manager.SignUp("a", "a");
             Assert.IsTrue(signedIn.name == "");
         }*/
-    }
+	}
 }
