@@ -33,6 +33,28 @@ public class ApplicationContext : DbContext
 		)
 		.HasColumnName("Color");
 
+		modelBuilder.Entity<PositionedModel>()
+			.Property(pm => pm.position)
+			.HasConversion(
+				p => $"{p.x},{p.y},{p.z}",
+				p => new Coordinate(p)
+			);
+
+		modelBuilder.Entity<Scene>()
+			.Property(s => s.lookFrom)
+			.HasConversion(
+				lF => $"{lF.x},{lF.y},{lF.z}",
+				lF => new Coordinate(lF)
+			);
+
+		modelBuilder.Entity<Scene>()
+			.Property(s => s.lookAt)
+			.HasConversion(
+				lA => $"{lA.x},{lA.y},{lA.z}",
+				lA => new Coordinate(lA)
+			);
+
+
 		modelBuilder.Entity<Model>()
 		.HasOne(m => m.material)
 		.WithMany()
@@ -52,12 +74,6 @@ public class ApplicationContext : DbContext
 			.OnDelete(DeleteBehavior.NoAction);
 
 
-		modelBuilder.Entity<PositionedModel>()
-			.Property(pm => pm.position)
-			.HasConversion(
-			p => $"{p.x},{p.y},{p.z}",
-			p => new Coordinate(p)
-			);
 
 		modelBuilder.Entity<Material>()
 			.HasDiscriminator<string>("Type")

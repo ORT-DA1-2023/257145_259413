@@ -130,7 +130,11 @@
 	<img src="@String.Concat("images/",sessionManager.CurrentUser.name,"/",scene.name,".png")" style="width: 300px; height: 200px;" />
 
 	<p class="text-start">Último renderizado: @scene.lastRendered</p>
-	@if (scene.lastRendered < scene.lastModified)
+	@if (scene.lastRendered < scene.lastModified ||
+		 !lookFrom.Equals(new Coordinate(LookFromX, LookFromY, LookFromZ)) ||
+		 !lookAt.Equals(new Coordinate(LookAtX, LookAtY, LookAtZ)) ||
+		 fov != scene.fieldOfView ||
+		 aperture != scene.aperture)
 	{
 		<div class="alert alert-warning" role="alert">
 			<i class="fa-solid fa-triangle-exclamation">Imagen desactualizada</i>
@@ -184,6 +188,9 @@
 	private double LookAtY = 2;
 	private double LookAtZ = 5;
 
+	private Coordinate lookFrom;
+	private Coordinate lookAt;
+
 
 	private int fov = 30;
 
@@ -207,6 +214,20 @@
 		positionedModelRepository = new PositionedModelRepository(sessionManager, applicationContext);
 		scene = sceneRepository.GetSceneByName(name);
 		positionedModels = sceneRepository.GetPositionedModels(scene);
+
+		if (scene.lastModified != scene.created)
+		{
+			LookFromX = scene.lookFrom.x;
+            LookFromY = scene.lookFrom.y;
+            LookFromZ = scene.lookFrom.z;
+			LookAtX = scene.lookAt.x;
+            LookAtY = scene.lookAt.y;
+            LookAtZ = scene.lookAt.z;
+			fov = scene.fieldOfView;
+			aperture = scene.aperture;
+			lookFrom = new Coordinate(LookFromX, LookFromY, LookFromZ);
+			lookAt = new Coordinate(LookAtX, LookAtY, LookAtZ);
+		}
 	}
 
 	public async Task<Stream> DownloadFile()

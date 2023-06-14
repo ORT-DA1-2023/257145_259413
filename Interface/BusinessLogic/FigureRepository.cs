@@ -1,7 +1,6 @@
 ﻿using Interface.DataAccess;
 using Domain;
 using Exceptions;
-using Interface.DataAccess;
 using Interface.Pages.User;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using System.Linq.Expressions;
@@ -22,20 +21,20 @@ namespace Interface.BusinessLogic
 
 
 
-        public FigureRepository(SessionManager sessionManager, ApplicationContext _dbContext)
-        {
-            this.sessionManager = sessionManager;
+		public FigureRepository(SessionManager sessionManager, ApplicationContext _dbContext)
+		{
+			this.sessionManager = sessionManager;
 			this._dbContext = _dbContext;
 			this.clientRepository = new ClientRepository(_dbContext, sessionManager);
 			this.logged = clientRepository.Find(sessionManager.CurrentUser.Id);
-        }
+		}
 
 		public List<Figure> GetFigures()
 		{
-			  return _dbContext.figures.Where(f => f.client.Id == logged.Id).ToList();
+			return _dbContext.figures.Where(f => f.client.Id == logged.Id).ToList();
 		}
 
-        public Figure MatchingFigure(string name)
+		public Figure MatchingFigure(string name)
 		{
 			List<Figure> figures = GetFigures();
 			foreach (var figure in figures)
@@ -63,7 +62,7 @@ namespace Interface.BusinessLogic
 			}
 			_dbContext.figures.Add(figure);
 			_dbContext.SaveChanges();
-			}
+		}
 
 		public void CreateFigure(string name, double radiusNumber)
 		{
@@ -84,9 +83,9 @@ namespace Interface.BusinessLogic
 		public bool FigureIsLinked(Figure figure)
 		{
 			List<Model> models = _dbContext.models.Where(m => m.client.Id == logged.Id).ToList();
-			foreach(Model model in models)
+			foreach (Model model in models)
 			{
-				if(model.figure == figure)
+				if (model.figure == figure)
 				{
 					return true;
 				}
@@ -103,15 +102,15 @@ namespace Interface.BusinessLogic
 			else
 			{
 				_dbContext.figures.Remove(figure);
-                _dbContext.SaveChanges();
-            }
+				_dbContext.SaveChanges();
+			}
 		}
 
-		public Figure Find (int id)
+		public Figure Find(int id)
 		{
 			Figure result = _dbContext.figures.FirstOrDefault(f => f.Id == id);
-            _dbContext.SaveChanges();
-            return result;
+			_dbContext.SaveChanges();
+			return result;
 		}
 
 

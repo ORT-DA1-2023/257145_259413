@@ -71,6 +71,10 @@ namespace Interface.BusinessLogic
 			Render render;
 			if (scene.VerifyFoV(fov))
 			{
+				scene.lookAt = lookAt;
+				scene.lookFrom = lookFrom;
+				scene.fieldOfView = fov;
+				scene.aperture = aperture;
 				if (isDifuminated)
 				{
 					scene.VerifyAperture(aperture);
@@ -82,6 +86,7 @@ namespace Interface.BusinessLogic
 				}
 				scene.lastRendered = DateTime.Now;
 				render.RenderScene(_logged.name);
+				_dbContext.SaveChanges();
 			}
 		}
 

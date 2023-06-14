@@ -47,6 +47,11 @@ namespace Domain
 			return coordinate.GetType() == typeof(double);
 		}
 
+		public bool Equals(Coordinate coordinate)
+		{
+			return this.x == coordinate.x && this.y == coordinate.y && this.z == coordinate.z;
+		}
+
 		public override string ToString()
 		{
 			return "x: " + this.x + " y: " + this.y + " z: " + this.z;

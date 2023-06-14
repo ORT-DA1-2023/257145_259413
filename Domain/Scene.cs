@@ -21,6 +21,15 @@ namespace Domain
 		public DateTime lastModified { get; set; }
 		public DateTime lastRendered { get; set; }
 		public DateTime created { get; set; }
+
+		public Coordinate lookFrom { get; set; }
+
+		public Coordinate lookAt { get; set; }
+
+		public int fieldOfView { get; set; }
+
+		public double aperture { get; set; }
+
 		public Client client { get; set; }
 
 		public Scene()
@@ -30,12 +39,13 @@ namespace Domain
 			this.lastModified = this.created;
 		}
 
-		public Scene(string name)
+		public Scene(string name) : this()
 		{
 			this.name = name;
-			this.positionedModels = new List<PositionedModel>();
-			this.created = DateTime.Now;
-			this.lastModified = this.created;
+			this.fieldOfView = 30;
+			this.aperture = 0;
+			this.lookFrom = new Coordinate(0, 0, 0);
+			this.lookAt = new Coordinate(0, 0, 0);
 		}
 
 		public ICollection<PositionedModel> GetPositionedModels()
@@ -100,13 +110,6 @@ namespace Domain
 			positionedModels.Add(positionedModel);
 			lastModified = DateTime.Now;
 		}
-
-		public void deletePositionedModel(PositionedModel positionedModel)
-		{
-			positionedModels.Remove(positionedModel);
-			lastModified = DateTime.Now;
-		}
-
 
 		public bool VerifyCoordinate(float x, float y, float z)
 		{

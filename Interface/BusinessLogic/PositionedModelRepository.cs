@@ -21,6 +21,7 @@ namespace Interface.BusinessLogic
 			positionedModel.model = model;
 			positionedModel.position = position;
 			positionedModel.scene = scene;
+			scene.lastModified = DateTime.Now;
 			Add(positionedModel);
 		}
 
